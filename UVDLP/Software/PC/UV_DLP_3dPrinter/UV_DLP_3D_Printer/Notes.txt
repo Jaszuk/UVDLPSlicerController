@@ -1,0 +1,3 @@
+﻿Steps:
+Load an stl file
+find min/max points
