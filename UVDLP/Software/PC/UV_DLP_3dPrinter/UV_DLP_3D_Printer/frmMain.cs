@@ -11,7 +11,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform.Windows;
 using System.IO.Ports;
-
+using System.IO;
 
 namespace UV_DLP_3D_Printer
 {
@@ -25,6 +25,7 @@ namespace UV_DLP_3D_Printer
         PrinterInterface m_printeriface = new PrinterInterface();
         PrinterInfo m_printerinfo = new PrinterInfo();
         frmDLP m_frmdlp = new frmDLP();
+        String m_pathsep = "";
         
         
         private bool lmdown, rmdown;
@@ -44,8 +45,46 @@ namespace UV_DLP_3D_Printer
             m_printmgr.PrintLayer += new delPrinterLayer(PrintLayer);
             SysLog.Instance().LogMSG += new LogMessage(SysLogger);
             FillMonitors();
+            //m_pathsep
+            if (RunningPlatform() == Platform.Windows)
+            {
+                m_pathsep = "\\";
+            }
+            else 
+            {
+                m_pathsep = "/";
+            }
         }
 
+        public enum Platform
+        {
+            Windows,
+            Linux,
+            Mac
+        }
+
+        public static Platform RunningPlatform()
+        {
+            switch (Environment.OSVersion.Platform)
+            {
+                case PlatformID.Unix:
+                    // Well, there are chances MacOSX is reported as Unix instead of MacOSX.
+                    // Instead of platform check, we'll do a feature checks (Mac specific root folders)
+                    if (Directory.Exists("/Applications")
+                        & Directory.Exists("/System")
+                        & Directory.Exists("/Users")
+                        & Directory.Exists("/Volumes"))
+                        return Platform.Mac;
+                    else
+                        return Platform.Linux;
+
+                case PlatformID.MacOSX:
+                    return Platform.Mac;
+
+                default:
+                    return Platform.Windows;
+            }
+        }
         /*
          This handler gets called whenever something in the system 
          * logs a message
@@ -121,6 +160,15 @@ namespace UV_DLP_3D_Printer
             {
                 prgSlice.Value = 0;
             }
+            if (chkExportSlices.Checked == true)
+            {
+                String fn = "";
+                String path = lblDirExport.Text;
+                Slice sl = (Slice)m_slicer.m_slices[layer];
+                Bitmap bmp = m_slicer.RenderSlice(GetSliceParms(), sl);
+                fn = path + m_pathsep + "slice" + layer + ".png";
+                bmp.Save(fn);
+            }
         }
 
 
@@ -162,13 +210,20 @@ namespace UV_DLP_3D_Printer
 
         private void cmdSlice_Click(object sender, EventArgs e)
         {
-            SliceParms sp = GetSliceParms();
-            int numslices = m_slicer.GetNumberOfSlices(sp, m_obj);
-            lblNumSlices.Text = "Number of Slices: " + numslices;
-            m_slicer.Slice(sp, m_obj, ".");
-            vScrollBar1.Maximum = numslices;
-            vScrollBar1.Value = 0;
+            try
+            {
+                SliceParms sp = GetSliceParms();
+                int numslices = m_slicer.GetNumberOfSlices(sp, m_obj);
+                lblNumSlices.Text = "Number of Slices: " + numslices;
+                m_slicer.Slice(sp, m_obj, ".");
+                vScrollBar1.Maximum = numslices;
+                vScrollBar1.Value = 0;
 
+            }
+            catch (Exception ex) 
+            {
+                SysLog.Instance().Log(ex.Message);
+            }
             
         }
 
@@ -409,7 +464,8 @@ namespace UV_DLP_3D_Printer
         {
             if (m_obj == null) return;
             m_obj.m_wireframe = chkWireframe.Checked;
-            glControl1.Invalidate();
+            //glControl1.Invalidate();
+            DisplayFunc();
         }
 
         private void cmdCenter_Click(object sender, EventArgs e)
@@ -418,7 +474,8 @@ namespace UV_DLP_3D_Printer
             Point3d center = m_obj.CalcCenter();
             m_obj.Translate((float)-center.x, (float)-center.y,(float) -center.z);
             ShowObjectInfo();
-            glControl1.Invalidate();
+           // glControl1.Invalidate();
+            DisplayFunc();
         }
 
         private void cmdRefreshCom_Click(object sender, EventArgs e)
@@ -473,7 +530,8 @@ namespace UV_DLP_3D_Printer
 
             m_obj.Translate((float)-center.x, (float)-center.y, (float)-zlev);
             ShowObjectInfo();
-            glControl1.Invalidate();
+            //glControl1.Invalidate();
+            DisplayFunc();
         }
 
         private void cmdScale_Click(object sender, EventArgs e)
@@ -564,6 +622,14 @@ namespace UV_DLP_3D_Printer
             }
             //
            
+        }
+
+        private void cmdSelectDir_Click(object sender, EventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) 
+            {
+                lblDirExport.Text = folderBrowserDialog1.SelectedPath;
+            }
         }
 
     }

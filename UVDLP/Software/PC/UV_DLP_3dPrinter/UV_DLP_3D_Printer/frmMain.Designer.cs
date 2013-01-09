@@ -45,7 +45,7 @@
             this.cmdCenter = new System.Windows.Forms.Button();
             this.chkWireframe = new System.Windows.Forms.CheckBox();
             this.tabSlice = new System.Windows.Forms.TabPage();
-            this.button2 = new System.Windows.Forms.Button();
+            this.cmdShowDLPfrm = new System.Windows.Forms.Button();
             this.picSlice = new System.Windows.Forms.PictureBox();
             this.lblNumSlices = new System.Windows.Forms.Label();
             this.prgSlice = new System.Windows.Forms.ProgressBar();
@@ -75,6 +75,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.txtLog = new System.Windows.Forms.TextBox();
+            this.chkExportSlices = new System.Windows.Forms.CheckBox();
+            this.cmdSelectDir = new System.Windows.Forms.Button();
+            this.lblDirExport = new System.Windows.Forms.Label();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -273,7 +277,10 @@
             // 
             // tabSlice
             // 
-            this.tabSlice.Controls.Add(this.button2);
+            this.tabSlice.Controls.Add(this.lblDirExport);
+            this.tabSlice.Controls.Add(this.cmdSelectDir);
+            this.tabSlice.Controls.Add(this.chkExportSlices);
+            this.tabSlice.Controls.Add(this.cmdShowDLPfrm);
             this.tabSlice.Controls.Add(this.picSlice);
             this.tabSlice.Controls.Add(this.lblNumSlices);
             this.tabSlice.Controls.Add(this.prgSlice);
@@ -289,15 +296,15 @@
             this.tabSlice.Text = "Slice";
             this.tabSlice.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // cmdShowDLPfrm
             // 
-            this.button2.Location = new System.Drawing.Point(76, 529);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.cmdShowDLPfrm.Location = new System.Drawing.Point(40, 518);
+            this.cmdShowDLPfrm.Name = "cmdShowDLPfrm";
+            this.cmdShowDLPfrm.Size = new System.Drawing.Size(159, 23);
+            this.cmdShowDLPfrm.TabIndex = 18;
+            this.cmdShowDLPfrm.Text = "Show DLP screen";
+            this.cmdShowDLPfrm.UseVisualStyleBackColor = true;
+            this.cmdShowDLPfrm.Click += new System.EventHandler(this.button2_Click);
             // 
             // picSlice
             // 
@@ -319,7 +326,7 @@
             // 
             // prgSlice
             // 
-            this.prgSlice.Location = new System.Drawing.Point(34, 128);
+            this.prgSlice.Location = new System.Drawing.Point(34, 104);
             this.prgSlice.Name = "prgSlice";
             this.prgSlice.Size = new System.Drawing.Size(359, 23);
             this.prgSlice.TabIndex = 15;
@@ -595,6 +602,35 @@
             this.txtLog.Size = new System.Drawing.Size(1457, 158);
             this.txtLog.TabIndex = 0;
             // 
+            // chkExportSlices
+            // 
+            this.chkExportSlices.AutoSize = true;
+            this.chkExportSlices.Location = new System.Drawing.Point(34, 134);
+            this.chkExportSlices.Name = "chkExportSlices";
+            this.chkExportSlices.Size = new System.Drawing.Size(111, 21);
+            this.chkExportSlices.TabIndex = 19;
+            this.chkExportSlices.Text = "Export Slices";
+            this.chkExportSlices.UseVisualStyleBackColor = true;
+            // 
+            // cmdSelectDir
+            // 
+            this.cmdSelectDir.Location = new System.Drawing.Point(151, 134);
+            this.cmdSelectDir.Name = "cmdSelectDir";
+            this.cmdSelectDir.Size = new System.Drawing.Size(109, 23);
+            this.cmdSelectDir.TabIndex = 20;
+            this.cmdSelectDir.Text = "Choose Dir";
+            this.cmdSelectDir.UseVisualStyleBackColor = true;
+            this.cmdSelectDir.Click += new System.EventHandler(this.cmdSelectDir_Click);
+            // 
+            // lblDirExport
+            // 
+            this.lblDirExport.AutoSize = true;
+            this.lblDirExport.Location = new System.Drawing.Point(34, 167);
+            this.lblDirExport.Name = "lblDirExport";
+            this.lblDirExport.Size = new System.Drawing.Size(16, 17);
+            this.lblDirExport.TabIndex = 21;
+            this.lblDirExport.Text = "./";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -677,7 +713,11 @@
         private System.Windows.Forms.Label lblPixperMM;
         private System.Windows.Forms.Label lblNumSlices;
         private System.Windows.Forms.PictureBox picSlice;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button cmdShowDLPfrm;
+        private System.Windows.Forms.Label lblDirExport;
+        private System.Windows.Forms.Button cmdSelectDir;
+        private System.Windows.Forms.CheckBox chkExportSlices;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }
 
