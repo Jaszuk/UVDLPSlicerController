@@ -324,9 +324,16 @@ namespace Engine3D
                             char[] delimiters = new char[] {' '};
                             line = sr.ReadLine().Trim();//outerloop
                             toks = line.Split(delimiters,StringSplitOptions.RemoveEmptyEntries);
-                            tmp.x = float.Parse(toks[1]);
-                            tmp.y = float.Parse(toks[2]);
-                            tmp.z = float.Parse(toks[3]);
+                           // tmp.x = float.Parse(toks[1].Trim());
+                           // tmp.y = float.Parse(toks[2].Trim());
+                           // tmp.z = float.Parse(toks[3].Trim());
+                            float tf = 0.0f;
+                             Single.TryParse(toks[1],out tf);
+                             tmp.x = tf;
+                             Single.TryParse(toks[2], out tf);
+                             tmp.y = tf;
+                             Single.TryParse(toks[3], out tf);
+                             tmp.z = tf;
                             poly.m_points[idx] = AddUniqueVert(tmp);
                         }
 

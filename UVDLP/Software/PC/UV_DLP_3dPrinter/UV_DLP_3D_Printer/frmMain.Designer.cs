@@ -53,7 +53,7 @@
             this.cmdStartPrint = new System.Windows.Forms.Button();
             this.lblETC = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblLayerInd = new System.Windows.Forms.Label();
             this.lblLayerTime = new System.Windows.Forms.Label();
             this.txtLayerTime = new System.Windows.Forms.TextBox();
             this.chkPumpControl = new System.Windows.Forms.CheckBox();
@@ -131,7 +131,7 @@
             this.vScrollBar1.Location = new System.Drawing.Point(3, 3);
             this.vScrollBar1.Maximum = 1000;
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(21, 569);
+            this.vScrollBar1.Size = new System.Drawing.Size(21, 591);
             this.vScrollBar1.TabIndex = 11;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
             this.vScrollBar1.ValueChanged += new System.EventHandler(this.vScrollBar1_ValueChanged);
@@ -284,7 +284,7 @@
             this.tabSlice.Location = new System.Drawing.Point(4, 25);
             this.tabSlice.Name = "tabSlice";
             this.tabSlice.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSlice.Size = new System.Drawing.Size(515, 575);
+            this.tabSlice.Size = new System.Drawing.Size(515, 597);
             this.tabSlice.TabIndex = 1;
             this.tabSlice.Text = "Slice";
             this.tabSlice.UseVisualStyleBackColor = true;
@@ -329,20 +329,20 @@
             this.tabPrint.Controls.Add(this.cmdStartPrint);
             this.tabPrint.Controls.Add(this.lblETC);
             this.tabPrint.Controls.Add(this.label3);
-            this.tabPrint.Controls.Add(this.label2);
+            this.tabPrint.Controls.Add(this.lblLayerInd);
             this.tabPrint.Controls.Add(this.lblLayerTime);
             this.tabPrint.Controls.Add(this.txtLayerTime);
             this.tabPrint.Controls.Add(this.chkPumpControl);
             this.tabPrint.Location = new System.Drawing.Point(4, 25);
             this.tabPrint.Name = "tabPrint";
-            this.tabPrint.Size = new System.Drawing.Size(515, 575);
+            this.tabPrint.Size = new System.Drawing.Size(515, 597);
             this.tabPrint.TabIndex = 2;
             this.tabPrint.Text = "Print";
             this.tabPrint.UseVisualStyleBackColor = true;
             // 
             // cmdStartPrint
             // 
-            this.cmdStartPrint.Location = new System.Drawing.Point(17, 195);
+            this.cmdStartPrint.Location = new System.Drawing.Point(14, 234);
             this.cmdStartPrint.Name = "cmdStartPrint";
             this.cmdStartPrint.Size = new System.Drawing.Size(135, 34);
             this.cmdStartPrint.TabIndex = 6;
@@ -368,23 +368,23 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Time to Completion";
             // 
-            // label2
+            // lblLayerInd
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 119);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(138, 17);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Printing Layer X of Y";
+            this.lblLayerInd.AutoSize = true;
+            this.lblLayerInd.Location = new System.Drawing.Point(14, 119);
+            this.lblLayerInd.Name = "lblLayerInd";
+            this.lblLayerInd.Size = new System.Drawing.Size(138, 17);
+            this.lblLayerInd.TabIndex = 3;
+            this.lblLayerInd.Text = "Printing Layer X of Y";
             // 
             // lblLayerTime
             // 
             this.lblLayerTime.AutoSize = true;
             this.lblLayerTime.Location = new System.Drawing.Point(14, 62);
             this.lblLayerTime.Name = "lblLayerTime";
-            this.lblLayerTime.Size = new System.Drawing.Size(189, 17);
+            this.lblLayerTime.Size = new System.Drawing.Size(258, 17);
             this.lblLayerTime.TabIndex = 2;
-            this.lblLayerTime.Text = "Exposure Time Per Layer (s)";
+            this.lblLayerTime.Text = "Exposure Time Per Layer (milliseconds)";
             // 
             // txtLayerTime
             // 
@@ -392,7 +392,7 @@
             this.txtLayerTime.Name = "txtLayerTime";
             this.txtLayerTime.Size = new System.Drawing.Size(100, 22);
             this.txtLayerTime.TabIndex = 1;
-            this.txtLayerTime.Text = "5";
+            this.txtLayerTime.Text = "5000";
             // 
             // chkPumpControl
             // 
@@ -414,7 +414,7 @@
             this.tabMachine.Controls.Add(this.label4);
             this.tabMachine.Location = new System.Drawing.Point(4, 25);
             this.tabMachine.Name = "tabMachine";
-            this.tabMachine.Size = new System.Drawing.Size(515, 575);
+            this.tabMachine.Size = new System.Drawing.Size(515, 597);
             this.tabMachine.TabIndex = 3;
             this.tabMachine.Text = "Machine";
             this.tabMachine.UseVisualStyleBackColor = true;
@@ -652,7 +652,7 @@
         private System.Windows.Forms.Button cmdStartPrint;
         private System.Windows.Forms.Label lblETC;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblLayerInd;
         private System.Windows.Forms.Label lblLayerTime;
         private System.Windows.Forms.TextBox txtLayerTime;
         private System.Windows.Forms.CheckBox chkPumpControl;

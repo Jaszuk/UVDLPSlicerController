@@ -41,6 +41,7 @@ namespace UV_DLP_3D_Printer
             m_slicer.Sliced += new Slicer.LayerSliced(LayerSliced);
             cmdRefreshCom_Click(null,null);
             m_printmgr.PrintStatus += new delPrintStatus(PrintStatus);
+            m_printmgr.PrintLayer += new delPrinterLayer(PrintLayer);
             SysLog.Instance().LogMSG += new LogMessage(SysLogger);
             FillMonitors();
         }
@@ -51,12 +52,62 @@ namespace UV_DLP_3D_Printer
          */
         void SysLogger(String message,int level) 
         {
-            txtLog.Text = message +"\r\n"+ txtLog.Text;
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(delegate() { SysLogger(message, level); }));
+            }
+            else
+            {
+                txtLog.Text = message + "\r\n" + txtLog.Text;
+            }
         }
-
+        /*void MyMethod1b(int a, int b){
+  if (this.InvokeRequired)    {        
+    // Reinvoke the same method if necessary        
+    BeginInvoke(new MethodInvoker(delegate(){MyMethod1b(a, b);}));
+  } else {
+  // Do Whatever you need to do here       ...    
+  }
+}*/
         void PrintStatus(ePrintStat printstat) 
         {
          // displays the print status
+            String message = "";
+            switch(printstat)
+            {
+                case ePrintStat.ePrintCancelled:
+                    message = "Print Cancelled";
+                    break;
+                case ePrintStat.eLayerCompleted:
+                    message = "Layer Completed";
+                    break;
+                case ePrintStat.ePrintCompleted:
+                    message = "Print Completed";
+                    break;
+                case ePrintStat.ePrintStarted:
+                    message = "Print Started";
+                    break;
+            }
+            SysLog.Instance().Log(message);
+        }
+
+        //This delegate is called when the print manager is printing a new layer
+        void PrintLayer(Bitmap bmp, int layer) 
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(delegate() { PrintLayer(bmp, layer); }));
+            }
+            else
+            {
+                ViewLayer(layer);
+                //m_frmdlp.ShowImage(bmp); // display the new layer
+                //picSlice.Image = bmp;
+                String txt = "Printing layer " + layer + " of " + m_slicer.m_slices.Count;
+                lblLayerInd.Text = txt;
+                SysLog.Instance().Log(txt);
+
+            }
         }
 
         public void LayerSliced(int layer, int totallayers)
@@ -146,11 +197,10 @@ namespace UV_DLP_3D_Printer
                     m_engine3d.AddLine(ln);
                 }
                 glControl1.Invalidate();
-                //now show the 2d slice
-                //m_slicer.
+                //render the 2d slice
                 Bitmap bmp = m_slicer.RenderSlice(GetSliceParms(), sl);
+                //now show the 2d slice
                 picSlice.Image = bmp;
-
                 m_frmdlp.ShowImage(bmp);
             }
             catch (Exception) { }
@@ -191,7 +241,7 @@ namespace UV_DLP_3D_Printer
                 aspect = ((float)glControl1.Width) / ((float)glControl1.Height);
 
                 //GL.Matr
-                OpenTK.Matrix4 projection = OpenTK.Matrix4.CreatePerspectiveFieldOfView(0.55f, aspect, 0.1f, 1000);
+                OpenTK.Matrix4 projection = OpenTK.Matrix4.CreatePerspectiveFieldOfView(0.55f, aspect, 0.1f, 4000);
                 OpenTK.Matrix4 modelView = OpenTK.Matrix4.LookAt(new OpenTK.Vector3(5, 0, -5), new OpenTK.Vector3(0, 0, 0), new OpenTK.Vector3(0, 0, 1));
 
                 GL.MatrixMode(MatrixMode.Projection);
@@ -249,19 +299,12 @@ namespace UV_DLP_3D_Printer
           GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
           GL.LoadIdentity();
 
-          /* A step backward, then spin the cube */
-
           GL.Translate(0, 0, orbitdist);
-         // GL.Rotate(30, 1, 0, 0);
           GL.Rotate(orbitypos, 0, 1, 0);
           GL.Rotate(orbitxpos, 1, 0, 0);
 
-          // Rotate a bit more 
-          //alpha = alpha + 0.1f;
           m_engine3d.RenderGL();
             
-          /* End */
-          //m_engine3d.m_camera.SetViewGL();
           GL.Flush();
           glControl1.SwapBuffers();                                    
         }
@@ -396,19 +439,27 @@ namespace UV_DLP_3D_Printer
 
         private void cmdStartPrint_Click(object sender, EventArgs e)
         {
-            if (cmdStartPrint.Text == "Start Print")
+            try
             {
-                //check stuff, make sure device is connected,
-                // display a messagebox to tell the user to configure screen
-                // check to make sure model is sliced and everything is set up
-                // then begin the print
-                m_printmgr.StartPrint();
-                cmdStartPrint.Text = "Cancel Print";
+                if (cmdStartPrint.Text == "Start Print")
+                {
+                    //check stuff, make sure device is connected,
+                    // display a messagebox to tell the user to configure screen
+                    // check to make sure model is sliced and everything is set up
+                    // then begin the print
+                    int msec = int.Parse(txtLayerTime.Text);
+                    m_printmgr.StartPrint(m_slicer, msec, GetSliceParms());
+                    cmdStartPrint.Text = "Cancel Print";
+                }
+                else
+                {
+                    m_printmgr.CancelPrint();
+                    cmdStartPrint.Text = "Start Print";
+                }
             }
-            else 
+            catch (Exception ex) 
             {
-                m_printmgr.CancelPrint();
-                cmdStartPrint.Text = "Start Print";
+                SysLog.Instance().Log(ex.Message);
             }
         }
 
