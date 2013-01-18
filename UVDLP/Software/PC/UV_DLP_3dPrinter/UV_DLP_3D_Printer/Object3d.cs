@@ -54,7 +54,7 @@ namespace Engine3D
         {
             
         }
-
+        
         public void RenderGL() 
         {
             foreach (Polygon poly in m_lstpolys)
@@ -273,8 +273,12 @@ namespace Engine3D
                     for (int pc = 0; pc < 3; pc++) //iterate through the points
                     {
                         p.m_points[pc] = new Point3d();
+                        //Point3d pnt = new Point3d();
+                        //pnt.Load(br);
+                        //p.m_points[pc] = AddUniqueVert(pnt);
                         p.m_points[pc].Load(br);
                         m_lstpoints.Add(p.m_points[pc]);                       
+
                     }
                     uint attr = br.ReadUInt16(); // not used attribute
                     p.CalcNormal();

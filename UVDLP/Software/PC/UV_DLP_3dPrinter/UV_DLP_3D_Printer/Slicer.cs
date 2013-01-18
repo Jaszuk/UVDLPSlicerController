@@ -5,6 +5,7 @@ using System.Text;
 using Engine3D;
 using System.Collections;
 using System.Drawing;
+using System.Threading;
 namespace UV_DLP_3D_Printer
 {
     public class Slicer
@@ -13,9 +14,14 @@ namespace UV_DLP_3D_Printer
 
         public ArrayList m_slices; // list of Slices
         public LayerSliced Sliced;
+        private Thread m_slicethread;
+        private SliceParms m_sp = null;
+        private Object3d m_obj = null;
+
         public Slicer() 
         {
             m_slices = new ArrayList();
+            
 
         }
         public int GetNumberOfSlices(SliceParms sp, Object3d obj) 
@@ -40,40 +46,54 @@ namespace UV_DLP_3D_Printer
         // and saves them in the directory
         public bool Slice(SliceParms sp, Object3d obj, String outdir) 
         {
+                m_obj = obj;
+                m_sp = sp;
+
+                m_slicethread = new Thread(new ThreadStart(slicefunc));
+                m_slicethread.Start();
+                return true;
+        }
+
+        private void slicefunc() 
+        {
             try
             {
+
                 m_slices = new ArrayList();
                 //iterate 
                 //determine the number of slices
-                obj.FindMinMax();
-                int numslices = (int)((obj.m_max.z - obj.m_min.z) / sp.ZThick);
+                m_obj.FindMinMax();
+                int numslices = (int)((m_obj.m_max.z - m_obj.m_min.z) / m_sp.ZThick);
 
-                double curz = (double)obj.m_min.z;
+                double curz = (double)m_obj.m_min.z;
 
-                for (int c = 0; c < numslices; c++) 
+                for (int c = 0; c < numslices; c++)
                 {
                     //get a list of polygons at this slice z height that intersect
-                    ArrayList lstply = GetZPolys(obj, curz);
+                    ArrayList lstply = GetZPolys(m_obj, curz);
                     //iterate through all the polygons and generat 2d line segments at this z level
                     ArrayList lstintersections = GetZIntersections(lstply, curz);
-                    curz += sp.ZThick;
+                    curz += m_sp.ZThick;
                     Slice sl = new Slice();
                     sl.m_segments = lstintersections;
                     m_slices.Add(sl);
-                    if (Sliced != null) 
+                    if (Sliced != null)
                     {
                         Sliced(c, numslices);
                     }
                     //render segments to the bitmap
-                   // sl.CalcMinMax_XY();
+                    // sl.CalcMinMax_XY();
                 }
-                return true;
+                
             }
-            catch (Exception) 
+            catch (Exception ex)
             {
-                return false;
-            }
+                //return ;
+                SysLog.Instance().Log(ex.Message);
+            }        
         }
+
+
         /*
          This function does the rasterization of the generated slice into
          * a 2d bitmap that can be displayed and sent to the machine's DLP

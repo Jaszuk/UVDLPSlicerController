@@ -12,6 +12,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform.Windows;
 using System.IO.Ports;
 using System.IO;
+using System.Collections;
 
 namespace UV_DLP_3D_Printer
 {
@@ -111,23 +112,30 @@ namespace UV_DLP_3D_Printer
         void PrintStatus(ePrintStat printstat) 
         {
          // displays the print status
-            String message = "";
-            switch(printstat)
+            if (InvokeRequired)
             {
-                case ePrintStat.ePrintCancelled:
-                    message = "Print Cancelled";
-                    break;
-                case ePrintStat.eLayerCompleted:
-                    message = "Layer Completed";
-                    break;
-                case ePrintStat.ePrintCompleted:
-                    message = "Print Completed";
-                    break;
-                case ePrintStat.ePrintStarted:
-                    message = "Print Started";
-                    break;
+                BeginInvoke(new MethodInvoker(delegate() { PrintStatus(printstat); }));
             }
-            SysLog.Instance().Log(message);
+            else
+            {
+                String message = "";
+                switch (printstat)
+                {
+                    case ePrintStat.ePrintCancelled:
+                        message = "Print Cancelled";
+                        break;
+                    case ePrintStat.eLayerCompleted:
+                        message = "Layer Completed";
+                        break;
+                    case ePrintStat.ePrintCompleted:
+                        message = "Print Completed";
+                        break;
+                    case ePrintStat.ePrintStarted:
+                        message = "Print Started";
+                        break;
+                }
+                SysLog.Instance().Log(message);
+            }
         }
 
         //This delegate is called when the print manager is printing a new layer
@@ -151,23 +159,30 @@ namespace UV_DLP_3D_Printer
 
         public void LayerSliced(int layer, int totallayers)
         {
-            if (layer == 0) 
+            if (InvokeRequired)
             {
-                prgSlice.Maximum = totallayers - 1;
+                BeginInvoke(new MethodInvoker(delegate() { LayerSliced( layer,totallayers); }));
             }
-            prgSlice.Value = layer;
-            if (layer == totallayers -1) 
+            else
             {
-                prgSlice.Value = 0;
-            }
-            if (chkExportSlices.Checked == true)
-            {
-                String fn = "";
-                String path = lblDirExport.Text;
-                Slice sl = (Slice)m_slicer.m_slices[layer];
-                Bitmap bmp = m_slicer.RenderSlice(GetSliceParms(), sl);
-                fn = path + m_pathsep + "slice" + layer + ".png";
-                bmp.Save(fn);
+                if (layer == 0)
+                {
+                    prgSlice.Maximum = totallayers - 1;
+                }
+                prgSlice.Value = layer;
+                if (layer == totallayers - 1)
+                {
+                    prgSlice.Value = 0;
+                }
+                if (chkExportSlices.Checked == true)
+                {
+                    String fn = "";
+                    String path = lblDirExport.Text;
+                    Slice sl = (Slice)m_slicer.m_slices[layer];
+                    Bitmap bmp = m_slicer.RenderSlice(GetSliceParms(), sl);
+                    fn = path + m_pathsep + "slice" + layer + ".png";
+                    bmp.Save(fn);
+                }
             }
         }
 
@@ -182,6 +197,11 @@ namespace UV_DLP_3D_Printer
                 txtFileInfo.Text += "# points = " + m_obj.NumPoints + "\r\n";
                 txtFileInfo.Text += "Min points = (" + String.Format("{0:0.00}",m_obj.m_min.x) + "," + String.Format("{0:0.00}",m_obj.m_min.y) + "," + String.Format("{0:0.00}",m_obj.m_min.z) + ")\r\n";
                 txtFileInfo.Text += "Max points = (" + String.Format("{0:0.00}",m_obj.m_max.x) + "," + String.Format("{0:0.00}",m_obj.m_max.y) + "," + String.Format("{0:0.00}",m_obj.m_max.z) + ")\r\n";
+                double xs, ys, zs;
+                xs = m_obj.m_max.x - m_obj.m_min.x;
+                ys = m_obj.m_max.y - m_obj.m_min.y;
+                zs = m_obj.m_max.z - m_obj.m_min.z;
+                txtFileInfo.Text += "Size = (" + String.Format("{0:0.00}", xs) + "," + String.Format("{0:0.00}", ys) + "," + String.Format("{0:0.00}", zs) + ")\r\n";
             }
             catch (Exception) { }
         
@@ -202,8 +222,10 @@ namespace UV_DLP_3D_Printer
                     chkWireframe.Checked = false;
                     m_engine3d.RemoveAllObjects();
                     m_engine3d.AddObject(m_obj);
+                    m_slicer.m_slices = new ArrayList();
                     glControl1.Invalidate();
-
+                    vScrollBar1.Maximum = 1;
+                    vScrollBar1.Value = 0;
                 }
             }
         }
@@ -257,6 +279,7 @@ namespace UV_DLP_3D_Printer
                 //now show the 2d slice
                 picSlice.Image = bmp;
                 m_frmdlp.ShowImage(bmp);
+                lblCurSlice.Text = "Layer = " +layer;
             }
             catch (Exception) { }
         
