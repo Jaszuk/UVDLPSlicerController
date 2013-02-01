@@ -45,9 +45,8 @@
             this.cmdCenter = new System.Windows.Forms.Button();
             this.chkWireframe = new System.Windows.Forms.CheckBox();
             this.tabSlice = new System.Windows.Forms.TabPage();
-            this.lblDirExport = new System.Windows.Forms.Label();
-            this.cmdSelectDir = new System.Windows.Forms.Button();
-            this.chkExportSlices = new System.Windows.Forms.CheckBox();
+            this.cmdSliceOptions = new System.Windows.Forms.Button();
+            this.lblCurSlice = new System.Windows.Forms.Label();
             this.cmdShowDLPfrm = new System.Windows.Forms.Button();
             this.picSlice = new System.Windows.Forms.PictureBox();
             this.lblNumSlices = new System.Windows.Forms.Label();
@@ -79,7 +78,6 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.lblCurSlice = new System.Windows.Forms.Label();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -278,10 +276,8 @@
             // 
             // tabSlice
             // 
+            this.tabSlice.Controls.Add(this.cmdSliceOptions);
             this.tabSlice.Controls.Add(this.lblCurSlice);
-            this.tabSlice.Controls.Add(this.lblDirExport);
-            this.tabSlice.Controls.Add(this.cmdSelectDir);
-            this.tabSlice.Controls.Add(this.chkExportSlices);
             this.tabSlice.Controls.Add(this.cmdShowDLPfrm);
             this.tabSlice.Controls.Add(this.picSlice);
             this.tabSlice.Controls.Add(this.lblNumSlices);
@@ -298,34 +294,23 @@
             this.tabSlice.Text = "Slice";
             this.tabSlice.UseVisualStyleBackColor = true;
             // 
-            // lblDirExport
+            // cmdSliceOptions
             // 
-            this.lblDirExport.AutoSize = true;
-            this.lblDirExport.Location = new System.Drawing.Point(34, 167);
-            this.lblDirExport.Name = "lblDirExport";
-            this.lblDirExport.Size = new System.Drawing.Size(16, 17);
-            this.lblDirExport.TabIndex = 21;
-            this.lblDirExport.Text = "./";
+            this.cmdSliceOptions.Location = new System.Drawing.Point(162, 62);
+            this.cmdSliceOptions.Name = "cmdSliceOptions";
+            this.cmdSliceOptions.Size = new System.Drawing.Size(122, 36);
+            this.cmdSliceOptions.TabIndex = 23;
+            this.cmdSliceOptions.Text = "Options";
+            this.cmdSliceOptions.UseVisualStyleBackColor = true;
+            this.cmdSliceOptions.Click += new System.EventHandler(this.cmdSliceOptions_Click);
             // 
-            // cmdSelectDir
+            // lblCurSlice
             // 
-            this.cmdSelectDir.Location = new System.Drawing.Point(151, 134);
-            this.cmdSelectDir.Name = "cmdSelectDir";
-            this.cmdSelectDir.Size = new System.Drawing.Size(109, 23);
-            this.cmdSelectDir.TabIndex = 20;
-            this.cmdSelectDir.Text = "Choose Dir";
-            this.cmdSelectDir.UseVisualStyleBackColor = true;
-            this.cmdSelectDir.Click += new System.EventHandler(this.cmdSelectDir_Click);
-            // 
-            // chkExportSlices
-            // 
-            this.chkExportSlices.AutoSize = true;
-            this.chkExportSlices.Location = new System.Drawing.Point(34, 134);
-            this.chkExportSlices.Name = "chkExportSlices";
-            this.chkExportSlices.Size = new System.Drawing.Size(111, 21);
-            this.chkExportSlices.TabIndex = 19;
-            this.chkExportSlices.Text = "Export Slices";
-            this.chkExportSlices.UseVisualStyleBackColor = true;
+            this.lblCurSlice.AutoSize = true;
+            this.lblCurSlice.Location = new System.Drawing.Point(181, 62);
+            this.lblCurSlice.Name = "lblCurSlice";
+            this.lblCurSlice.Size = new System.Drawing.Size(0, 17);
+            this.lblCurSlice.TabIndex = 22;
             // 
             // cmdShowDLPfrm
             // 
@@ -633,14 +618,6 @@
             this.txtLog.Size = new System.Drawing.Size(1457, 158);
             this.txtLog.TabIndex = 0;
             // 
-            // lblCurSlice
-            // 
-            this.lblCurSlice.AutoSize = true;
-            this.lblCurSlice.Location = new System.Drawing.Point(181, 62);
-            this.lblCurSlice.Name = "lblCurSlice";
-            this.lblCurSlice.Size = new System.Drawing.Size(0, 17);
-            this.lblCurSlice.TabIndex = 22;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -724,11 +701,9 @@
         private System.Windows.Forms.Label lblNumSlices;
         private System.Windows.Forms.PictureBox picSlice;
         private System.Windows.Forms.Button cmdShowDLPfrm;
-        private System.Windows.Forms.Label lblDirExport;
-        private System.Windows.Forms.Button cmdSelectDir;
-        private System.Windows.Forms.CheckBox chkExportSlices;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Label lblCurSlice;
+        private System.Windows.Forms.Button cmdSliceOptions;
     }
 }
 

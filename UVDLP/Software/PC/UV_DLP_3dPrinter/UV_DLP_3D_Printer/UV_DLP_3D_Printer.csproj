@@ -71,12 +71,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="DebugLogger.cs" />
     <Compile Include="frmDLP.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmDLP.Designer.cs">
       <DependentUpon>frmDLP.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSliceOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSliceOptions.Designer.cs">
+      <DependentUpon>frmSliceOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GCodeGenerator.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="PrinterInfo.cs" />
     <Compile Include="SysLog.cs" />
     <Compile Include="PrinterInterface.cs" />
@@ -102,6 +112,9 @@
     <EmbeddedResource Include="frmDLP.resx">
       <DependentUpon>frmDLP.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmSliceOptions.resx">
+      <DependentUpon>frmSliceOptions.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -124,6 +137,7 @@
     <Compile Include="Slice.cs" />
     <Compile Include="SliceParms.cs" />
     <Compile Include="Slicer.cs" />
+    <Compile Include="Utility.cs" />
     <Compile Include="Vector3d.cs" />
   </ItemGroup>
   <ItemGroup>

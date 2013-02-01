@@ -26,6 +26,8 @@ namespace UV_DLP_3D_Printer
         PrinterInterface m_printeriface = new PrinterInterface();
         PrinterInfo m_printerinfo = new PrinterInfo();
         frmDLP m_frmdlp = new frmDLP();
+        frmSliceOptions m_frmsliceopt = new frmSliceOptions();
+
         String m_pathsep = "";
         
         
@@ -174,10 +176,10 @@ namespace UV_DLP_3D_Printer
                 {
                     prgSlice.Value = 0;
                 }
-                if (chkExportSlices.Checked == true)
+                if (Config.Instance().GenerateSlices == true)
                 {
                     String fn = "";
-                    String path = lblDirExport.Text;
+                    String path = Config.Instance().WorkingDirectory;
                     Slice sl = (Slice)m_slicer.m_slices[layer];
                     Bitmap bmp = m_slicer.RenderSlice(GetSliceParms(), sl);
                     fn = path + m_pathsep + "slice" + layer + ".png";
@@ -377,7 +379,7 @@ namespace UV_DLP_3D_Printer
           GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
           GL.LoadIdentity();
 
-          GL.Translate(0, 0, orbitdist);
+          GL.Translate(0, -10, orbitdist);
           GL.Rotate(orbitypos, 0, 1, 0);
           GL.Rotate(orbitxpos, 1, 0, 0);
 
@@ -647,12 +649,9 @@ namespace UV_DLP_3D_Printer
            
         }
 
-        private void cmdSelectDir_Click(object sender, EventArgs e)
+        private void cmdSliceOptions_Click(object sender, EventArgs e)
         {
-            if (folderBrowserDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) 
-            {
-                lblDirExport.Text = folderBrowserDialog1.SelectedPath;
-            }
+            m_frmsliceopt.ShowDialog();
         }
 
     }

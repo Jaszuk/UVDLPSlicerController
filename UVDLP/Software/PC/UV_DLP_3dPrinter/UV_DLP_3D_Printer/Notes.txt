@@ -1,3 +1,24 @@
-﻿Steps:
-Load an stl file
-find min/max points
+﻿Hardware objectives:
+Use as much standard 3d printing hardware as possible.
+A Ramps / Gen4 board or compatible should be using to control the Z Axis of the device
+
+Ultimately, I want my application to be a replacement for apps such as replicatorG, printerface,etc...
+
+I need to be able to syncronize the GCode Zmovements with the display of the slices on the secondary monitor
+How can I do this?
+	1) one possible method -
+	The GCode file must be generated to contain special comments between z movements
+	The comments can trigger the display of a slice
+		cons - can only be built from host computer - not run from machine - this shouldn't be much of an issue, because
+		the image slices need to be sent from the machine anyway	
+	2) The z axis and slices are syncronized by time only
+		cons - this could quickly get out of sync, problems with pause
+
+GCode Generation:
+	use a start.gcode file
+	use an end.gcode file
+	use a layer.gcode file for in between layers
+
+	good reference:
+	 http://reprap.org/wiki/G-code
+
