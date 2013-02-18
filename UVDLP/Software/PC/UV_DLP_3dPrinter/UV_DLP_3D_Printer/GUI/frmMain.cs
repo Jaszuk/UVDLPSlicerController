@@ -41,7 +41,6 @@ namespace UV_DLP_3D_Printer
             UVDLPApp.Instance().m_buildmgr.PrintLayer += new delPrinterLayer(PrintLayer);
             //SysLog.Instance().LogMSG += new LogMessage(SysLogger);
             DebugLogger.Instance().LoggerStatusEvent += new LoggerStatusHandler(LoggerStatusEvent);
-            FillMonitors();
             UVDLPApp.Instance().m_deviceinterface.StatusEvent += new DeviceInterface.DeviceInterfaceStatus(DeviceStatusEvent);
             //m_pathsep
             SetConnectionStatus();
@@ -53,11 +52,17 @@ namespace UV_DLP_3D_Printer
             {
                 cmdConnect.Enabled = false;
                 cmdDisconnect.Enabled = true;
+                cmdRefresh.Enabled = false;
+                cmbSerial.Enabled = false;
+                cmdControl.Enabled = true;
             }
             else 
             {
                 cmdConnect.Enabled = true;
                 cmdDisconnect.Enabled = false;
+                cmdRefresh.Enabled = true;
+                cmbSerial.Enabled = true;
+                cmdControl.Enabled = false;
             }
         }
         /*
@@ -398,24 +403,7 @@ namespace UV_DLP_3D_Printer
           glControl1.SwapBuffers();                                    
         }
 
-        private void FillMonitors() 
-        {
-            try
-            {
-                lstMonitors.Items.Clear();
-                foreach (Screen s in Screen.AllScreens)
-                {
-                    lstMonitors.Items.Add(s.DeviceName);
-                }
-                if (lstMonitors.Items.Count > 0)
-                    lstMonitors.SelectedIndex = 0;
-            }
-            catch (Exception) 
-            {
-            
-            }
-            
-        }
+        
         private void glControl1_Load(object sender, EventArgs e)
         {
             loaded = true;
@@ -518,16 +506,6 @@ namespace UV_DLP_3D_Printer
             DisplayFunc();
         }
 
-        private void cmdRefreshCom_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void cmdRefreshMonitors_Click(object sender, EventArgs e)
-        {
-            FillMonitors();
-        }
-
         private void cmdStartPrint_Click(object sender, EventArgs e)
         {
             UVDLPApp.Instance().m_buildmgr.StartPrint(UVDLPApp.Instance().m_slicefile, UVDLPApp.Instance().m_gcode);
@@ -579,9 +557,7 @@ namespace UV_DLP_3D_Printer
             catch (Exception) 
             {
             
-            }
-            //
-           
+            }          
         }
 
         private void cmdSliceOptions_Click(object sender, EventArgs e)
@@ -654,6 +630,11 @@ namespace UV_DLP_3D_Printer
                 DebugLogger.Instance().LogRecord("Disconnecting from Printer");
                 UVDLPApp.Instance().m_deviceinterface.Disconnect();
             }
+        }
+
+        private void cmdControl_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

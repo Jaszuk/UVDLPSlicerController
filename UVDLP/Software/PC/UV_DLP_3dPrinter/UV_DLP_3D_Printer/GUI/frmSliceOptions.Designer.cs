@@ -37,6 +37,7 @@
             this.txtZThick = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.chkexportsvg = new System.Windows.Forms.CheckBox();
+            this.cmdCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // chkExportSlices
@@ -51,7 +52,7 @@
             // 
             // cmdOK
             // 
-            this.cmdOK.Location = new System.Drawing.Point(100, 229);
+            this.cmdOK.Location = new System.Drawing.Point(36, 239);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(129, 41);
             this.cmdOK.TabIndex = 24;
@@ -113,11 +114,22 @@
             this.chkexportsvg.Text = "Export SVG Slices";
             this.chkexportsvg.UseVisualStyleBackColor = true;
             // 
+            // cmdCancel
+            // 
+            this.cmdCancel.Location = new System.Drawing.Point(171, 239);
+            this.cmdCancel.Name = "cmdCancel";
+            this.cmdCancel.Size = new System.Drawing.Size(129, 41);
+            this.cmdCancel.TabIndex = 31;
+            this.cmdCancel.Text = "Cancel";
+            this.cmdCancel.UseVisualStyleBackColor = true;
+            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
+            // 
             // frmSliceOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(342, 292);
+            this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.chkexportsvg);
             this.Controls.Add(this.txtZThick);
             this.Controls.Add(this.label1);
@@ -126,6 +138,7 @@
             this.Controls.Add(this.chkgengcode);
             this.Controls.Add(this.cmdOK);
             this.Controls.Add(this.chkExportSlices);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmSliceOptions";
@@ -148,5 +161,6 @@
         private System.Windows.Forms.TextBox txtZThick;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkexportsvg;
+        private System.Windows.Forms.Button cmdCancel;
     }
 }

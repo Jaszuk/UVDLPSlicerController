@@ -40,13 +40,18 @@
             this.label2 = new System.Windows.Forms.Label();
             this.projheight = new System.Windows.Forms.TextBox();
             this.projwidth = new System.Windows.Forms.TextBox();
+            this.Monitors = new System.Windows.Forms.GroupBox();
+            this.lblMonInfo = new System.Windows.Forms.Label();
+            this.cmdRefreshMonitors = new System.Windows.Forms.Button();
+            this.lstMonitors = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.Monitors.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
-            this.cmdOK.Location = new System.Drawing.Point(114, 220);
+            this.cmdOK.Location = new System.Drawing.Point(132, 350);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(92, 38);
             this.cmdOK.TabIndex = 0;
@@ -56,7 +61,7 @@
             // 
             // cmdCancel
             // 
-            this.cmdCancel.Location = new System.Drawing.Point(212, 220);
+            this.cmdCancel.Location = new System.Drawing.Point(230, 350);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(92, 38);
             this.cmdCancel.TabIndex = 1;
@@ -158,16 +163,62 @@
             this.projwidth.TabIndex = 0;
             this.projwidth.Text = "1024";
             // 
+            // Monitors
+            // 
+            this.Monitors.Controls.Add(this.lblMonInfo);
+            this.Monitors.Controls.Add(this.cmdRefreshMonitors);
+            this.Monitors.Controls.Add(this.lstMonitors);
+            this.Monitors.Location = new System.Drawing.Point(12, 184);
+            this.Monitors.Name = "Monitors";
+            this.Monitors.Size = new System.Drawing.Size(357, 160);
+            this.Monitors.TabIndex = 12;
+            this.Monitors.TabStop = false;
+            this.Monitors.Text = "Select Print Display Device";
+            // 
+            // lblMonInfo
+            // 
+            this.lblMonInfo.AutoSize = true;
+            this.lblMonInfo.Location = new System.Drawing.Point(7, 117);
+            this.lblMonInfo.Name = "lblMonInfo";
+            this.lblMonInfo.Size = new System.Drawing.Size(0, 17);
+            this.lblMonInfo.TabIndex = 2;
+            // 
+            // cmdRefreshMonitors
+            // 
+            this.cmdRefreshMonitors.Location = new System.Drawing.Point(6, 117);
+            this.cmdRefreshMonitors.Name = "cmdRefreshMonitors";
+            this.cmdRefreshMonitors.Size = new System.Drawing.Size(176, 23);
+            this.cmdRefreshMonitors.TabIndex = 1;
+            this.cmdRefreshMonitors.Text = "Refresh";
+            this.cmdRefreshMonitors.UseVisualStyleBackColor = true;
+            this.cmdRefreshMonitors.Click += new System.EventHandler(this.cmdRefreshMonitors_Click);
+            // 
+            // lstMonitors
+            // 
+            this.lstMonitors.FormattingEnabled = true;
+            this.lstMonitors.ItemHeight = 16;
+            this.lstMonitors.Location = new System.Drawing.Point(7, 26);
+            this.lstMonitors.Name = "lstMonitors";
+            this.lstMonitors.Size = new System.Drawing.Size(301, 84);
+            this.lstMonitors.TabIndex = 0;
+            this.lstMonitors.SelectedIndexChanged += new System.EventHandler(this.lstMonitors_SelectedIndexChanged);
+            // 
             // frmMachineConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(448, 273);
+            this.ClientSize = new System.Drawing.Size(466, 400);
+            this.Controls.Add(this.Monitors);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOK);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmMachineConfig";
+            this.ShowInTaskbar = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Machine Configuration";
             this.Load += new System.EventHandler(this.frmMachineConfig_Load);
@@ -175,6 +226,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.Monitors.ResumeLayout(false);
+            this.Monitors.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -193,5 +246,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox projheight;
         private System.Windows.Forms.TextBox projwidth;
+        private System.Windows.Forms.GroupBox Monitors;
+        private System.Windows.Forms.Label lblMonInfo;
+        private System.Windows.Forms.Button cmdRefreshMonitors;
+        private System.Windows.Forms.ListBox lstMonitors;
     }
 }

@@ -61,11 +61,6 @@
             this.prgSlice = new System.Windows.Forms.ProgressBar();
             this.tabGCode = new System.Windows.Forms.TabPage();
             this.txtGCode = new System.Windows.Forms.TextBox();
-            this.tabMachine = new System.Windows.Forms.TabPage();
-            this.Monitors = new System.Windows.Forms.GroupBox();
-            this.lblMonInfo = new System.Windows.Forms.Label();
-            this.cmdRefreshMonitors = new System.Windows.Forms.Button();
-            this.lstMonitors = new System.Windows.Forms.ListBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
@@ -73,8 +68,9 @@
             this.cmdStop = new System.Windows.Forms.ToolStripButton();
             this.cmdRefresh = new System.Windows.Forms.ToolStripButton();
             this.cmdConnect = new System.Windows.Forms.ToolStripButton();
-            this.picSlice = new System.Windows.Forms.PictureBox();
             this.cmdDisconnect = new System.Windows.Forms.ToolStripButton();
+            this.cmdControl = new System.Windows.Forms.ToolStripButton();
+            this.picSlice = new System.Windows.Forms.PictureBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -84,8 +80,6 @@
             this.tabModel.SuspendLayout();
             this.tabSlice.SuspendLayout();
             this.tabGCode.SuspendLayout();
-            this.tabMachine.SuspendLayout();
-            this.Monitors.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
@@ -185,7 +179,8 @@
             this.cmbSerial,
             this.cmdRefresh,
             this.cmdConnect,
-            this.cmdDisconnect});
+            this.cmdDisconnect,
+            this.cmdControl});
             this.toolStrip1.Location = new System.Drawing.Point(0, 28);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(920, 55);
@@ -272,7 +267,6 @@
             this.tabControl1.Controls.Add(this.tabModel);
             this.tabControl1.Controls.Add(this.tabSlice);
             this.tabControl1.Controls.Add(this.tabGCode);
-            this.tabControl1.Controls.Add(this.tabMachine);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.ItemSize = new System.Drawing.Size(110, 21);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -430,55 +424,6 @@
             this.txtGCode.Size = new System.Drawing.Size(515, 597);
             this.txtGCode.TabIndex = 0;
             // 
-            // tabMachine
-            // 
-            this.tabMachine.Controls.Add(this.Monitors);
-            this.tabMachine.Location = new System.Drawing.Point(4, 25);
-            this.tabMachine.Name = "tabMachine";
-            this.tabMachine.Size = new System.Drawing.Size(515, 597);
-            this.tabMachine.TabIndex = 3;
-            this.tabMachine.Text = "Machine";
-            this.tabMachine.UseVisualStyleBackColor = true;
-            // 
-            // Monitors
-            // 
-            this.Monitors.Controls.Add(this.lblMonInfo);
-            this.Monitors.Controls.Add(this.cmdRefreshMonitors);
-            this.Monitors.Controls.Add(this.lstMonitors);
-            this.Monitors.Location = new System.Drawing.Point(18, 126);
-            this.Monitors.Name = "Monitors";
-            this.Monitors.Size = new System.Drawing.Size(357, 183);
-            this.Monitors.TabIndex = 8;
-            this.Monitors.TabStop = false;
-            this.Monitors.Text = "Select Print Display Device";
-            // 
-            // lblMonInfo
-            // 
-            this.lblMonInfo.AutoSize = true;
-            this.lblMonInfo.Location = new System.Drawing.Point(7, 117);
-            this.lblMonInfo.Name = "lblMonInfo";
-            this.lblMonInfo.Size = new System.Drawing.Size(0, 17);
-            this.lblMonInfo.TabIndex = 2;
-            // 
-            // cmdRefreshMonitors
-            // 
-            this.cmdRefreshMonitors.Location = new System.Drawing.Point(6, 154);
-            this.cmdRefreshMonitors.Name = "cmdRefreshMonitors";
-            this.cmdRefreshMonitors.Size = new System.Drawing.Size(176, 23);
-            this.cmdRefreshMonitors.TabIndex = 1;
-            this.cmdRefreshMonitors.Text = "Refresh";
-            this.cmdRefreshMonitors.UseVisualStyleBackColor = true;
-            this.cmdRefreshMonitors.Click += new System.EventHandler(this.cmdRefreshMonitors_Click);
-            // 
-            // lstMonitors
-            // 
-            this.lstMonitors.FormattingEnabled = true;
-            this.lstMonitors.ItemHeight = 16;
-            this.lstMonitors.Location = new System.Drawing.Point(7, 26);
-            this.lstMonitors.Name = "lstMonitors";
-            this.lstMonitors.Size = new System.Drawing.Size(301, 84);
-            this.lstMonitors.TabIndex = 0;
-            // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -550,16 +495,6 @@
             this.cmdConnect.Text = "Connect";
             this.cmdConnect.Click += new System.EventHandler(this.cmdConnect1_Click);
             // 
-            // picSlice
-            // 
-            this.picSlice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picSlice.Location = new System.Drawing.Point(34, 190);
-            this.picSlice.Name = "picSlice";
-            this.picSlice.Size = new System.Drawing.Size(464, 300);
-            this.picSlice.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSlice.TabIndex = 17;
-            this.picSlice.TabStop = false;
-            // 
             // cmdDisconnect
             // 
             this.cmdDisconnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -569,6 +504,26 @@
             this.cmdDisconnect.Size = new System.Drawing.Size(52, 52);
             this.cmdDisconnect.Text = "Disconnect";
             this.cmdDisconnect.Click += new System.EventHandler(this.cmdDisconnect_Click);
+            // 
+            // cmdControl
+            // 
+            this.cmdControl.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdControl.Image = global::UV_DLP_3D_Printer.Properties.Resources.move;
+            this.cmdControl.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdControl.Name = "cmdControl";
+            this.cmdControl.Size = new System.Drawing.Size(52, 52);
+            this.cmdControl.Text = "View Printer Controls";
+            this.cmdControl.Click += new System.EventHandler(this.cmdControl_Click);
+            // 
+            // picSlice
+            // 
+            this.picSlice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picSlice.Location = new System.Drawing.Point(34, 190);
+            this.picSlice.Name = "picSlice";
+            this.picSlice.Size = new System.Drawing.Size(464, 300);
+            this.picSlice.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picSlice.TabIndex = 17;
+            this.picSlice.TabStop = false;
             // 
             // frmMain
             // 
@@ -595,9 +550,6 @@
             this.tabSlice.PerformLayout();
             this.tabGCode.ResumeLayout(false);
             this.tabGCode.PerformLayout();
-            this.tabMachine.ResumeLayout(false);
-            this.Monitors.ResumeLayout(false);
-            this.Monitors.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
@@ -622,16 +574,11 @@
         private System.Windows.Forms.Button cmdPlace;
         private System.Windows.Forms.Button cmdCenter;
         private System.Windows.Forms.TabPage tabSlice;
-        private System.Windows.Forms.TabPage tabMachine;
         private System.Windows.Forms.ProgressBar prgSlice;
         private System.Windows.Forms.TextBox txtScale;
         private System.Windows.Forms.Button cmdScale;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.TextBox txtLog;
-        private System.Windows.Forms.GroupBox Monitors;
-        private System.Windows.Forms.Label lblMonInfo;
-        private System.Windows.Forms.Button cmdRefreshMonitors;
-        private System.Windows.Forms.ListBox lstMonitors;
         private System.Windows.Forms.Label lblNumSlices;
         private System.Windows.Forms.PictureBox picSlice;
         private System.Windows.Forms.Button cmdShowDLPfrm;
@@ -656,6 +603,7 @@
         private System.Windows.Forms.ToolStripButton cmdRefresh;
         private System.Windows.Forms.ToolStripButton cmdConnect;
         private System.Windows.Forms.ToolStripButton cmdDisconnect;
+        private System.Windows.Forms.ToolStripButton cmdControl;
     }
 }
 

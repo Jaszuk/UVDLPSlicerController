@@ -29,6 +29,19 @@ namespace UV_DLP_3D_Printer
         {
             try
             {
+                XmlReader xr = XmlReader.Create(filename);
+                xr.ReadStartElement("MachineConfig");
+                m_XDLPRes = double.Parse(xr.ReadElementString("DLP_X_Res"));
+                m_YDLPRes = double.Parse(xr.ReadElementString("DLP_Y_Res"));
+                m_PlatXSize = double.Parse(xr.ReadElementString("PlatformXSize"));
+                m_PlatYSize = double.Parse(xr.ReadElementString("PlatformYSize"));
+                m_PlatZSize = double.Parse(xr.ReadElementString("PlatformZSize"));
+                m_Xpixpermm = double.Parse(xr.ReadElementString("PixPermmX"));
+                m_Ypixpermm = double.Parse(xr.ReadElementString("PixPermmY"));
+                m_ZMaxFeedrate = double.Parse(xr.ReadElementString("MaxZFeedRate"));
+                m_monitorid = xr.ReadElementString("MonitorID");
+                xr.ReadEndElement();
+                xr.Close();
                 return true;
             }
             catch (Exception ex) 
@@ -69,7 +82,8 @@ namespace UV_DLP_3D_Printer
             m_PlatXSize = 102.0;
             m_PlatYSize = 77.0;
             m_PlatZSize = 100; // 100 mm default, we have to load this
-            m_ZMaxFeedrate = 1000;
+            m_ZMaxFeedrate = 100;
+            m_monitorid = "";
             CalcPixPerMM();
         }
 

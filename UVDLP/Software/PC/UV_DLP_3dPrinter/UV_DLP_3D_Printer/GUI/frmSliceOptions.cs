@@ -19,8 +19,12 @@ namespace UV_DLP_3D_Printer
         private void cmdOK_Click(object sender, EventArgs e)
         {
             //save some stuff
-            GetValues();
-            Close();
+            if (GetValues())
+            {
+                //save
+                UVDLPApp.Instance().SaveCurrentSliceBuildConfig();
+                Close();
+            }
         }
 
         private void SetValues() 
@@ -32,7 +36,7 @@ namespace UV_DLP_3D_Printer
             txtLayerTime.Text = "" + UVDLPApp.Instance().m_buildparms.layertime_ms;
         
         }
-        private void GetValues() 
+        private bool GetValues() 
         {
             try
             {              
@@ -41,16 +45,23 @@ namespace UV_DLP_3D_Printer
                 UVDLPApp.Instance().m_buildparms.exportimages = chkExportSlices.Checked;
                 UVDLPApp.Instance().m_buildparms.exportsvg = chkexportsvg.Checked;
                 UVDLPApp.Instance().m_buildparms.layertime_ms = int.Parse(txtLayerTime.Text);
+                return true;
             }
             catch (Exception ex) 
             {
-                MessageBox.Show("Input Error", "Please check input paramters\r\n" + ex.Message);
+                MessageBox.Show("Please check input parameters\r\n" + ex.Message,"Input Error");
+                return false;
             }
         }
 
         private void frmSliceOptions_Load(object sender, EventArgs e)
         {
             SetValues();
+        }
+
+        private void cmdCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -90,6 +90,30 @@ namespace UV_DLP_3D_Printer
                     return Platform.Windows;
             }
         }
+
+        public void SaveCurrentMachineConfig() 
+        {
+            try
+            {
+                m_printerinfo.Save(m_appconfig.m_curmachineeprofilename);
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+            }
+        }
+        public void SaveCurrentSliceBuildConfig()
+        {
+            try
+            {
+                m_buildparms.Save(m_appconfig.m_cursliceprofilename);
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+            }
+        }
+
         public void DoAppStartup() 
         {
             m_apppath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -123,7 +147,10 @@ namespace UV_DLP_3D_Printer
             }
 
             //load the current machine configuration file
-
+            if (!m_printerinfo.Load(m_appconfig.m_curmachineeprofilename)) 
+            {
+                m_printerinfo.Save(m_appconfig.m_curmachineeprofilename);
+            }
             //load the current slicing profile
             if (!m_buildparms.Load(m_appconfig.m_cursliceprofilename)) 
             {

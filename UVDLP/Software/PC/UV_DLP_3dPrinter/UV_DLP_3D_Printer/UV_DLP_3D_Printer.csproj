@@ -77,6 +77,12 @@
     <Compile Include="Device_Interface\NULLdriver.cs" />
     <Compile Include="Device_Interface\DriverFactory.cs" />
     <Compile Include="Device_Interface\GenericDriver.cs" />
+    <Compile Include="GUI\frmControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\frmControl.Designer.cs">
+      <DependentUpon>frmControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Slicing\SliceFile.cs" />
     <Compile Include="Utility\DebugLogger.cs" />
     <Compile Include="GUI\frmDLP.cs">
@@ -119,6 +125,9 @@
     <Compile Include="BuildManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="GUI\frmControl.resx">
+      <DependentUpon>frmControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmMachineConfig.resx">
       <DependentUpon>frmMachineConfig.cs</DependentUpon>
     </EmbeddedResource>
@@ -159,6 +168,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Notes.txt" />
+    <None Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Down1Blue.png" />
+    <None Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Up1Blue.png" />
+    <None Include="resources\021\move.png" />
     <None Include="resources\021\Refresh-icon.png" />
     <None Include="resources\021\Disconnect.png" />
     <None Include="resources\021\Connect.png" />
