@@ -70,53 +70,69 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Camera.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="DebugLogger.cs" />
-    <Compile Include="frmDLP.cs">
+    <Compile Include="3DEngine\Camera.cs" />
+    <Compile Include="Configs\AppConfig.cs" />
+    <Compile Include="Configs\DeviceDriverConfig.cs" />
+    <Compile Include="Device_Interface\DeviceDriver.cs" />
+    <Compile Include="Device_Interface\NULLdriver.cs" />
+    <Compile Include="Device_Interface\DriverFactory.cs" />
+    <Compile Include="Device_Interface\GenericDriver.cs" />
+    <Compile Include="Slicing\SliceFile.cs" />
+    <Compile Include="Utility\DebugLogger.cs" />
+    <Compile Include="GUI\frmDLP.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmDLP.Designer.cs">
+    <Compile Include="GUI\frmDLP.Designer.cs">
       <DependentUpon>frmDLP.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmSliceOptions.cs">
+    <Compile Include="GUI\frmMachineConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmSliceOptions.Designer.cs">
+    <Compile Include="GUI\frmMachineConfig.Designer.cs">
+      <DependentUpon>frmMachineConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\frmSliceOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\frmSliceOptions.Designer.cs">
       <DependentUpon>frmSliceOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="GCodeGenerator.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="PrinterInfo.cs" />
-    <Compile Include="SysLog.cs" />
-    <Compile Include="PrinterInterface.cs" />
-    <Compile Include="Engine3d.cs" />
-    <Compile Include="frmMain.cs">
+    <Compile Include="Slicing\GCodeFile.cs" />
+    <Compile Include="Slicing\GCodeGenerator.cs" />
+    <Compile Include="Utility\Logger.cs" />
+    <Compile Include="Configs\MachineConfig.cs" />
+    <Compile Include="Configs\Settings.cs" />
+    <Compile Include="Device_Interface\DeviceInterface.cs" />
+    <Compile Include="3DEngine\Engine3d.cs" />
+    <Compile Include="GUI\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMain.Designer.cs">
+    <Compile Include="GUI\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Matrix3D.cs" />
-    <Compile Include="MinMax.cs" />
-    <Compile Include="Object3d.cs" />
-    <Compile Include="Point3d.cs" />
-    <Compile Include="Polygon.cs" />
-    <Compile Include="PolyLine3d.cs" />
-    <Compile Include="PrintManager.cs" />
+    <Compile Include="3DEngine\Matrix3D.cs" />
+    <Compile Include="3DEngine\MinMax.cs" />
+    <Compile Include="3DEngine\Object3d.cs" />
+    <Compile Include="3DEngine\Point3d.cs" />
+    <Compile Include="3DEngine\Polygon.cs" />
+    <Compile Include="3DEngine\PolyLine3d.cs" />
+    <Compile Include="BuildManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="frmMain.resx">
+    <EmbeddedResource Include="GUI\frmMachineConfig.resx">
+      <DependentUpon>frmMachineConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmDLP.resx">
+    <EmbeddedResource Include="GUI\frmDLP.resx">
       <DependentUpon>frmDLP.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmSliceOptions.resx">
+    <EmbeddedResource Include="GUI\frmSliceOptions.resx">
       <DependentUpon>frmSliceOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -134,14 +150,21 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Slice.cs" />
-    <Compile Include="SliceParms.cs" />
-    <Compile Include="Slicer.cs" />
-    <Compile Include="Utility.cs" />
-    <Compile Include="Vector3d.cs" />
+    <Compile Include="Slicing\Slice.cs" />
+    <Compile Include="Configs\SliceBuildConfig.cs" />
+    <Compile Include="Slicing\Slicer.cs" />
+    <Compile Include="Utility\Utility.cs" />
+    <Compile Include="UVDLPApp.cs" />
+    <Compile Include="3DEngine\Vector3d.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Notes.txt" />
+    <None Include="resources\021\Refresh-icon.png" />
+    <None Include="resources\021\Disconnect.png" />
+    <None Include="resources\021\Connect.png" />
+    <None Include="resources\021\bfzn_006.png" />
+    <None Include="resources\021\bfzn_004.png" />
+    <None Include="resources\021\bfzn_003.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

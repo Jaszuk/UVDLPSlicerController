@@ -15,6 +15,8 @@ namespace UV_DLP_3D_Printer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            //init the app object
+            UVDLPApp.Instance().DoAppStartup();
             Application.Run(new frmMain());
         }
     }

@@ -22,3 +22,87 @@ GCode Generation:
 	good reference:
 	 http://reprap.org/wiki/G-code
 
+
+
+	 I need several structures to keep this all straight, I could simplify thingsm but I think
+	 it will bite me in the ass later if I do
+
+	 I need:
+
+		Machine Configuration  - this structure will hold information about a specific machine that we're using
+		it should be store in an XML file similar(or identical) to the replicator G xml file. this contains information
+		about the machine such as:						
+		   the X resolution of the DLP projector in pixels
+           the Y resolution of the DLP projector in pixels
+           the X size of the build platform in mm
+           the Y size of the build platform in mm
+           the Z size of the Z axis length in mm
+           the calculated pixels per mm
+           the calculated pixels per mm
+		   the Z max feed rate
+			Driver -
+				Baud rate, stop bits, parity, type of driver
+
+
+		Slicing/building Parameters - These are the specific parameters used to slice an object into a GCode file along
+			with a set of images. This structure should have the following information. The user should be able to generate multiple
+			slicing parameter profiles that can be used to slice models
+			-dots per mm x
+			-dots per mm y
+            -the X/Y resolution of the output image
+			-thickness of the z layer - slicing height
+			-Desired Platform Build temperature
+			-z axis travel speed
+			-time to project image per layer in milliseconds (relative build speed)
+
+		The Slicer takes the input model with the Slicing parameters and generates 2 things:
+			-A GCode file
+				The GCode file contains the fileanme of the slicing parameters file along with
+				a copy of the slicing parameter variables in it's header (for reference)
+			-A set of Images that represent each slice
+				The image files and the gcode file should follow a naming pattern based on the
+				original model filename (automatically generated).
+			-Alternative to a set of sliced images, the slicer can produce a sliced file and during runtime
+			 can dynamically generate slices from theses. This is a good space saver.
+			-Another alternative is to store the image slices in a movie format such as avi, mpg, etc.. as a 
+			 lossless movie
+				
+
+		I think I need to separate the build parameters from the slicing parameters
+		The slicing parameters hold info such as 
+			slice thickness
+			whether to export files, and where to export them
+
+
+
+		Application Configuration file. This application configuration represents some basic configuration parameters of the app
+			-Last model loaded (MRU list)
+			-Last Machine Configuration used
+			-Last Slicing/build parameters used
+
+
+
+			App Directory structure
+
+			/root
+				appconfig.xml - the application configuration file
+				/Machines   - (Machine Configurations profiles Directory)
+					-0 or more machine configuration XML files
+				/Slicing	- (slicing and building profiles)
+					-0 or more profiles used for slicing and building
+
+
+		Slice file
+			A slice file represents a model that has been sliced and is ready to be printed.
+				It may contain the vectors on a per slice basic. In this configuration each vector would have to be rendered
+				at run time with the build configuration. The build configuration specifies items that are specific to the machine being buil on
+				such as x/y platform size, monitor resolution, etc.. This might be a good format to exchange between users because it represents a sliced
+				file (at a given z resolution), but (hopefully) would not be as large as a series of images.
+
+				A secondary version of the slice file could be compressed 2 color  4 bit or 8 bit RLE compressed images in a single file. This would removed the
+				need to transport dozens (or hundreds) of image files for even a moderately sized sliced model. These images would represent
+				a sliced and ready to print model for a specific machine. If the X/Y platform size or resolution differed, the model would 
+				have to be re-sliced. The advantage of this format is that it is ready to print, and allows for slices to be viewed and examined quickly
+
+				Another approach is not to generate image or vector slices at all, and only generate them at run-time. The model itself could be 
+				the only resource needed beyond the slicing and build parameters.

@@ -1,0 +1,37 @@
+##############################################################################
+#                                                                            #
+# Teacup - lean and efficient firmware for RepRap printers                   #
+#                                                                            #
+# by Triffid Hunter, Traumflug, jakepoz, Markus Hitter, many others          #
+#                                                                            #
+##############################################################################
+
+For installation instructions, see
+http://reprap.org/wiki/Teacup_Firmware#Simple_Installation and/or
+http://reprap.org/wiki/Teacup_Firmware#Developer_Installation
+
+For documentation, see
+http://reprap.org/wiki/Teacup_Firmware
+
+
+##############################################################################
+#                                                                            #
+# This firmware is Copyright (c) ...                                         #
+#   2009 - 2010 Michael Moon aka Triffid_Hunter                              #
+#   2010 - 2013 Markus "Traumflug" Hitter <mah@jump-ing.de>                  #
+#                                                                            #
+# This program is free software; you can redistribute it and/or modify       #
+# it under the terms of the GNU General Public License as published by       #
+# the Free Software Foundation; either version 2 of the License, or          #
+# (at your option) any later version.                                        #
+#                                                                            #
+# This program is distributed in the hope that it will be useful,            #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of             #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              #
+# GNU General Public License for more details.                               #
+#                                                                            #
+# You should have received a copy of the GNU General Public License          #
+# along with this program; if not, write to the Free Software                #
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA #
+#                                                                            #
+##############################################################################
