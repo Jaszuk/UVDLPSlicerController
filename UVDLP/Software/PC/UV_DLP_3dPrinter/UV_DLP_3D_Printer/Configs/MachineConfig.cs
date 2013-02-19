@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using UV_DLP_3D_Printer.Configs;
 
 namespace UV_DLP_3D_Printer
 {
@@ -25,10 +26,13 @@ namespace UV_DLP_3D_Printer
         private double m_Ypixpermm; // the calculated pixels per mm
         public double m_ZMaxFeedrate;// in mm/min 
         public string m_monitorid; // which monitor we're using
+        public ConnectionConfig m_connection;
+
         public bool Load(string filename) 
         {
             try
             {
+                bool retval = false;
                 XmlReader xr = XmlReader.Create(filename);
                 xr.ReadStartElement("MachineConfig");
                 m_XDLPRes = double.Parse(xr.ReadElementString("DLP_X_Res"));
@@ -40,9 +44,14 @@ namespace UV_DLP_3D_Printer
                 m_Ypixpermm = double.Parse(xr.ReadElementString("PixPermmY"));
                 m_ZMaxFeedrate = double.Parse(xr.ReadElementString("MaxZFeedRate"));
                 m_monitorid = xr.ReadElementString("MonitorID");
+                
+                if (m_connection.Load(xr))
+                {
+                    retval = true;
+                }
                 xr.ReadEndElement();
                 xr.Close();
-                return true;
+                return retval;
             }
             catch (Exception ex) 
             {
@@ -54,20 +63,27 @@ namespace UV_DLP_3D_Printer
         {
             try
             {
+                bool retval = false;
                 XmlWriter xw = XmlWriter.Create(filename);
-                xw.WriteStartElement("MachineConfig");
-                xw.WriteElementString("DLP_X_Res", m_XDLPRes.ToString());
-                xw.WriteElementString("DLP_Y_Res", m_YDLPRes.ToString());
-                xw.WriteElementString("PlatformXSize", m_PlatXSize.ToString());
-                xw.WriteElementString("PlatformYSize", m_PlatYSize.ToString());
-                xw.WriteElementString("PlatformZSize", m_PlatZSize.ToString());
-                xw.WriteElementString("PixPermmX", m_Xpixpermm.ToString());
-                xw.WriteElementString("PixPermmY", m_Ypixpermm.ToString());
-                xw.WriteElementString("MaxZFeedRate", m_ZMaxFeedrate.ToString());
-                xw.WriteElementString("MonitorID", m_monitorid.ToString());
-                xw.WriteEndElement();
+                xw.WriteStartDocument();
+                    xw.WriteStartElement("MachineConfig");
+                        xw.WriteElementString("DLP_X_Res", m_XDLPRes.ToString());
+                        xw.WriteElementString("DLP_Y_Res", m_YDLPRes.ToString());
+                        xw.WriteElementString("PlatformXSize", m_PlatXSize.ToString());
+                        xw.WriteElementString("PlatformYSize", m_PlatYSize.ToString());
+                        xw.WriteElementString("PlatformZSize", m_PlatZSize.ToString());
+                        xw.WriteElementString("PixPermmX", m_Xpixpermm.ToString());
+                        xw.WriteElementString("PixPermmY", m_Ypixpermm.ToString());
+                        xw.WriteElementString("MaxZFeedRate", m_ZMaxFeedrate.ToString());
+                        xw.WriteElementString("MonitorID", m_monitorid.ToString());
+                        if (m_connection.Save(xw))
+                        {
+                            retval = true;
+                        }
+                    xw.WriteEndElement();
+                xw.WriteEndDocument();
                 xw.Close();
-                return true;
+                return retval;
             }
             catch (Exception ex)
             {
@@ -85,6 +101,8 @@ namespace UV_DLP_3D_Printer
             m_ZMaxFeedrate = 100;
             m_monitorid = "";
             CalcPixPerMM();
+            m_connection = new ConnectionConfig();
+            m_connection.CreateDefault();
         }
 
         private void CalcPixPerMM() 

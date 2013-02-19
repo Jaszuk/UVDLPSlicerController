@@ -107,6 +107,7 @@
             // chkexportsvg
             // 
             this.chkexportsvg.AutoSize = true;
+            this.chkexportsvg.Enabled = false;
             this.chkexportsvg.Location = new System.Drawing.Point(21, 166);
             this.chkexportsvg.Name = "chkexportsvg";
             this.chkexportsvg.Size = new System.Drawing.Size(144, 21);

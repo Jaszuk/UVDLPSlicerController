@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using UV_DLP_3D_Printer.Configs;
 
 namespace UV_DLP_3D_Printer.Drivers
 {

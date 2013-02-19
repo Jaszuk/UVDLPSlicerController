@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.IO.Ports;
 using System.Timers;
+using UV_DLP_3D_Printer.Configs;
 
 namespace UV_DLP_3D_Printer.Drivers
 {
@@ -34,7 +35,7 @@ namespace UV_DLP_3D_Printer.Drivers
         protected eDriverType m_drivertype;
         public DataReceivedEvent DataReceived; // a delegate to notify when data is received
         public DeviceStatusEvent DeviceStatus;
-
+        protected ConnectionConfig m_config; // the serial port configuration
         protected DeviceDriver() 
         {
             m_serialport = new SerialPort();
@@ -60,5 +61,9 @@ namespace UV_DLP_3D_Printer.Drivers
         public abstract bool Disconnect();
         public abstract int Write(byte[] data, int len);
         public abstract int Write(String line);
+        public void Configure(ConnectionConfig cc) 
+        {
+            m_config = cc;
+        }
     }
 }

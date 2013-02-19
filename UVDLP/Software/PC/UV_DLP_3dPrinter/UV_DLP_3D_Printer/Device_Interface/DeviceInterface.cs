@@ -6,6 +6,9 @@ using System.IO.Ports;
 using System.Timers;
 using System.IO;
 using UV_DLP_3D_Printer.Drivers;
+using UV_DLP_3D_Printer.Configs;
+
+
 namespace UV_DLP_3D_Printer
 {
     /*
@@ -110,7 +113,10 @@ namespace UV_DLP_3D_Printer
                 m_driver.DeviceStatus += new DeviceDriver.DeviceStatusEvent(DriverDeviceStatusEvent);
             }
         }
-
+        public void Configure(ConnectionConfig cc) 
+        {
+            Driver.Configure(cc);
+        }
         public void DriverDeviceStatusEvent(DeviceDriver device, eDeviceStatus status) 
         {
             switch (status) 

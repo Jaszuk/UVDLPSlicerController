@@ -13,7 +13,7 @@ using OpenTK.Platform.Windows;
 using System.IO.Ports;
 using System.IO;
 using System.Collections;
-
+using UV_DLP_3D_Printer.GUI;
 namespace UV_DLP_3D_Printer
 {
     public partial class frmMain : Form
@@ -612,6 +612,9 @@ namespace UV_DLP_3D_Printer
                     String com = cmbSerial.Text;
                     if (com.Length > 0)
                     {
+                        //maybe get the com port if it's different?
+                        UVDLPApp.Instance().m_printerinfo.m_connection.comname = com;
+                        UVDLPApp.Instance().m_deviceinterface.Configure(UVDLPApp.Instance().m_printerinfo.m_connection);
                         DebugLogger.Instance().LogRecord("Connecting to Printer on " + com);
                         UVDLPApp.Instance().m_deviceinterface.Connect();//com);                        
                     }
@@ -637,5 +640,10 @@ namespace UV_DLP_3D_Printer
 
         }
 
+        private void connectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmConnection frmconnect = new frmConnection();
+            frmconnect.ShowDialog();
+        }
     }
 }

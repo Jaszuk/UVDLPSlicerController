@@ -72,11 +72,18 @@
   <ItemGroup>
     <Compile Include="3DEngine\Camera.cs" />
     <Compile Include="Configs\AppConfig.cs" />
+    <Compile Include="Configs\ConnectionConfig.cs" />
     <Compile Include="Configs\DeviceDriverConfig.cs" />
     <Compile Include="Device_Interface\DeviceDriver.cs" />
     <Compile Include="Device_Interface\NULLdriver.cs" />
     <Compile Include="Device_Interface\DriverFactory.cs" />
     <Compile Include="Device_Interface\GenericDriver.cs" />
+    <Compile Include="GUI\frmConnection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\frmConnection.Designer.cs">
+      <DependentUpon>frmConnection.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\frmControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,6 +132,9 @@
     <Compile Include="BuildManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="GUI\frmConnection.resx">
+      <DependentUpon>frmConnection.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmControl.resx">
       <DependentUpon>frmControl.cs</DependentUpon>
     </EmbeddedResource>
