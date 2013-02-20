@@ -14,6 +14,7 @@ using System.IO.Ports;
 using System.IO;
 using System.Collections;
 using UV_DLP_3D_Printer.GUI;
+
 namespace UV_DLP_3D_Printer
 {
     public partial class frmMain : Form
@@ -21,12 +22,13 @@ namespace UV_DLP_3D_Printer
         bool loaded = false;               
         Engine3d m_engine3d = new Engine3d();              
         frmDLP m_frmdlp = new frmDLP();
-        frmSliceOptions m_frmsliceopt = new frmSliceOptions();      
-        
+        frmSliceOptions m_frmsliceopt = new frmSliceOptions();
+        frmControl m_frmcontrol = new frmControl();
+        frmSlice m_frmSlice = new frmSlice();
         private bool lmdown, rmdown;
         private int mdx, mdy;
         float orbitypos = 0;
-        float orbitxpos = -40;
+        float orbitxpos = -80;
         float orbitdist = -200;
 
         public frmMain()
@@ -35,17 +37,16 @@ namespace UV_DLP_3D_Printer
             m_engine3d.AddGrid();
             m_engine3d.AddPlatCube();
             m_engine3d.CameraReset();
-            UVDLPApp.Instance().m_slicer.Sliced += new Slicer.LayerSliced(LayerSliced);
+            UVDLPApp.Instance().m_slicer.Slice_Event += new Slicer.SliceEvent(SliceEv);
             cmdRefresh_Click(null,null);
             UVDLPApp.Instance().m_buildmgr.PrintStatus += new delPrintStatus(PrintStatus);
             UVDLPApp.Instance().m_buildmgr.PrintLayer += new delPrinterLayer(PrintLayer);
-            //SysLog.Instance().LogMSG += new LogMessage(SysLogger);
             DebugLogger.Instance().LoggerStatusEvent += new LoggerStatusHandler(LoggerStatusEvent);
             UVDLPApp.Instance().m_deviceinterface.StatusEvent += new DeviceInterface.DeviceInterfaceStatus(DeviceStatusEvent);
-            //m_pathsep
             SetConnectionStatus();
-
         }
+
+        
         private void SetConnectionStatus() 
         {
             if (UVDLPApp.Instance().m_deviceinterface.Connected)
@@ -55,6 +56,8 @@ namespace UV_DLP_3D_Printer
                 cmdRefresh.Enabled = false;
                 cmbSerial.Enabled = false;
                 cmdControl.Enabled = true;
+                cmdBuild.Enabled = true;
+                cmdStop.Enabled = true;
             }
             else 
             {
@@ -63,6 +66,9 @@ namespace UV_DLP_3D_Printer
                 cmdRefresh.Enabled = true;
                 cmbSerial.Enabled = true;
                 cmdControl.Enabled = false;
+                cmdBuild.Enabled = false;
+                cmdStop.Enabled = false;
+
             }
         }
         /*
@@ -128,6 +134,7 @@ namespace UV_DLP_3D_Printer
                         break;
                     case ePrintStat.ePrintCompleted:
                         message = "Print Completed";
+                        MessageBox.Show("Build Completed");
                         break;
                     case ePrintStat.ePrintStarted:
                         message = "Print Started";
@@ -153,38 +160,29 @@ namespace UV_DLP_3D_Printer
             }
         }
 
-        public void LayerSliced(int layer, int totallayers)
+        private void SliceEv(Slicer.eSliceEvent ev, int layer, int totallayers)
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new MethodInvoker(delegate() { LayerSliced( layer,totallayers); }));
+                BeginInvoke(new MethodInvoker(delegate() { SliceEv(ev,layer, totallayers); }));
             }
             else
             {
-                if (layer == 0)
+                switch (ev)
                 {
-                    prgSlice.Maximum = totallayers - 1;
+                    case Slicer.eSliceEvent.eSliceStarted:
+                        break;
+                    case Slicer.eSliceEvent.eLayerSliced:
+                        break;
+                    case Slicer.eSliceEvent.eSliceCompleted:
+                        //show the gcode
+                        txtGCode.Text = UVDLPApp.Instance().m_gcode.RawGCode;
+                        vScrollBar1.Maximum = totallayers;
+                        vScrollBar1.Value = 0;
+                        break;
                 }
-                prgSlice.Value = layer;
-                if (layer == totallayers - 1) // last layer
-                {
-                    prgSlice.Value = 0;
-                    //generate the GCode
-                    //GCodeFile gcf;
-                    UVDLPApp.Instance().m_gcode = GCodeGenerator.Generate(UVDLPApp.Instance().m_slicefile, UVDLPApp.Instance().m_printerinfo);
-                    txtGCode.Text = UVDLPApp.Instance().m_gcode.RawGCode;
-                    //get the path of the current object file
-                    string path = Path.GetDirectoryName(UVDLPApp.Instance().m_obj.m_fullname);
-                    string fn = Path.GetFileNameWithoutExtension(UVDLPApp.Instance().m_obj.m_fullname);
-                    if (!UVDLPApp.Instance().m_gcode.Save(path + UVDLPApp.m_pathsep + fn + ".gcode")) 
-                    {
-                        DebugLogger.Instance().LogRecord("Cannot save GCode File " + path + UVDLPApp.m_pathsep + fn + ".gcode");
-                    }
-                }
-
             }
         }
-
 
         private void ShowObjectInfo() 
         {
@@ -231,37 +229,7 @@ namespace UV_DLP_3D_Printer
             }
         }
 
-        private void cmdSlice_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                SliceBuildConfig sp = UVDLPApp.Instance().m_buildparms;
-                sp.UpdateFrom(UVDLPApp.Instance().m_printerinfo);
-                int numslices = UVDLPApp.Instance().m_slicer.GetNumberOfSlices(sp, UVDLPApp.Instance().m_obj);
-                lblNumSlices.Text = "Number of Slices: " + numslices;
-                UVDLPApp.Instance().m_slicefile = UVDLPApp.Instance().m_slicer.Slice(sp, UVDLPApp.Instance().m_obj, ".");
-                vScrollBar1.Maximum = numslices;
-                vScrollBar1.Value = 0;
-
-            }
-            catch (Exception ex) 
-            {
-                DebugLogger.Instance().LogRecord(ex.Message);
-            }
-            
-        }
-        /*
-        private SliceBuildConfig GetSliceParms() 
-        {
-            // copy the build parameters from the printer information
-            SliceBuildConfig sp = UVDLPApp.Instance().m_buildparms;// new BuildParms();
-            sp.dpmmX = UVDLPApp.Instance().m_printerinfo.PixPerMMX; //10 dots per mm
-            sp.dpmmY = UVDLPApp.Instance().m_printerinfo.PixPerMMY;// 10;
-            sp.xres = UVDLPApp.Instance().m_printerinfo.XRes;
-            sp.yres = UVDLPApp.Instance().m_printerinfo.YRes;
-            return sp;
-        }
-        */
+        
         private void ViewLayer(int layer, Bitmap image) 
         {
             try
@@ -289,7 +257,7 @@ namespace UV_DLP_3D_Printer
                 }
                 picSlice.Image = bmp;//now show the 2d slice
                 m_frmdlp.ShowImage(bmp);
-                lblCurSlice.Text = "Layer = " +layer;
+                //lblCurSlice.Text = "Layer = " +layer;
             }
             catch (Exception) { }
         
@@ -311,6 +279,7 @@ namespace UV_DLP_3D_Printer
                 return;
             SetupViewport();
         }
+
         private void SetupViewport()
         {
             if (!loaded)
@@ -325,7 +294,6 @@ namespace UV_DLP_3D_Printer
                 // Glu
                 GL.Ortho(0, w, 0, h, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
                 GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
-                //gluPerspective(20, width / (float)height, 5, 15);
                 aspect = ((float)glControl1.Width) / ((float)glControl1.Height);
 
                 //GL.Matr
@@ -339,19 +307,15 @@ namespace UV_DLP_3D_Printer
                 GL.LoadMatrix(ref projection);
 
                 GL.ShadeModel(ShadingModel.Smooth);
-                
                 GL.Enable(EnableCap.Lighting);
                 GL.Enable(EnableCap.Light0);
                 float []mat_specular = { 1.0f, 1.0f, 1.0f, 1.0f };
                 float []mat_shininess = { 50.0f };
-                //glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-                //glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
                 GL.Material(MaterialFace.Front, MaterialParameter.Specular, mat_specular);
                 GL.Material(MaterialFace.Front, MaterialParameter.Shininess, mat_shininess);
 
-                //GL.Enable(EnableCap.Blend); // alpha blending
-                //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-                //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                GL.Enable(EnableCap.Blend); // alpha blending
+                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
                 
                 float[] lightpos = new float[4];
                 lightpos[0] = 5.0f;
@@ -415,13 +379,8 @@ namespace UV_DLP_3D_Printer
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
             SetupViewport();
-            Application.Idle += Application_Idle; // press TAB twice after +=
         }
 
-        void Application_Idle(object sender, EventArgs e)
-        {
-           // glControl1.Invalidate();
-        }
         private void glControl1_MouseDown(object sender, MouseEventArgs e)
         {
             mdx = e.X;
@@ -543,7 +502,7 @@ namespace UV_DLP_3D_Printer
         }
 
 
-
+        /* // this code shows the secondary DLP screen 
         private void button2_Click(object sender, EventArgs e)
         {
             try
@@ -559,7 +518,7 @@ namespace UV_DLP_3D_Printer
             
             }          
         }
-
+        */
         private void cmdSliceOptions_Click(object sender, EventArgs e)
         {
             m_frmsliceopt.ShowDialog();
@@ -613,10 +572,14 @@ namespace UV_DLP_3D_Printer
                     if (com.Length > 0)
                     {
                         //maybe get the com port if it's different?
-                        UVDLPApp.Instance().m_printerinfo.m_connection.comname = com;
-                        UVDLPApp.Instance().m_deviceinterface.Configure(UVDLPApp.Instance().m_printerinfo.m_connection);
+                        UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection.comname = com;
+                        UVDLPApp.Instance().m_deviceinterface.Configure(UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection);
                         DebugLogger.Instance().LogRecord("Connecting to Printer on " + com);
-                        UVDLPApp.Instance().m_deviceinterface.Connect();//com);                        
+                        if (!UVDLPApp.Instance().m_deviceinterface.Connect()) 
+                        {
+                            DebugLogger.Instance().LogRecord("Cannot connect printer driver on " + com);
+                        }
+                  
                     }
                 }
             }
@@ -637,13 +600,26 @@ namespace UV_DLP_3D_Printer
 
         private void cmdControl_Click(object sender, EventArgs e)
         {
-
+            if (m_frmcontrol.IsDisposed)
+            {
+                m_frmcontrol = new frmControl();
+            }
+            m_frmcontrol.Show();
         }
 
         private void connectionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmConnection frmconnect = new frmConnection();
             frmconnect.ShowDialog();
+        }
+
+        private void cmdSlice1_Click(object sender, EventArgs e)
+        {
+            if (m_frmSlice.IsDisposed) 
+            {
+                m_frmSlice = new frmSlice();
+            }
+            m_frmSlice.Show();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace UV_DLP_3D_Printer
             try
             {
                 DateTime CurTime = DateTime.Now;
-                MsgOut = CurTime.ToString("yyyy/dd/MM HH:mm:ss.fff") + ">" + OutStr;
+                MsgOut = CurTime.ToString("HH:mm:ss.fff") + "> " + OutStr;
                 base.LogRecord(MsgOut);
             }
             catch (Exception) { }

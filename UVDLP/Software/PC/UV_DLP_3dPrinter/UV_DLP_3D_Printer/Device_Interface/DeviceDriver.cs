@@ -36,9 +36,20 @@ namespace UV_DLP_3D_Printer.Drivers
         public DataReceivedEvent DataReceived; // a delegate to notify when data is received
         public DeviceStatusEvent DeviceStatus;
         protected ConnectionConfig m_config; // the serial port configuration
+        protected byte[] m_buffer;
+
         protected DeviceDriver() 
         {
             m_serialport = new SerialPort();
+            m_buffer = new byte[8192];
+
+            m_serialport.DataReceived += new SerialDataReceivedEventHandler(m_serialport_DataReceived);
+        }
+
+        void m_serialport_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            int read = m_serialport.Read(m_buffer, 0, m_serialport.BytesToRead);
+            RaiseDataReceivedEvent(this, m_buffer, read);
         }
 
         public bool Connected { get { return m_connected; } }
@@ -64,6 +75,11 @@ namespace UV_DLP_3D_Printer.Drivers
         public void Configure(ConnectionConfig cc) 
         {
             m_config = cc;
+            m_serialport.BaudRate = cc.speed;
+            m_serialport.DataBits = cc.databits;
+            m_serialport.Parity = cc.parity;
+            m_serialport.Handshake = cc.handshake;
+            m_serialport.PortName = cc.comname;
         }
     }
 }

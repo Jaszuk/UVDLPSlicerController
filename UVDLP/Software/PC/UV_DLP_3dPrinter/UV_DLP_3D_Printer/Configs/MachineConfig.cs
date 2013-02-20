@@ -26,7 +26,8 @@ namespace UV_DLP_3D_Printer
         private double m_Ypixpermm; // the calculated pixels per mm
         public double m_ZMaxFeedrate;// in mm/min 
         public string m_monitorid; // which monitor we're using
-        public ConnectionConfig m_connection;
+
+        public DeviceDriverConfig m_driverconfig;
 
         public bool Load(string filename) 
         {
@@ -44,8 +45,8 @@ namespace UV_DLP_3D_Printer
                 m_Ypixpermm = double.Parse(xr.ReadElementString("PixPermmY"));
                 m_ZMaxFeedrate = double.Parse(xr.ReadElementString("MaxZFeedRate"));
                 m_monitorid = xr.ReadElementString("MonitorID");
-                
-                if (m_connection.Load(xr))
+
+                if (m_driverconfig.Load(xr))
                 {
                     retval = true;
                 }
@@ -76,7 +77,7 @@ namespace UV_DLP_3D_Printer
                         xw.WriteElementString("PixPermmY", m_Ypixpermm.ToString());
                         xw.WriteElementString("MaxZFeedRate", m_ZMaxFeedrate.ToString());
                         xw.WriteElementString("MonitorID", m_monitorid.ToString());
-                        if (m_connection.Save(xw))
+                        if (m_driverconfig.Save(xw))
                         {
                             retval = true;
                         }
@@ -101,8 +102,8 @@ namespace UV_DLP_3D_Printer
             m_ZMaxFeedrate = 100;
             m_monitorid = "";
             CalcPixPerMM();
-            m_connection = new ConnectionConfig();
-            m_connection.CreateDefault();
+            m_driverconfig = new DeviceDriverConfig();
+            
         }
 
         private void CalcPixPerMM() 

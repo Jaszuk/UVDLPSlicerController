@@ -105,6 +105,7 @@ namespace UV_DLP_3D_Printer
             }
             catch (Exception ex) 
             {
+                DebugLogger.Instance().LogRecord(ex.Message);
                 return 0;
             }            
         }

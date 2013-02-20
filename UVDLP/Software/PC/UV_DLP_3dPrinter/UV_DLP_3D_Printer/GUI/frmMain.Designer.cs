@@ -31,13 +31,25 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.txtFileInfo = new System.Windows.Forms.TextBox();
-            this.cmdSlice = new System.Windows.Forms.Button();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.glControl1 = new OpenTK.GLControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.tabMain = new System.Windows.Forms.TabControl();
+            this.tabModel1 = new System.Windows.Forms.TabPage();
+            this.tabGCode = new System.Windows.Forms.TabPage();
+            this.txtGCode = new System.Windows.Forms.TextBox();
+            this.tabSliceView = new System.Windows.Forms.TabPage();
+            this.picSlice = new System.Windows.Forms.PictureBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.cmdBuild = new System.Windows.Forms.ToolStripButton();
+            this.cmdStop = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmbSerial = new System.Windows.Forms.ToolStripComboBox();
+            this.cmdRefresh = new System.Windows.Forms.ToolStripButton();
+            this.cmdConnect = new System.Windows.Forms.ToolStripButton();
+            this.cmdDisconnect = new System.Windows.Forms.ToolStripButton();
+            this.cmdControl = new System.Windows.Forms.ToolStripButton();
+            this.cmdSlice1 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadBinarySTLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,37 +65,24 @@
             this.cmdPlace = new System.Windows.Forms.Button();
             this.cmdCenter = new System.Windows.Forms.Button();
             this.chkWireframe = new System.Windows.Forms.CheckBox();
-            this.tabSlice = new System.Windows.Forms.TabPage();
-            this.cmdSliceOptions = new System.Windows.Forms.Button();
-            this.lblCurSlice = new System.Windows.Forms.Label();
-            this.cmdShowDLPfrm = new System.Windows.Forms.Button();
-            this.lblNumSlices = new System.Windows.Forms.Label();
-            this.prgSlice = new System.Windows.Forms.ProgressBar();
-            this.tabGCode = new System.Windows.Forms.TabPage();
-            this.txtGCode = new System.Windows.Forms.TextBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.cmdBuild = new System.Windows.Forms.ToolStripButton();
-            this.cmdStop = new System.Windows.Forms.ToolStripButton();
-            this.cmdRefresh = new System.Windows.Forms.ToolStripButton();
-            this.cmdConnect = new System.Windows.Forms.ToolStripButton();
-            this.cmdDisconnect = new System.Windows.Forms.ToolStripButton();
-            this.cmdControl = new System.Windows.Forms.ToolStripButton();
-            this.picSlice = new System.Windows.Forms.PictureBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.tabMain.SuspendLayout();
+            this.tabModel1.SuspendLayout();
+            this.tabGCode.SuspendLayout();
+            this.tabSliceView.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picSlice)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabModel.SuspendLayout();
-            this.tabSlice.SuspendLayout();
-            this.tabGCode.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSlice)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -107,26 +106,16 @@
             this.txtFileInfo.Multiline = true;
             this.txtFileInfo.Name = "txtFileInfo";
             this.txtFileInfo.ReadOnly = true;
-            this.txtFileInfo.Size = new System.Drawing.Size(509, 113);
+            this.txtFileInfo.Size = new System.Drawing.Size(285, 113);
             this.txtFileInfo.TabIndex = 1;
-            // 
-            // cmdSlice
-            // 
-            this.cmdSlice.Location = new System.Drawing.Point(34, 73);
-            this.cmdSlice.Name = "cmdSlice";
-            this.cmdSlice.Size = new System.Drawing.Size(122, 36);
-            this.cmdSlice.TabIndex = 3;
-            this.cmdSlice.Text = "Slice";
-            this.cmdSlice.UseVisualStyleBackColor = true;
-            this.cmdSlice.Click += new System.EventHandler(this.cmdSlice_Click);
             // 
             // vScrollBar1
             // 
-            this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.vScrollBar1.Location = new System.Drawing.Point(3, 3);
+            this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.vScrollBar1.Location = new System.Drawing.Point(1114, 28);
             this.vScrollBar1.Maximum = 1000;
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(21, 591);
+            this.vScrollBar1.Size = new System.Drawing.Size(30, 598);
             this.vScrollBar1.TabIndex = 11;
             this.vScrollBar1.ValueChanged += new System.EventHandler(this.vScrollBar1_ValueChanged);
             // 
@@ -134,10 +123,10 @@
             // 
             this.glControl1.BackColor = System.Drawing.Color.Black;
             this.glControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.glControl1.Location = new System.Drawing.Point(0, 28);
+            this.glControl1.Location = new System.Drawing.Point(3, 3);
             this.glControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.glControl1.Name = "glControl1";
-            this.glControl1.Size = new System.Drawing.Size(920, 598);
+            this.glControl1.Size = new System.Drawing.Size(1109, 508);
             this.glControl1.TabIndex = 15;
             this.glControl1.VSync = false;
             this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
@@ -157,17 +146,86 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.tabMain);
             this.splitContainer1.Panel1.Controls.Add(this.toolStrip1);
-            this.splitContainer1.Panel1.Controls.Add(this.glControl1);
+            this.splitContainer1.Panel1.Controls.Add(this.vScrollBar1);
             this.splitContainer1.Panel1.Controls.Add(this.menuStrip1);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
             this.splitContainer1.Size = new System.Drawing.Size(1457, 630);
-            this.splitContainer1.SplitterDistance = 924;
+            this.splitContainer1.SplitterDistance = 1148;
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 20;
+            // 
+            // tabMain
+            // 
+            this.tabMain.Controls.Add(this.tabModel1);
+            this.tabMain.Controls.Add(this.tabGCode);
+            this.tabMain.Controls.Add(this.tabSliceView);
+            this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabMain.Location = new System.Drawing.Point(0, 83);
+            this.tabMain.Name = "tabMain";
+            this.tabMain.SelectedIndex = 0;
+            this.tabMain.Size = new System.Drawing.Size(1114, 543);
+            this.tabMain.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.tabMain.TabIndex = 18;
+            // 
+            // tabModel1
+            // 
+            this.tabModel1.Controls.Add(this.glControl1);
+            this.tabModel1.Location = new System.Drawing.Point(4, 25);
+            this.tabModel1.Name = "tabModel1";
+            this.tabModel1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabModel1.Size = new System.Drawing.Size(1115, 514);
+            this.tabModel1.TabIndex = 0;
+            this.tabModel1.Text = "Model View";
+            this.tabModel1.UseVisualStyleBackColor = true;
+            // 
+            // tabGCode
+            // 
+            this.tabGCode.Controls.Add(this.txtGCode);
+            this.tabGCode.Location = new System.Drawing.Point(4, 25);
+            this.tabGCode.Name = "tabGCode";
+            this.tabGCode.Padding = new System.Windows.Forms.Padding(3);
+            this.tabGCode.Size = new System.Drawing.Size(1115, 514);
+            this.tabGCode.TabIndex = 1;
+            this.tabGCode.Text = "GCode";
+            this.tabGCode.UseVisualStyleBackColor = true;
+            // 
+            // txtGCode
+            // 
+            this.txtGCode.BackColor = System.Drawing.Color.White;
+            this.txtGCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtGCode.Location = new System.Drawing.Point(3, 3);
+            this.txtGCode.Multiline = true;
+            this.txtGCode.Name = "txtGCode";
+            this.txtGCode.ReadOnly = true;
+            this.txtGCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtGCode.Size = new System.Drawing.Size(1109, 508);
+            this.txtGCode.TabIndex = 0;
+            // 
+            // tabSliceView
+            // 
+            this.tabSliceView.Controls.Add(this.picSlice);
+            this.tabSliceView.Location = new System.Drawing.Point(4, 25);
+            this.tabSliceView.Name = "tabSliceView";
+            this.tabSliceView.Size = new System.Drawing.Size(1106, 514);
+            this.tabSliceView.TabIndex = 2;
+            this.tabSliceView.Text = "Slice Viewer";
+            this.tabSliceView.UseVisualStyleBackColor = true;
+            // 
+            // picSlice
+            // 
+            this.picSlice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picSlice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.picSlice.Location = new System.Drawing.Point(0, 0);
+            this.picSlice.Name = "picSlice";
+            this.picSlice.Size = new System.Drawing.Size(1106, 514);
+            this.picSlice.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picSlice.TabIndex = 17;
+            this.picSlice.TabStop = false;
             // 
             // toolStrip1
             // 
@@ -180,13 +238,34 @@
             this.cmdRefresh,
             this.cmdConnect,
             this.cmdDisconnect,
-            this.cmdControl});
+            this.cmdControl,
+            this.cmdSlice1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 28);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(920, 55);
+            this.toolStrip1.Size = new System.Drawing.Size(1114, 55);
             this.toolStrip1.Stretch = true;
             this.toolStrip1.TabIndex = 17;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // cmdBuild
+            // 
+            this.cmdBuild.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdBuild.Image = global::UV_DLP_3D_Printer.Properties.Resources.bfzn_004;
+            this.cmdBuild.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdBuild.Name = "cmdBuild";
+            this.cmdBuild.Size = new System.Drawing.Size(52, 52);
+            this.cmdBuild.Text = "Start Build";
+            this.cmdBuild.Click += new System.EventHandler(this.cmdStartPrint_Click);
+            // 
+            // cmdStop
+            // 
+            this.cmdStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdStop.Image = global::UV_DLP_3D_Printer.Properties.Resources.bfzn_006;
+            this.cmdStop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdStop.Name = "cmdStop";
+            this.cmdStop.Size = new System.Drawing.Size(52, 52);
+            this.cmdStop.Text = "Stop Build";
+            this.cmdStop.Click += new System.EventHandler(this.cmdStop_Click);
             // 
             // toolStripSeparator1
             // 
@@ -198,6 +277,56 @@
             this.cmbSerial.Name = "cmbSerial";
             this.cmbSerial.Size = new System.Drawing.Size(121, 55);
             // 
+            // cmdRefresh
+            // 
+            this.cmdRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdRefresh.Image = global::UV_DLP_3D_Printer.Properties.Resources.Refresh_icon;
+            this.cmdRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdRefresh.Name = "cmdRefresh";
+            this.cmdRefresh.Size = new System.Drawing.Size(52, 52);
+            this.cmdRefresh.Text = "Refresh Port List";
+            this.cmdRefresh.Click += new System.EventHandler(this.cmdRefresh_Click);
+            // 
+            // cmdConnect
+            // 
+            this.cmdConnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdConnect.Image = global::UV_DLP_3D_Printer.Properties.Resources.Connect;
+            this.cmdConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdConnect.Name = "cmdConnect";
+            this.cmdConnect.Size = new System.Drawing.Size(52, 52);
+            this.cmdConnect.Text = "Connect";
+            this.cmdConnect.Click += new System.EventHandler(this.cmdConnect1_Click);
+            // 
+            // cmdDisconnect
+            // 
+            this.cmdDisconnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdDisconnect.Image = global::UV_DLP_3D_Printer.Properties.Resources.Disconnect;
+            this.cmdDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdDisconnect.Name = "cmdDisconnect";
+            this.cmdDisconnect.Size = new System.Drawing.Size(52, 52);
+            this.cmdDisconnect.Text = "Disconnect";
+            this.cmdDisconnect.Click += new System.EventHandler(this.cmdDisconnect_Click);
+            // 
+            // cmdControl
+            // 
+            this.cmdControl.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdControl.Image = global::UV_DLP_3D_Printer.Properties.Resources.move;
+            this.cmdControl.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdControl.Name = "cmdControl";
+            this.cmdControl.Size = new System.Drawing.Size(52, 52);
+            this.cmdControl.Text = "View Printer Controls";
+            this.cmdControl.Click += new System.EventHandler(this.cmdControl_Click);
+            // 
+            // cmdSlice1
+            // 
+            this.cmdSlice1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdSlice1.Image = global::UV_DLP_3D_Printer.Properties.Resources.slice;
+            this.cmdSlice1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdSlice1.Name = "cmdSlice1";
+            this.cmdSlice1.Size = new System.Drawing.Size(52, 52);
+            this.cmdSlice1.Text = "Slice!";
+            this.cmdSlice1.Click += new System.EventHandler(this.cmdSlice1_Click);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -205,7 +334,7 @@
             this.viewToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(920, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1144, 28);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -266,14 +395,12 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabModel);
-            this.tabControl1.Controls.Add(this.tabSlice);
-            this.tabControl1.Controls.Add(this.tabGCode);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.ItemSize = new System.Drawing.Size(110, 21);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(523, 626);
+            this.tabControl1.Size = new System.Drawing.Size(299, 626);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tabControl1.TabIndex = 16;
             // 
@@ -289,7 +416,7 @@
             this.tabModel.Location = new System.Drawing.Point(4, 25);
             this.tabModel.Name = "tabModel";
             this.tabModel.Padding = new System.Windows.Forms.Padding(3);
-            this.tabModel.Size = new System.Drawing.Size(515, 597);
+            this.tabModel.Size = new System.Drawing.Size(291, 597);
             this.tabModel.TabIndex = 0;
             this.tabModel.Text = "Model";
             this.tabModel.UseVisualStyleBackColor = true;
@@ -343,88 +470,6 @@
             this.chkWireframe.UseVisualStyleBackColor = true;
             this.chkWireframe.CheckedChanged += new System.EventHandler(this.chkWireframe_CheckedChanged);
             // 
-            // tabSlice
-            // 
-            this.tabSlice.Controls.Add(this.cmdSliceOptions);
-            this.tabSlice.Controls.Add(this.lblCurSlice);
-            this.tabSlice.Controls.Add(this.cmdShowDLPfrm);
-            this.tabSlice.Controls.Add(this.lblNumSlices);
-            this.tabSlice.Controls.Add(this.prgSlice);
-            this.tabSlice.Controls.Add(this.cmdSlice);
-            this.tabSlice.Controls.Add(this.vScrollBar1);
-            this.tabSlice.Controls.Add(this.picSlice);
-            this.tabSlice.Location = new System.Drawing.Point(4, 25);
-            this.tabSlice.Name = "tabSlice";
-            this.tabSlice.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSlice.Size = new System.Drawing.Size(515, 597);
-            this.tabSlice.TabIndex = 1;
-            this.tabSlice.Text = "Slice";
-            this.tabSlice.UseVisualStyleBackColor = true;
-            // 
-            // cmdSliceOptions
-            // 
-            this.cmdSliceOptions.Location = new System.Drawing.Point(34, 31);
-            this.cmdSliceOptions.Name = "cmdSliceOptions";
-            this.cmdSliceOptions.Size = new System.Drawing.Size(122, 36);
-            this.cmdSliceOptions.TabIndex = 23;
-            this.cmdSliceOptions.Text = "Options";
-            this.cmdSliceOptions.UseVisualStyleBackColor = true;
-            this.cmdSliceOptions.Click += new System.EventHandler(this.cmdSliceOptions_Click);
-            // 
-            // lblCurSlice
-            // 
-            this.lblCurSlice.AutoSize = true;
-            this.lblCurSlice.Location = new System.Drawing.Point(181, 62);
-            this.lblCurSlice.Name = "lblCurSlice";
-            this.lblCurSlice.Size = new System.Drawing.Size(0, 17);
-            this.lblCurSlice.TabIndex = 22;
-            // 
-            // cmdShowDLPfrm
-            // 
-            this.cmdShowDLPfrm.Location = new System.Drawing.Point(40, 518);
-            this.cmdShowDLPfrm.Name = "cmdShowDLPfrm";
-            this.cmdShowDLPfrm.Size = new System.Drawing.Size(159, 23);
-            this.cmdShowDLPfrm.TabIndex = 18;
-            this.cmdShowDLPfrm.Text = "Show DLP screen";
-            this.cmdShowDLPfrm.UseVisualStyleBackColor = true;
-            this.cmdShowDLPfrm.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // lblNumSlices
-            // 
-            this.lblNumSlices.AutoSize = true;
-            this.lblNumSlices.Location = new System.Drawing.Point(31, 11);
-            this.lblNumSlices.Name = "lblNumSlices";
-            this.lblNumSlices.Size = new System.Drawing.Size(0, 17);
-            this.lblNumSlices.TabIndex = 16;
-            // 
-            // prgSlice
-            // 
-            this.prgSlice.Location = new System.Drawing.Point(34, 115);
-            this.prgSlice.Name = "prgSlice";
-            this.prgSlice.Size = new System.Drawing.Size(359, 23);
-            this.prgSlice.TabIndex = 15;
-            // 
-            // tabGCode
-            // 
-            this.tabGCode.Controls.Add(this.txtGCode);
-            this.tabGCode.Location = new System.Drawing.Point(4, 25);
-            this.tabGCode.Name = "tabGCode";
-            this.tabGCode.Size = new System.Drawing.Size(515, 597);
-            this.tabGCode.TabIndex = 4;
-            this.tabGCode.Text = "GCode";
-            this.tabGCode.UseVisualStyleBackColor = true;
-            // 
-            // txtGCode
-            // 
-            this.txtGCode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtGCode.Location = new System.Drawing.Point(0, 0);
-            this.txtGCode.Multiline = true;
-            this.txtGCode.Name = "txtGCode";
-            this.txtGCode.ReadOnly = true;
-            this.txtGCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtGCode.Size = new System.Drawing.Size(515, 597);
-            this.txtGCode.TabIndex = 0;
-            // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -456,76 +501,6 @@
             this.txtLog.Size = new System.Drawing.Size(1457, 158);
             this.txtLog.TabIndex = 0;
             // 
-            // cmdBuild
-            // 
-            this.cmdBuild.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdBuild.Image = global::UV_DLP_3D_Printer.Properties.Resources.bfzn_004;
-            this.cmdBuild.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdBuild.Name = "cmdBuild";
-            this.cmdBuild.Size = new System.Drawing.Size(52, 52);
-            this.cmdBuild.Text = "Start Build";
-            this.cmdBuild.Click += new System.EventHandler(this.cmdStartPrint_Click);
-            // 
-            // cmdStop
-            // 
-            this.cmdStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdStop.Image = global::UV_DLP_3D_Printer.Properties.Resources.bfzn_006;
-            this.cmdStop.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdStop.Name = "cmdStop";
-            this.cmdStop.Size = new System.Drawing.Size(52, 52);
-            this.cmdStop.Text = "Stop Build";
-            this.cmdStop.Click += new System.EventHandler(this.cmdStop_Click);
-            // 
-            // cmdRefresh
-            // 
-            this.cmdRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdRefresh.Image = global::UV_DLP_3D_Printer.Properties.Resources.Refresh_icon;
-            this.cmdRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdRefresh.Name = "cmdRefresh";
-            this.cmdRefresh.Size = new System.Drawing.Size(52, 52);
-            this.cmdRefresh.Text = "Refresh Port List";
-            this.cmdRefresh.Click += new System.EventHandler(this.cmdRefresh_Click);
-            // 
-            // cmdConnect
-            // 
-            this.cmdConnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdConnect.Image = global::UV_DLP_3D_Printer.Properties.Resources.Connect;
-            this.cmdConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdConnect.Name = "cmdConnect";
-            this.cmdConnect.Size = new System.Drawing.Size(52, 52);
-            this.cmdConnect.Text = "Connect";
-            this.cmdConnect.Click += new System.EventHandler(this.cmdConnect1_Click);
-            // 
-            // cmdDisconnect
-            // 
-            this.cmdDisconnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdDisconnect.Image = global::UV_DLP_3D_Printer.Properties.Resources.Disconnect;
-            this.cmdDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdDisconnect.Name = "cmdDisconnect";
-            this.cmdDisconnect.Size = new System.Drawing.Size(52, 52);
-            this.cmdDisconnect.Text = "Disconnect";
-            this.cmdDisconnect.Click += new System.EventHandler(this.cmdDisconnect_Click);
-            // 
-            // cmdControl
-            // 
-            this.cmdControl.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdControl.Image = global::UV_DLP_3D_Printer.Properties.Resources.move;
-            this.cmdControl.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdControl.Name = "cmdControl";
-            this.cmdControl.Size = new System.Drawing.Size(52, 52);
-            this.cmdControl.Text = "View Printer Controls";
-            this.cmdControl.Click += new System.EventHandler(this.cmdControl_Click);
-            // 
-            // picSlice
-            // 
-            this.picSlice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picSlice.Location = new System.Drawing.Point(34, 190);
-            this.picSlice.Name = "picSlice";
-            this.picSlice.Size = new System.Drawing.Size(464, 300);
-            this.picSlice.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picSlice.TabIndex = 17;
-            this.picSlice.TabStop = false;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -540,6 +515,12 @@
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
+            this.tabMain.ResumeLayout(false);
+            this.tabModel1.ResumeLayout(false);
+            this.tabGCode.ResumeLayout(false);
+            this.tabGCode.PerformLayout();
+            this.tabSliceView.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picSlice)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -547,15 +528,10 @@
             this.tabControl1.ResumeLayout(false);
             this.tabModel.ResumeLayout(false);
             this.tabModel.PerformLayout();
-            this.tabSlice.ResumeLayout(false);
-            this.tabSlice.PerformLayout();
-            this.tabGCode.ResumeLayout(false);
-            this.tabGCode.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
             this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picSlice)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -565,7 +541,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox txtFileInfo;
-        private System.Windows.Forms.Button cmdSlice;
         private System.Windows.Forms.VScrollBar vScrollBar1;
         private OpenTK.GLControl glControl1;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -574,19 +549,12 @@
         private System.Windows.Forms.TabPage tabModel;
         private System.Windows.Forms.Button cmdPlace;
         private System.Windows.Forms.Button cmdCenter;
-        private System.Windows.Forms.TabPage tabSlice;
-        private System.Windows.Forms.ProgressBar prgSlice;
         private System.Windows.Forms.TextBox txtScale;
         private System.Windows.Forms.Button cmdScale;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.TextBox txtLog;
-        private System.Windows.Forms.Label lblNumSlices;
         private System.Windows.Forms.PictureBox picSlice;
-        private System.Windows.Forms.Button cmdShowDLPfrm;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.Label lblCurSlice;
-        private System.Windows.Forms.Button cmdSliceOptions;
-        private System.Windows.Forms.TabPage tabGCode;
         private System.Windows.Forms.TextBox txtGCode;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -605,6 +573,11 @@
         private System.Windows.Forms.ToolStripButton cmdConnect;
         private System.Windows.Forms.ToolStripButton cmdDisconnect;
         private System.Windows.Forms.ToolStripButton cmdControl;
+        private System.Windows.Forms.ToolStripButton cmdSlice1;
+        private System.Windows.Forms.TabControl tabMain;
+        private System.Windows.Forms.TabPage tabModel1;
+        private System.Windows.Forms.TabPage tabGCode;
+        private System.Windows.Forms.TabPage tabSliceView;
     }
 }
 

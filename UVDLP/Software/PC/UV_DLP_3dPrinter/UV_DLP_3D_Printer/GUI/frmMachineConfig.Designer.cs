@@ -44,14 +44,17 @@
             this.lblMonInfo = new System.Windows.Forms.Label();
             this.cmdRefreshMonitors = new System.Windows.Forms.Button();
             this.lstMonitors = new System.Windows.Forms.ListBox();
+            this.grpDriver = new System.Windows.Forms.GroupBox();
+            this.lstDrivers = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.Monitors.SuspendLayout();
+            this.grpDriver.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
-            this.cmdOK.Location = new System.Drawing.Point(132, 350);
+            this.cmdOK.Location = new System.Drawing.Point(125, 405);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(92, 38);
             this.cmdOK.TabIndex = 0;
@@ -61,7 +64,7 @@
             // 
             // cmdCancel
             // 
-            this.cmdCancel.Location = new System.Drawing.Point(230, 350);
+            this.cmdCancel.Location = new System.Drawing.Point(228, 405);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(92, 38);
             this.cmdCancel.TabIndex = 1;
@@ -170,7 +173,7 @@
             this.Monitors.Controls.Add(this.lstMonitors);
             this.Monitors.Location = new System.Drawing.Point(12, 184);
             this.Monitors.Name = "Monitors";
-            this.Monitors.Size = new System.Drawing.Size(357, 160);
+            this.Monitors.Size = new System.Drawing.Size(226, 160);
             this.Monitors.TabIndex = 12;
             this.Monitors.TabStop = false;
             this.Monitors.Text = "Select Print Display Device";
@@ -199,15 +202,35 @@
             this.lstMonitors.ItemHeight = 16;
             this.lstMonitors.Location = new System.Drawing.Point(7, 26);
             this.lstMonitors.Name = "lstMonitors";
-            this.lstMonitors.Size = new System.Drawing.Size(301, 84);
+            this.lstMonitors.Size = new System.Drawing.Size(198, 84);
             this.lstMonitors.TabIndex = 0;
             this.lstMonitors.SelectedIndexChanged += new System.EventHandler(this.lstMonitors_SelectedIndexChanged);
+            // 
+            // grpDriver
+            // 
+            this.grpDriver.Controls.Add(this.lstDrivers);
+            this.grpDriver.Location = new System.Drawing.Point(245, 184);
+            this.grpDriver.Name = "grpDriver";
+            this.grpDriver.Size = new System.Drawing.Size(200, 160);
+            this.grpDriver.TabIndex = 13;
+            this.grpDriver.TabStop = false;
+            this.grpDriver.Text = "Driver";
+            // 
+            // lstDrivers
+            // 
+            this.lstDrivers.FormattingEnabled = true;
+            this.lstDrivers.ItemHeight = 16;
+            this.lstDrivers.Location = new System.Drawing.Point(7, 22);
+            this.lstDrivers.Name = "lstDrivers";
+            this.lstDrivers.Size = new System.Drawing.Size(187, 84);
+            this.lstDrivers.TabIndex = 0;
             // 
             // frmMachineConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(466, 400);
+            this.ClientSize = new System.Drawing.Size(466, 455);
+            this.Controls.Add(this.grpDriver);
             this.Controls.Add(this.Monitors);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -228,6 +251,7 @@
             this.groupBox2.PerformLayout();
             this.Monitors.ResumeLayout(false);
             this.Monitors.PerformLayout();
+            this.grpDriver.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -250,5 +274,7 @@
         private System.Windows.Forms.Label lblMonInfo;
         private System.Windows.Forms.Button cmdRefreshMonitors;
         private System.Windows.Forms.ListBox lstMonitors;
+        private System.Windows.Forms.GroupBox grpDriver;
+        private System.Windows.Forms.ListBox lstDrivers;
     }
 }

@@ -71,7 +71,7 @@ namespace UV_DLP_3D_Printer
         public DeviceDataReceived DataEvent;
         private DeviceDriver m_driver;
         protected Timer m_timeouttimer;
-        private const int DEF_TIMEOUT = 1000;// 1 second default timeout
+        private const int DEF_TIMEOUT = 500;// 1 second default timeout
         protected int m_timeoutms; 
 
         public DeviceInterface() 
@@ -90,6 +90,8 @@ namespace UV_DLP_3D_Printer
             if (StatusEvent != null)
             {
                 StatusEvent(ePIStatus.eTimedout, "Command Timed Out");
+                DebugLogger.Instance().LogRecord("Command Timed out");
+                m_timeouttimer.Enabled = false;
             }
         }
 
@@ -102,6 +104,7 @@ namespace UV_DLP_3D_Printer
                 if (m_driver != null)
                 {
                     DeviceDriver olddriver = m_driver;
+                    olddriver.Disconnect(); // disconnect the old driver
                     //remove the old device driver delegates
                     olddriver.DataReceived -= new DeviceDriver.DataReceivedEvent(DriverDataReceivedEvent);
                     olddriver.DeviceStatus -= new DeviceDriver.DeviceStatusEvent(DriverDeviceStatusEvent);
@@ -215,22 +218,10 @@ namespace UV_DLP_3D_Printer
         {
             return m_driver.Disconnect();
         }
-        public bool Connect()//String comport) 
+        public bool Connect()
         {
             try
             {
-                /*
-                //any command can be use to "connect" the printer,
-                // the big issue is that hte printer responds within the
-                // allotted timeframe.
-                m_serialport.BaudRate = 115200;// default baud rate
-                m_serialport.Parity = Parity.None;
-                m_serialport.DataBits = 8;
-                m_serialport.StopBits = StopBits.One;
-
-                m_serialport.Open();
-                m_serialport.DataReceived += new SerialDataReceivedEventHandler(m_serialport_DataReceived);
-                */
                 return m_driver.Connect();
             }
             catch (Exception ) 

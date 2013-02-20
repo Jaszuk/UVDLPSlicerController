@@ -6,11 +6,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using UV_DLP_3D_Printer.Drivers;
 namespace UV_DLP_3D_Printer
 {
     public partial class frmMachineConfig : Form
     {
+        private eDriverType m_saved;
         public frmMachineConfig()
         {
             InitializeComponent();
@@ -21,6 +22,24 @@ namespace UV_DLP_3D_Printer
         {
             try
             {
+                foreach (String s in Enum.GetNames(typeof(eDriverType))) 
+                {
+                    lstDrivers.Items.Add(s);
+                }
+                lstDrivers.SelectedItem = UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_drivertype.ToString();
+                m_saved = UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_drivertype;
+                //() check connection
+                if (UVDLPApp.Instance().m_deviceinterface.Connected)
+                {
+                    grpDriver.Enabled = false;
+                }
+                else 
+                {
+                    grpDriver.Enabled = true; ;
+                }
+
+
+                //list the drivers
                 txtPlatWidth.Text = "" + UVDLPApp.Instance().m_printerinfo.m_PlatXSize;
                 txtPlatHeight.Text = "" + UVDLPApp.Instance().m_printerinfo.m_PlatYSize;
                 projwidth.Text = "" + UVDLPApp.Instance().m_printerinfo.XRes;
@@ -45,6 +64,15 @@ namespace UV_DLP_3D_Printer
         {
             try
             {
+                if (lstDrivers.SelectedIndex != -1) 
+                {
+                    UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_drivertype = (eDriverType)Enum.Parse(typeof(eDriverType), lstDrivers.SelectedItem.ToString());
+                }
+                if (m_saved != UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_drivertype) 
+                {
+                    UVDLPApp.Instance().SetupDriver();
+                }
+
                 UVDLPApp.Instance().m_printerinfo.m_PlatXSize = double.Parse(txtPlatWidth.Text);
                 UVDLPApp.Instance().m_printerinfo.m_PlatYSize = double.Parse(txtPlatHeight.Text);
                 UVDLPApp.Instance().m_printerinfo.m_XDLPRes = double.Parse(projwidth.Text);

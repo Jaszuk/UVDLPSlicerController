@@ -9,6 +9,8 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Platform.Windows;
 using UV_DLP_3D_Printer.Drivers;
 using UV_DLP_3D_Printer.Slicing;
+using UV_DLP_3D_Printer;
+
 namespace UV_DLP_3D_Printer
 {
     /*
@@ -59,6 +61,7 @@ namespace UV_DLP_3D_Printer
             m_deviceinterface = new DeviceInterface();
             m_buildmgr = new BuildManager();
             m_slicer = new Slicer();
+            m_slicer.Slice_Event += new Slicer.SliceEvent(SliceEv);
             m_gcode = null;
         }
         public enum Platform
@@ -67,7 +70,29 @@ namespace UV_DLP_3D_Printer
             Linux,
             Mac
         }
+        void SliceEv(Slicer.eSliceEvent ev, int layer, int totallayers) 
+        {
+            switch (ev) 
+            {
+                case Slicer.eSliceEvent.eSliceStarted:
+                    break;
+                case Slicer.eSliceEvent.eLayerSliced:
+                    break;
+                case Slicer.eSliceEvent.eSliceCompleted:
+                    UVDLPApp.Instance().m_gcode = GCodeGenerator.Generate(UVDLPApp.Instance().m_slicefile, UVDLPApp.Instance().m_printerinfo);
+                    //txtGCode.Text = UVDLPApp.Instance().m_gcode.RawGCode;
+                    //get the path of the current object file
+                    string path = Path.GetDirectoryName(UVDLPApp.Instance().m_obj.m_fullname);
+                    string fn = Path.GetFileNameWithoutExtension(UVDLPApp.Instance().m_obj.m_fullname);
+                    if (!UVDLPApp.Instance().m_gcode.Save(path + UVDLPApp.m_pathsep + fn + ".gcode")) 
+                    {
+                        DebugLogger.Instance().LogRecord("Cannot save GCode File " + path + UVDLPApp.m_pathsep + fn + ".gcode");
+                    }
+                    //raise an event to show the gcode
 
+                    break;
+            }
+        }
         public static Platform RunningPlatform()
         {
             switch (Environment.OSVersion.Platform)
@@ -114,6 +139,12 @@ namespace UV_DLP_3D_Printer
             }
         }
 
+        public void SetupDriver() 
+        {
+            DebugLogger.Instance().LogRecord("Changing driver type to " + m_printerinfo.m_driverconfig.m_drivertype.ToString());
+            m_deviceinterface.Driver = DriverFactory.Create(m_printerinfo.m_driverconfig.m_drivertype);
+        }
+
         public void DoAppStartup() 
         {
             m_apppath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
@@ -158,8 +189,7 @@ namespace UV_DLP_3D_Printer
                 m_buildparms.Save(m_appconfig.m_cursliceprofilename);
             }
 
-            // for testing, create  null driver interface
-            m_deviceinterface.Driver = DriverFactory.Create(eDriverType.eNULL_DRIVER);
+            SetupDriver();
         }
 
     }

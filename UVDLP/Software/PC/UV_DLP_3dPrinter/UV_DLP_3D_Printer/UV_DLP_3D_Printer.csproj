@@ -90,6 +90,12 @@
     <Compile Include="GUI\frmControl.Designer.cs">
       <DependentUpon>frmControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\frmSlice.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\frmSlice.Designer.cs">
+      <DependentUpon>frmSlice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Slicing\SliceFile.cs" />
     <Compile Include="Utility\DebugLogger.cs" />
     <Compile Include="GUI\frmDLP.cs">
@@ -147,6 +153,9 @@
     <EmbeddedResource Include="GUI\frmDLP.resx">
       <DependentUpon>frmDLP.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmSlice.resx">
+      <DependentUpon>frmSlice.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmSliceOptions.resx">
       <DependentUpon>frmSliceOptions.cs</DependentUpon>
     </EmbeddedResource>
@@ -178,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Notes.txt" />
+    <None Include="resources\slice.jpg" />
     <None Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Down1Blue.png" />
     <None Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Up1Blue.png" />
     <None Include="resources\021\move.png" />

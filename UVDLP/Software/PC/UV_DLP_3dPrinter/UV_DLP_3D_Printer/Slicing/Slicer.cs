@@ -11,20 +11,30 @@ namespace UV_DLP_3D_Printer
 {
     public class Slicer
     {
-        public delegate void LayerSliced(int layer, int totallayers);
+        public enum eSliceEvent 
+        {
+            eSliceStarted,
+            eLayerSliced,
+            eSliceCompleted,
+        }
+        public delegate void SliceEvent(eSliceEvent ev, int layer, int totallayers);
 
-        //public ArrayList m_slices; // list of Slices
         private SliceFile m_sf; // the current file being sliced
-        public LayerSliced Sliced;
+        public SliceEvent Slice_Event;
         private Thread m_slicethread;
-       // private SliceBuildConfig m_sp = null;
         private Object3d m_obj = null;
 
         public Slicer() 
         {
-            //m_slices = new ArrayList();           
+        
         }
-
+        public void RaiseSliceEvent(eSliceEvent ev, int curlayer, int totallayers)
+        {
+            if (Slice_Event != null) 
+            {
+                Slice_Event(ev, curlayer, totallayers);
+            }
+        }
         public int GetNumberOfSlices(SliceBuildConfig sp, Object3d obj) 
         {
             try
@@ -45,10 +55,8 @@ namespace UV_DLP_3D_Printer
         public SliceFile Slice(SliceBuildConfig sp, Object3d obj, String outdir) 
         {
                 m_obj = obj;
-                //m_sp = sp;
                 // create new slice file
                 m_sf = new SliceFile(sp);
-
                 m_slicethread = new Thread(new ThreadStart(slicefunc));
                 m_slicethread.Start();
                 return m_sf;
@@ -66,8 +74,10 @@ namespace UV_DLP_3D_Printer
                 int numslices = (int)((m_obj.m_max.z - m_obj.m_min.z) / m_sf.m_config.ZThick);
 
                 double curz = (double)m_obj.m_min.z;
-
-                for (int c = 0; c < numslices; c++)
+                RaiseSliceEvent(eSliceEvent.eSliceStarted, 0, numslices);
+                DebugLogger.Instance().LogRecord("Slicing started");
+                int c = 0;
+                for (c = 0; c < numslices; c++)
                 {
                     //get a list of polygons at this slice z height that intersect
                     ArrayList lstply = GetZPolys(m_obj, curz);
@@ -77,11 +87,11 @@ namespace UV_DLP_3D_Printer
                     Slice sl = new Slice();
                     sl.m_segments = lstintersections;
                     m_sf.m_slices.Add(sl);
-                    if (Sliced != null)
-                    {
-                        Sliced(c, numslices);
-                    }
-                }                
+                    RaiseSliceEvent(eSliceEvent.eLayerSliced, c, numslices);
+                }
+                RaiseSliceEvent(eSliceEvent.eSliceCompleted, c, numslices);
+                DebugLogger.Instance().LogRecord("Slicing Completed");
+
             }
             catch (Exception ex)
             {

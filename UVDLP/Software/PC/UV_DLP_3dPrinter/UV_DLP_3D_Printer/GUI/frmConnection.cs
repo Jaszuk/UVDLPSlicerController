@@ -23,9 +23,9 @@ namespace UV_DLP_3D_Printer.GUI
         {
             try
             {
-                UVDLPApp.Instance().m_printerinfo.m_connection.comname = cmbPorts.SelectedItem.ToString();
-                UVDLPApp.Instance().m_printerinfo.m_connection.speed = int.Parse(cmbSpeed.SelectedItem.ToString());
-                UVDLPApp.Instance().m_printerinfo.m_connection.databits = int.Parse(txtDataBits.Text);
+                UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection.comname = cmbPorts.SelectedItem.ToString();
+                UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection.speed = int.Parse(cmbSpeed.SelectedItem.ToString());
+                UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection.databits = int.Parse(txtDataBits.Text);
 
 
                 return true;
@@ -39,7 +39,7 @@ namespace UV_DLP_3D_Printer.GUI
 
         private void SetData() 
         {
-            ConnectionConfig cc = UVDLPApp.Instance().m_printerinfo.m_connection;
+            ConnectionConfig cc = UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection;
             cmbPorts.Items.Clear();
             //set all available port names
             foreach (String s in SerialPort.GetPortNames()) 

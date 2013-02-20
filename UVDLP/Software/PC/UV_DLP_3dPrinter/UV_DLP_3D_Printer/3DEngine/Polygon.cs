@@ -173,8 +173,7 @@ namespace Engine3D
             GL.Color4(Color.FromArgb(50, 128, 128, 128));
             GL.Normal3(m_normal.x, m_normal.y, m_normal.z);
             foreach (Point3d p in this.m_points)
-            {
-               
+            {               
                 GL.Vertex3(p.x, p.y, p.z);
             }
             GL.End();            

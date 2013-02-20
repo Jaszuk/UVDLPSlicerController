@@ -116,6 +116,13 @@ namespace UV_DLP_3D_Printer.Properties {
             }
         }
         
+        public static System.Drawing.Bitmap slice {
+            get {
+                object obj = ResourceManager.GetObject("slice", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         public static System.Drawing.Bitmap Up1Blue {
             get {
                 object obj = ResourceManager.GetObject("Up1Blue", resourceCulture);
