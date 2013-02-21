@@ -10,7 +10,7 @@ using OpenTK.Platform.Windows;
 using UV_DLP_3D_Printer.Drivers;
 using UV_DLP_3D_Printer.Slicing;
 using UV_DLP_3D_Printer;
-
+using System.Drawing;
 namespace UV_DLP_3D_Printer
 {
     /*
@@ -25,6 +25,8 @@ namespace UV_DLP_3D_Printer
         // the current application configuration object
         public AppConfig m_appconfig;
         public string appcofnginame; // the full filename
+        // the simple 3d graphic engine we're using along with OpenGL
+        public Engine3d m_engine3d = new Engine3d();
         // the current model we're working with
         public Object3d m_obj = null;
         // the current machine configuration
@@ -70,29 +72,77 @@ namespace UV_DLP_3D_Printer
             Linux,
             Mac
         }
+        public bool LoadModel(String filename) 
+        {
+            try
+            {
+                return true;
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+                return false;
+            }
+        }
         void SliceEv(Slicer.eSliceEvent ev, int layer, int totallayers) 
         {
+            String path = "";
             switch (ev) 
             {
                 case Slicer.eSliceEvent.eSliceStarted:
+                    // if we're exporting images
+                    if (m_buildparms.exportimages) 
+                    {
+                        // get the model name
+                        String modelname = m_obj.m_fullname;
+                        // strip off the file extension
+                        path = Path.GetDirectoryName(modelname);
+                        path += UVDLPApp.m_pathsep;
+                        path += Path.GetFileNameWithoutExtension(modelname);// strip off the file extension
+                        if (!Directory.Exists(path)) // check and see if a directory of that name exists,
+                        {
+                            Directory.CreateDirectory(path);// if not, create it
+                        }
+                    }
                     break;
                 case Slicer.eSliceEvent.eLayerSliced:
+                    //save the rendered image slice
+                    //render the slice
+                   
+                    if (m_buildparms.exportimages)
+                    {
+                        // get the model name
+                        String modelname = m_obj.m_fullname;
+                        // strip off the file extension
+                        path = Path.GetDirectoryName(modelname);
+                        path += UVDLPApp.m_pathsep;
+                        path += Path.GetFileNameWithoutExtension(modelname);// strip off the file extension
+                        Bitmap bmp = null;
+                        String imagename = path + m_pathsep + Path.GetFileNameWithoutExtension(modelname) + String.Format("{0:0000}",layer) + ".png";
+                        bmp = UVDLPApp.Instance().m_slicefile.RenderSlice(layer);
+                        bmp.Save(imagename);
+                    }
                     break;
                 case Slicer.eSliceEvent.eSliceCompleted:
-                    UVDLPApp.Instance().m_gcode = GCodeGenerator.Generate(UVDLPApp.Instance().m_slicefile, UVDLPApp.Instance().m_printerinfo);
-                    //txtGCode.Text = UVDLPApp.Instance().m_gcode.RawGCode;
+                    m_gcode = GCodeGenerator.Generate(m_slicefile, m_printerinfo);
                     //get the path of the current object file
-                    string path = Path.GetDirectoryName(UVDLPApp.Instance().m_obj.m_fullname);
-                    string fn = Path.GetFileNameWithoutExtension(UVDLPApp.Instance().m_obj.m_fullname);
+                    path = Path.GetDirectoryName(m_obj.m_fullname);
+                    string fn = Path.GetFileNameWithoutExtension(m_obj.m_fullname);
                     if (!UVDLPApp.Instance().m_gcode.Save(path + UVDLPApp.m_pathsep + fn + ".gcode")) 
                     {
-                        DebugLogger.Instance().LogRecord("Cannot save GCode File " + path + UVDLPApp.m_pathsep + fn + ".gcode");
+                        DebugLogger.Instance().LogRecord("Cannot save GCode File " + path + m_pathsep + fn + ".gcode");
                     }
-                    //raise an event to show the gcode
-
                     break;
+                case Slicer.eSliceEvent.eSliceCancelled:
+                    DebugLogger.Instance().LogRecord("Slicing Cancelled");
+                    break;
+
+
             }
         }
+        // a public property to get the 3d engine
+        public Engine3d Engine3D { get { return m_engine3d; } }
+
         public static Platform RunningPlatform()
         {
             switch (Environment.OSVersion.Platform)

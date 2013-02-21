@@ -20,7 +20,7 @@ namespace UV_DLP_3D_Printer
     public partial class frmMain : Form
     {
         bool loaded = false;               
-        Engine3d m_engine3d = new Engine3d();              
+        //Engine3d UVDLPApp.Instance().Engine3D = new Engine3d();              
         frmDLP m_frmdlp = new frmDLP();
         frmSliceOptions m_frmsliceopt = new frmSliceOptions();
         frmControl m_frmcontrol = new frmControl();
@@ -34,9 +34,9 @@ namespace UV_DLP_3D_Printer
         public frmMain()
         {
             InitializeComponent();
-            m_engine3d.AddGrid();
-            m_engine3d.AddPlatCube();
-            m_engine3d.CameraReset();
+            UVDLPApp.Instance().Engine3D.AddGrid();
+            UVDLPApp.Instance().Engine3D.AddPlatCube();
+            UVDLPApp.Instance().Engine3D.CameraReset();
             UVDLPApp.Instance().m_slicer.Slice_Event += new Slicer.SliceEvent(SliceEv);
             cmdRefresh_Click(null,null);
             UVDLPApp.Instance().m_buildmgr.PrintStatus += new delPrintStatus(PrintStatus);
@@ -138,6 +138,11 @@ namespace UV_DLP_3D_Printer
                         break;
                     case ePrintStat.ePrintStarted:
                         message = "Print Started";
+                        if (!ShowDLPScreen()) 
+                        {
+                            MessageBox.Show("Monitor " + UVDLPApp.Instance().m_printerinfo.m_monitorid + " not found, cancelling build","Error");
+                            UVDLPApp.Instance().m_buildmgr.CancelPrint();
+                        }
                         break;
                 }
                 DebugLogger.Instance().LogRecord(message);
@@ -206,7 +211,7 @@ namespace UV_DLP_3D_Printer
         /*
          Load Stl
          */
-        private void button1_Click(object sender, EventArgs e)
+        private void LoadSTLModel_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK) 
             {
@@ -219,8 +224,8 @@ namespace UV_DLP_3D_Printer
                 {
                     ShowObjectInfo();
                     chkWireframe.Checked = false;
-                    m_engine3d.RemoveAllObjects();
-                    m_engine3d.AddObject(UVDLPApp.Instance().m_obj);
+                    UVDLPApp.Instance().Engine3D.RemoveAllObjects();
+                    UVDLPApp.Instance().Engine3D.AddObject(UVDLPApp.Instance().m_obj);
                     UVDLPApp.Instance().m_slicefile = null;
                     glControl1.Invalidate();
                     vScrollBar1.Maximum = 1;
@@ -235,14 +240,14 @@ namespace UV_DLP_3D_Printer
             try
             {
                 Slice sl = (Slice)UVDLPApp.Instance().m_slicefile.m_slices[layer];
-                m_engine3d.RemoveAllLines();
-                m_engine3d.AddGrid();
-                m_engine3d.AddPlatCube();
+                UVDLPApp.Instance().Engine3D.RemoveAllLines();
+                UVDLPApp.Instance().Engine3D.AddGrid();
+                UVDLPApp.Instance().Engine3D.AddPlatCube();
                 
                 foreach (PolyLine3d ln in sl.m_segments)
                 {
                     ln.m_color = Color.Red;
-                    m_engine3d.AddLine(ln);
+                    UVDLPApp.Instance().Engine3D.AddLine(ln);
                 }
                 glControl1.Invalidate();
                 //render the 2d slice
@@ -292,14 +297,15 @@ namespace UV_DLP_3D_Printer
                 GL.MatrixMode(MatrixMode.Projection);
                 GL.LoadIdentity();
                 // Glu
-                GL.Ortho(0, w, 0, h, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
+                //GL.Ortho(0, w, 0, h, -1, 1); // Bottom-left corner pixel has coordinate (0, 0)
+                GL.Ortho(0, w, 0, h, 1, 2000); // Bottom-left corner pixel has coordinate (0, 0)
                 GL.Viewport(0, 0, w, h); // Use all of the glControl painting area
                 aspect = ((float)glControl1.Width) / ((float)glControl1.Height);
 
                 //GL.Matr
                 GL.Enable(EnableCap.DepthTest); // for z buffer
-                OpenTK.Matrix4 projection = OpenTK.Matrix4.CreatePerspectiveFieldOfView(0.55f, aspect, 0.1f, 2000);
-                GL.DepthRange(0.1, 2000.0);
+                OpenTK.Matrix4 projection = OpenTK.Matrix4.CreatePerspectiveFieldOfView(0.55f, aspect, 1,2000);
+                //GL.DepthRange(0, 2000);
                 OpenTK.Matrix4 modelView = OpenTK.Matrix4.LookAt(new OpenTK.Vector3(5, 0, -5), new OpenTK.Vector3(0, 0, 0), new OpenTK.Vector3(0, 0, 1));
 
                 GL.MatrixMode(MatrixMode.Projection);
@@ -314,8 +320,8 @@ namespace UV_DLP_3D_Printer
                 GL.Material(MaterialFace.Front, MaterialParameter.Specular, mat_specular);
                 GL.Material(MaterialFace.Front, MaterialParameter.Shininess, mat_shininess);
 
-                GL.Enable(EnableCap.Blend); // alpha blending
-                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+               // GL.Enable(EnableCap.Blend); // alpha blending
+                //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
                 
                 float[] lightpos = new float[4];
                 lightpos[0] = 5.0f;
@@ -360,7 +366,7 @@ namespace UV_DLP_3D_Printer
           GL.Rotate(orbitypos, 0, 1, 0);
           GL.Rotate(orbitxpos, 1, 0, 0);
 
-          m_engine3d.RenderGL();
+          UVDLPApp.Instance().Engine3D.RenderGL();
             
           GL.Flush();
            // glControl1.
@@ -426,7 +432,7 @@ namespace UV_DLP_3D_Printer
             {
                 dx /= 2;
                 dy /= 2;
-                //m_engine3d.m_camera.viewmat.Rotate(-dy, dx, 0);
+                //UVDLPApp.Instance().Engine3D.m_camera.viewmat.Rotate(-dy, dx, 0);
                 orbitypos += (float)dx;
                 orbitxpos += (float)dy;
 
@@ -434,8 +440,8 @@ namespace UV_DLP_3D_Printer
             }
             if (rmdown)
             {
-                dx /= 2;// m_engine3d.m_camera.m_scalex;
-                dy /= 2;// m_engine3d.m_camera.m_scaley;
+                dx /= 2;// UVDLPApp.Instance().Engine3D.m_camera.m_scalex;
+                dy /= 2;// UVDLPApp.Instance().Engine3D.m_camera.m_scaley;
                 orbitdist += (float)dy;
                 glControl1.Invalidate();
 
@@ -501,7 +507,37 @@ namespace UV_DLP_3D_Printer
             }
         }
 
-
+        private bool ShowDLPScreen() 
+        {
+            try
+            {
+                Screen dlpscreen = null;
+                foreach (Screen s in Screen.AllScreens) 
+                {
+                    if (s.DeviceName.Equals(UVDLPApp.Instance().m_printerinfo.m_monitorid)) 
+                    {
+                        dlpscreen = s;
+                        break;
+                    }
+                }
+                if (dlpscreen == null)
+                    return false;
+                if (m_frmdlp.IsDisposed) 
+                {
+                    m_frmdlp = new frmDLP();//recreate
+                }
+                m_frmdlp.Show();
+                m_frmdlp.SetDesktopBounds(dlpscreen.Bounds.X, dlpscreen.Bounds.Y, dlpscreen.Bounds.Width, dlpscreen.Bounds.Height);
+                m_frmdlp.WindowState = FormWindowState.Maximized;
+                m_frmdlp.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+                return false;
+            }                  
+        }
         /* // this code shows the secondary DLP screen 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -531,7 +567,7 @@ namespace UV_DLP_3D_Printer
 
         private void loadBinarySTLToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            button1_Click(this, null);
+            LoadSTLModel_Click(this, null);
         }
 
         private void slicingOptionsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -552,14 +588,25 @@ namespace UV_DLP_3D_Printer
 
         private void cmdRefresh_Click(object sender, EventArgs e)
         {
-            DebugLogger.Instance().LogRecord("Refreshing port list");
-            cmbSerial.Items.Clear();
-            foreach (String s in SerialPort.GetPortNames())
+            try
             {
-                cmbSerial.Items.Add(s);
+                DebugLogger.Instance().LogRecord("Refreshing port list");
+                cmbSerial.Items.Clear();
+                foreach (String s in SerialPort.GetPortNames())
+                {
+                    cmbSerial.Items.Add(s);
+                }
+                //if (cmbSerial.Items.Count > 0)
+                //    cmbSerial.SelectedIndex = 0;
+                cmbSerial.SelectedItem = UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection.comname;
             }
-            if (cmbSerial.Items.Count > 0)
-                cmbSerial.SelectedIndex = 0;
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+                if (cmbSerial.Items.Count > 0)
+                    cmbSerial.SelectedIndex = 0;
+                
+            }
         }
 
         private void cmdConnect1_Click(object sender, EventArgs e)
@@ -574,7 +621,7 @@ namespace UV_DLP_3D_Printer
                         //maybe get the com port if it's different?
                         UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection.comname = com;
                         UVDLPApp.Instance().m_deviceinterface.Configure(UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection);
-                        DebugLogger.Instance().LogRecord("Connecting to Printer on " + com);
+                        DebugLogger.Instance().LogRecord("Connecting to Printer on " + com + " using " + UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_drivertype.ToString());
                         if (!UVDLPApp.Instance().m_deviceinterface.Connect()) 
                         {
                             DebugLogger.Instance().LogRecord("Cannot connect printer driver on " + com);

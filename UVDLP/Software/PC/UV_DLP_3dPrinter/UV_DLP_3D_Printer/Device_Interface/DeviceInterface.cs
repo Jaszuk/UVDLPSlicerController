@@ -178,8 +178,20 @@ namespace UV_DLP_3D_Printer
          */
         public void MoveTo(double zpos,double rate) 
         {
-            String command = "G0 Z"  + zpos + " F" + rate + "\r\n";
+            String command = "G1 Z"  + zpos + " F" + rate + "\r\n";
             SendCommandToDevice(command);
+        }
+        /*
+         This function moves the Z axis to by the distance in mm 
+         * at the specified feed rate
+         */
+        public void Move(double zpos, double rate)
+        {
+            String command = "G1 Z" + zpos + " F" + rate + "\r\n";
+            SendCommandToDevice("G91\r\n"); 
+            SendCommandToDevice(command);
+            SendCommandToDevice("G90\r\n");
+            
         }
 
         /*

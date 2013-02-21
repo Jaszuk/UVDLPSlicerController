@@ -16,6 +16,7 @@ namespace UV_DLP_3D_Printer
             eSliceStarted,
             eLayerSliced,
             eSliceCompleted,
+            eSliceCancelled
         }
         public delegate void SliceEvent(eSliceEvent ev, int layer, int totallayers);
 
@@ -23,10 +24,17 @@ namespace UV_DLP_3D_Printer
         public SliceEvent Slice_Event;
         private Thread m_slicethread;
         private Object3d m_obj = null;
+        private bool m_cancel = false;
+        private bool isslicing = false;
 
         public Slicer() 
         {
         
+        }
+        public bool IsSlicing { get { return isslicing; } }
+        public void CancelSlicing() 
+        {
+            m_cancel = true;
         }
         public void RaiseSliceEvent(eSliceEvent ev, int curlayer, int totallayers)
         {
@@ -55,10 +63,12 @@ namespace UV_DLP_3D_Printer
         public SliceFile Slice(SliceBuildConfig sp, Object3d obj, String outdir) 
         {
                 m_obj = obj;
+                m_cancel = false;
                 // create new slice file
                 m_sf = new SliceFile(sp);
                 m_slicethread = new Thread(new ThreadStart(slicefunc));
                 m_slicethread.Start();
+                isslicing = true;
                 return m_sf;
         }
 
@@ -79,6 +89,13 @@ namespace UV_DLP_3D_Printer
                 int c = 0;
                 for (c = 0; c < numslices; c++)
                 {
+                    if (m_cancel) 
+                    {
+                        isslicing = false;
+                        m_cancel = false;
+                        RaiseSliceEvent(eSliceEvent.eSliceCancelled, c, numslices);
+                        return;
+                    }
                     //get a list of polygons at this slice z height that intersect
                     ArrayList lstply = GetZPolys(m_obj, curz);
                     //iterate through all the polygons and generat 2d line segments at this z level
@@ -91,6 +108,7 @@ namespace UV_DLP_3D_Printer
                 }
                 RaiseSliceEvent(eSliceEvent.eSliceCompleted, c, numslices);
                 DebugLogger.Instance().LogRecord("Slicing Completed");
+                isslicing = false;
 
             }
             catch (Exception ex)

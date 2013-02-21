@@ -46,6 +46,8 @@
             this.lstMonitors = new System.Windows.Forms.ListBox();
             this.grpDriver = new System.Windows.Forms.GroupBox();
             this.lstDrivers = new System.Windows.Forms.ListBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtPlatTall = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.Monitors.SuspendLayout();
@@ -74,13 +76,15 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.txtPlatTall);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.txtPlatHeight);
             this.groupBox1.Controls.Add(this.txtPlatWidth);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(357, 80);
+            this.groupBox1.Size = new System.Drawing.Size(433, 80);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Build Platform Area (mm)";
@@ -88,34 +92,34 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(177, 36);
+            this.label6.Location = new System.Drawing.Point(110, 36);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(49, 17);
+            this.label6.Size = new System.Drawing.Size(17, 17);
             this.label6.TabIndex = 3;
-            this.label6.Text = "Height";
+            this.label6.Text = "Y";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(7, 36);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(44, 17);
+            this.label5.Size = new System.Drawing.Size(17, 17);
             this.label5.TabIndex = 2;
-            this.label5.Text = "Width";
+            this.label5.Text = "X";
             // 
             // txtPlatHeight
             // 
-            this.txtPlatHeight.Location = new System.Drawing.Point(227, 33);
+            this.txtPlatHeight.Location = new System.Drawing.Point(133, 33);
             this.txtPlatHeight.Name = "txtPlatHeight";
-            this.txtPlatHeight.Size = new System.Drawing.Size(100, 22);
+            this.txtPlatHeight.Size = new System.Drawing.Size(49, 22);
             this.txtPlatHeight.TabIndex = 1;
             this.txtPlatHeight.Text = "77";
             // 
             // txtPlatWidth
             // 
-            this.txtPlatWidth.Location = new System.Drawing.Point(57, 33);
+            this.txtPlatWidth.Location = new System.Drawing.Point(30, 33);
             this.txtPlatWidth.Name = "txtPlatWidth";
-            this.txtPlatWidth.Size = new System.Drawing.Size(100, 22);
+            this.txtPlatWidth.Size = new System.Drawing.Size(58, 22);
             this.txtPlatWidth.TabIndex = 0;
             this.txtPlatWidth.Text = "102";
             // 
@@ -225,6 +229,23 @@
             this.lstDrivers.Size = new System.Drawing.Size(187, 84);
             this.lstDrivers.TabIndex = 0;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(207, 36);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(17, 17);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Z";
+            // 
+            // txtPlatTall
+            // 
+            this.txtPlatTall.Location = new System.Drawing.Point(230, 33);
+            this.txtPlatTall.Name = "txtPlatTall";
+            this.txtPlatTall.Size = new System.Drawing.Size(49, 22);
+            this.txtPlatTall.TabIndex = 4;
+            this.txtPlatTall.Text = "200";
+            // 
             // frmMachineConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -276,5 +297,7 @@
         private System.Windows.Forms.ListBox lstMonitors;
         private System.Windows.Forms.GroupBox grpDriver;
         private System.Windows.Forms.ListBox lstDrivers;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtPlatTall;
     }
 }

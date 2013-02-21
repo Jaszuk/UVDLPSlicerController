@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UV_DLP_3D_Printer</RootNamespace>
-    <AssemblyName>UV_DLP_3D_Printer</AssemblyName>
+    <AssemblyName>CreationWorkshop</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -187,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Notes.txt" />
+    <None Include="resources\Load.jpg" />
     <None Include="resources\slice.jpg" />
     <None Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Down1Blue.png" />
     <None Include="resources\IconsLandVistaArrowIconsDemo\PNG\64x64\Up1Blue.png" />

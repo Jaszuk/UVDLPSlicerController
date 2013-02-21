@@ -27,20 +27,23 @@ namespace UV_DLP_3D_Printer
             // append the build parameters as reference
             sb.Append(sf.m_config.ToString());
             //home to the z axis max at the max feed rate
+            /*
             sb.Append("G28 Z (Home to Z axis Maximum)\r\n");            
             //set the zposition to be the maximum axis length
             sb.Append("G92 Z" + pi.m_PlatZSize + " ( set the Z Position to be the maximum axis length) \r\n");            
             //move to the first layer position
             sb.Append("G1 Z" + sf.m_config.ZThick + " (move to the first layer position)\r\n");
             sb.Append("M109 S" + sf.m_config.plat_temp + "(Set Platform Temp for UV Resin)\r\n");
-
+            */
             for (int c = 0; c < sf.m_slices.Count; c++ )
             {
-                sb.Append(sf.m_config.PerSliceCode);
+                
                 String layermark = "";
                 String timedelay = "(<Delay> " + sf.m_config.layertime_ms + ")\r\n";
+                sb.Append(sf.m_config.PreSliceCode);
                 //move the z axis to the right layer position
-                sb.Append("G1 Z" + String.Format("{0:0.00000}",zpos) + " F" + feedrate + "(Move Z axis to position)\r\n");
+                sb.Append("G1 Z" + String.Format("{0:0.00000}",zpos) + " F" + feedrate + " (Move Z axis to position)\r\n");
+                sb.Append(sf.m_config.PostSliceCode);
                 //increment the z layer absoulte position to the next layer position
                 zpos += sf.m_config.ZThick;
                 // this is the marker the PrintManager uses to display the correct slice

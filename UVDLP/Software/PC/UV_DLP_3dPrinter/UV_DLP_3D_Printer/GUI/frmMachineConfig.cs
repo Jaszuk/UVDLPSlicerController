@@ -42,6 +42,7 @@ namespace UV_DLP_3D_Printer
                 //list the drivers
                 txtPlatWidth.Text = "" + UVDLPApp.Instance().m_printerinfo.m_PlatXSize;
                 txtPlatHeight.Text = "" + UVDLPApp.Instance().m_printerinfo.m_PlatYSize;
+                txtPlatTall.Text = UVDLPApp.Instance().m_printerinfo.m_PlatZSize.ToString();
                 projwidth.Text = "" + UVDLPApp.Instance().m_printerinfo.XRes;
                 projheight.Text = "" + UVDLPApp.Instance().m_printerinfo.YRes;
                 //select the current monitor
@@ -75,6 +76,7 @@ namespace UV_DLP_3D_Printer
 
                 UVDLPApp.Instance().m_printerinfo.m_PlatXSize = double.Parse(txtPlatWidth.Text);
                 UVDLPApp.Instance().m_printerinfo.m_PlatYSize = double.Parse(txtPlatHeight.Text);
+                UVDLPApp.Instance().m_printerinfo.m_PlatZSize = double.Parse(txtPlatTall.Text);
                 UVDLPApp.Instance().m_printerinfo.m_XDLPRes = double.Parse(projwidth.Text);
                 UVDLPApp.Instance().m_printerinfo.m_YDLPRes = double.Parse(projheight.Text);
                 if (lstMonitors.SelectedIndex != -1)

@@ -29,6 +29,7 @@ namespace UV_DLP_3D_Printer.GUI
                 switch (ev)
                 {
                     case Slicer.eSliceEvent.eSliceStarted:
+                        cmdSlice.Text = "Cancel";
                         prgSlice.Maximum = totallayers - 1;
                         break;
                     case Slicer.eSliceEvent.eLayerSliced:
@@ -39,7 +40,13 @@ namespace UV_DLP_3D_Printer.GUI
                         break;
                     case Slicer.eSliceEvent.eSliceCompleted:
                         lblMessage.Text = "Slicing Completed";
+                        cmdSlice.Text = "Slice!";
                         Close();
+                        break;
+                    case Slicer.eSliceEvent.eSliceCancelled:
+                        cmdSlice.Text = "Slice!";
+                        lblMessage.Text = "Slicing Cancelled";
+                        prgSlice.Value = 0;
                         break;
                 }
             }
@@ -48,7 +55,7 @@ namespace UV_DLP_3D_Printer.GUI
         private void cmdSliceOptions_Click(object sender, EventArgs e)
         {
             frmSliceOptions m_frmsliceopt = new frmSliceOptions();
-            m_frmsliceopt.ShowDialog();
+            m_frmsliceopt.Show();
         }
         private void frmSlice_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -59,10 +66,17 @@ namespace UV_DLP_3D_Printer.GUI
         {
             try
             {
-                SliceBuildConfig sp = UVDLPApp.Instance().m_buildparms;
-                sp.UpdateFrom(UVDLPApp.Instance().m_printerinfo);
-                int numslices = UVDLPApp.Instance().m_slicer.GetNumberOfSlices(sp, UVDLPApp.Instance().m_obj);
-                UVDLPApp.Instance().m_slicefile = UVDLPApp.Instance().m_slicer.Slice(sp, UVDLPApp.Instance().m_obj, ".");
+                if (UVDLPApp.Instance().m_slicer.IsSlicing)
+                {
+                    UVDLPApp.Instance().m_slicer.CancelSlicing();
+                }
+                else 
+                {
+                    SliceBuildConfig sp = UVDLPApp.Instance().m_buildparms;
+                    sp.UpdateFrom(UVDLPApp.Instance().m_printerinfo);
+                    int numslices = UVDLPApp.Instance().m_slicer.GetNumberOfSlices(sp, UVDLPApp.Instance().m_obj);
+                    UVDLPApp.Instance().m_slicefile = UVDLPApp.Instance().m_slicer.Slice(sp, UVDLPApp.Instance().m_obj, ".");                
+                }
             }
             catch (Exception ex)
             {

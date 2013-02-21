@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
-
+using System.IO;
 namespace UV_DLP_3D_Printer
 {
     /*
@@ -21,9 +21,16 @@ namespace UV_DLP_3D_Printer
         public bool exportgcode; // export the gcode file when slicing
         public bool exportsvg; // export the svg slices when building
         public bool exportimages; // export image slices when building
+        /*
+        private String m_startgcodefilename;
+        private String m_endgcodefilename;
+        private String m_prelayergcodefilename;
+        private String m_postlayergcodefilename;
+        */
         private String m_headercode; // inserted at beginning of file
         private String m_footercode; // inserted at end of file
-        private String m_perslicecode; // inserted between each slice
+        private String m_preslicecode; // inserted before each slice
+        private String m_postslicecode; // inserted after each slice
 
         private String[] m_defheader = 
         {
@@ -43,7 +50,12 @@ namespace UV_DLP_3D_Printer
             "(********** Footer End ********)\r\n", // 
         };
 
-        private String[] m_defperslice = 
+        private String[] m_defpreslice = 
+        {
+            "\r\n"
+        };
+
+        private String[] m_defpostslice = 
         {
             "\r\n"
         };
@@ -60,9 +72,15 @@ namespace UV_DLP_3D_Printer
             FooterCode = sb.ToString();
 
             sb = new StringBuilder();
-            foreach (String s in m_defperslice)
+            foreach (String s in m_defpreslice)
                 sb.Append(s);
-            PerSliceCode = sb.ToString();
+            PreSliceCode = sb.ToString();
+
+            sb = new StringBuilder();
+            foreach (String s in m_defpreslice)
+                sb.Append(s);
+            PostSliceCode = sb.ToString();
+            
         }
         public String HeaderCode
         {
@@ -74,10 +92,16 @@ namespace UV_DLP_3D_Printer
             get { return m_footercode; }
             set { m_footercode = value; }
         }
-        public String PerSliceCode
+        public String PreSliceCode
         {
-            get { return m_perslicecode; }
-            set { m_perslicecode = value; }
+            get { return m_preslicecode; }
+            set { m_preslicecode = value; }
+        }
+
+        public String PostSliceCode
+        {
+            get { return m_postslicecode; }
+            set { m_postslicecode = value; }
         }
 
         /*
@@ -97,7 +121,8 @@ namespace UV_DLP_3D_Printer
             exportimages = source.exportimages; // export image slices when building
             m_headercode = source.m_headercode; // inserted at beginning of file
             m_footercode = source.m_footercode; // inserted at end of file
-            m_perslicecode = source.m_perslicecode; // inserted between each slice            
+            m_preslicecode = source.m_preslicecode; // inserted between each slice            
+            m_postslicecode = source.m_postslicecode; // inserted between each slice            
         }
 
         public SliceBuildConfig() 
@@ -132,6 +157,7 @@ namespace UV_DLP_3D_Printer
         {
             try
             {
+                LoadGCodes();
                 XmlReader xr = (XmlReader)XmlReader.Create(filename);
                 xr.ReadStartElement("SliceBuildConfig");
                 dpmmX = double.Parse(xr.ReadElementString("DotsPermmX"));
@@ -141,11 +167,15 @@ namespace UV_DLP_3D_Printer
                 ZThick = double.Parse(xr.ReadElementString("SliceHeight"));
                 layertime_ms = int.Parse(xr.ReadElementString("LayerTime"));
                 plat_temp = int.Parse(xr.ReadElementString("PlatformTemp"));
-                m_headercode = xr.ReadElementString("HeaderGCode");
-                m_perslicecode = xr.ReadElementString("PerSliceGCode");
-                m_footercode = xr.ReadElementString("FooterGCode");
+               // m_headercode = xr.ReadElementString("HeaderGCode");
+               // m_perslicecode = xr.ReadElementString("PerSliceGCode");
+               // m_footercode = xr.ReadElementString("FooterGCode");
+                exportgcode = bool.Parse(xr.ReadElementString("ExportGCode"));
+                exportsvg = bool.Parse(xr.ReadElementString("ExportSVG"));
+                exportimages = bool.Parse(xr.ReadElementString("ExportImages")); ;
                 xr.ReadEndElement();
                 xr.Close();
+                
                 return true;
             }
             catch (Exception ex)
@@ -167,9 +197,13 @@ namespace UV_DLP_3D_Printer
                 xw.WriteElementString("SliceHeight", ZThick.ToString());
                 xw.WriteElementString("LayerTime", layertime_ms.ToString());
                 xw.WriteElementString("PlatformTemp", plat_temp.ToString());
-                xw.WriteElementString("HeaderGCode", m_headercode);
-                xw.WriteElementString("PerSliceGCode", m_perslicecode);
-                xw.WriteElementString("FooterGCode", m_footercode);
+               // xw.WriteElementString("HeaderGCode", m_headercode);
+               // xw.WriteElementString("PerSliceGCode", m_perslicecode);
+               // xw.WriteElementString("FooterGCode", m_footercode);
+                xw.WriteElementString("ExportGCode", exportgcode.ToString());
+                xw.WriteElementString("ExportSVG", exportsvg.ToString());
+                xw.WriteElementString("ExportImages", exportimages.ToString());
+
                 xw.WriteEndElement();
                 xw.Close();
                 return true;
@@ -195,6 +229,72 @@ namespace UV_DLP_3D_Printer
             sb.Append("(Platform Temp   = " + plat_temp + ")\r\n");
 
             return sb.ToString();
+        }
+
+        public void LoadGCodes() 
+        {
+            try
+            {
+                String machinepath = Path.GetDirectoryName(UVDLPApp.Instance().m_appconfig.m_curmachineeprofilename);
+                machinepath += UVDLPApp.m_pathsep;
+                machinepath += Path.GetFileNameWithoutExtension(UVDLPApp.Instance().m_appconfig.m_curmachineeprofilename);
+                if (!Directory.Exists(machinepath))
+                {
+                    Directory.CreateDirectory(machinepath);
+                    SetDefaultCodes();
+                    SaveDefaultGCodes();// save the default gcode files for this machine
+                }
+                else
+                {
+                    //load the files
+                    m_headercode = LoadFile(machinepath + UVDLPApp.m_pathsep + "start.gcode");
+                    m_footercode = LoadFile(machinepath + UVDLPApp.m_pathsep + "end.gcode");
+                    m_preslicecode = LoadFile(machinepath + UVDLPApp.m_pathsep + "preslice.gcode");
+                    m_postslicecode = LoadFile(machinepath + UVDLPApp.m_pathsep + "postslice.gcode");
+                }
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+            }
+        }
+
+        public String LoadFile(String filename) 
+        {
+            try
+            {
+                return File.ReadAllText(filename);
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+                return "";
+            }
+        }
+
+        public bool SaveFile(String filename, String contents) 
+        {
+            try
+            {
+                File.WriteAllText(filename, contents);
+                return true;
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+                return false;
+            }
+        }
+        public void SaveDefaultGCodes() 
+        {
+            String machinepath = Path.GetDirectoryName(UVDLPApp.Instance().m_appconfig.m_curmachineeprofilename);
+            machinepath += UVDLPApp.m_pathsep;
+            machinepath += Path.GetFileNameWithoutExtension(UVDLPApp.Instance().m_appconfig.m_curmachineeprofilename);
+
+            SaveFile(machinepath + UVDLPApp.m_pathsep + "start.gcode",m_headercode);
+            SaveFile(machinepath + UVDLPApp.m_pathsep + "end.gcode", m_footercode);
+            SaveFile(machinepath + UVDLPApp.m_pathsep + "preslice.gcode", m_preslicecode);
+            SaveFile(machinepath + UVDLPApp.m_pathsep + "postslice.gcode", m_postslicecode);
         }
     }
 }
