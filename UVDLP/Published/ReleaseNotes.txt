@@ -1,0 +1,9 @@
+02/22/2013 Initial Alpha 02 release
+	Added in Raw GCode display to send GCodes
+	Fixed Build Issue
+	Added in First Layer exposure time
+	Added in Z Feed rate in Machine Configuration
+	Temporarily changed GCode generation to use relative movements
+	Removed front-page connection serial port. Connection config is now done through connection screen.
+
+02/21/2013 Initial Alpha 01 release
