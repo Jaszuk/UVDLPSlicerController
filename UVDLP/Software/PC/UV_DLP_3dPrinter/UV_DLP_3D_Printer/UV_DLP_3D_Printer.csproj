@@ -90,6 +90,12 @@
     <Compile Include="GUI\frmControl.Designer.cs">
       <DependentUpon>frmControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\frmGCodeRaw.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\frmGCodeRaw.Designer.cs">
+      <DependentUpon>frmGCodeRaw.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\frmSlice.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmControl.resx">
       <DependentUpon>frmControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\frmGCodeRaw.resx">
+      <DependentUpon>frmGCodeRaw.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\frmMachineConfig.resx">
       <DependentUpon>frmMachineConfig.cs</DependentUpon>

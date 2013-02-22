@@ -25,6 +25,7 @@ namespace UV_DLP_3D_Printer
         frmSliceOptions m_frmsliceopt = new frmSliceOptions();
         frmControl m_frmcontrol = new frmControl();
         frmSlice m_frmSlice = new frmSlice();
+        frmGCodeRaw m_sendgcode = new frmGCodeRaw();
         private bool lmdown, rmdown;
         private int mdx, mdy;
         float orbitypos = 0;
@@ -38,7 +39,6 @@ namespace UV_DLP_3D_Printer
             UVDLPApp.Instance().Engine3D.AddPlatCube();
             UVDLPApp.Instance().Engine3D.CameraReset();
             UVDLPApp.Instance().m_slicer.Slice_Event += new Slicer.SliceEvent(SliceEv);
-            cmdRefresh_Click(null,null);
             UVDLPApp.Instance().m_buildmgr.PrintStatus += new delPrintStatus(PrintStatus);
             UVDLPApp.Instance().m_buildmgr.PrintLayer += new delPrinterLayer(PrintLayer);
             DebugLogger.Instance().LoggerStatusEvent += new LoggerStatusHandler(LoggerStatusEvent);
@@ -53,8 +53,8 @@ namespace UV_DLP_3D_Printer
             {
                 cmdConnect.Enabled = false;
                 cmdDisconnect.Enabled = true;
-                cmdRefresh.Enabled = false;
-                cmbSerial.Enabled = false;
+                //cmdRefresh.Enabled = false;
+                //cmbSerial.Enabled = false;
                 cmdControl.Enabled = true;
                 cmdBuild.Enabled = true;
                 cmdStop.Enabled = true;
@@ -63,8 +63,8 @@ namespace UV_DLP_3D_Printer
             {
                 cmdConnect.Enabled = true;
                 cmdDisconnect.Enabled = false;
-                cmdRefresh.Enabled = true;
-                cmbSerial.Enabled = true;
+                //cmdRefresh.Enabled = true;
+                //cmbSerial.Enabled = true;
                 cmdControl.Enabled = false;
                 cmdBuild.Enabled = false;
                 cmdStop.Enabled = false;
@@ -586,28 +586,7 @@ namespace UV_DLP_3D_Printer
             UVDLPApp.Instance().m_buildmgr.CancelPrint();
         }
 
-        private void cmdRefresh_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DebugLogger.Instance().LogRecord("Refreshing port list");
-                cmbSerial.Items.Clear();
-                foreach (String s in SerialPort.GetPortNames())
-                {
-                    cmbSerial.Items.Add(s);
-                }
-                //if (cmbSerial.Items.Count > 0)
-                //    cmbSerial.SelectedIndex = 0;
-                cmbSerial.SelectedItem = UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection.comname;
-            }
-            catch (Exception ex) 
-            {
-                DebugLogger.Instance().LogRecord(ex.Message);
-                if (cmbSerial.Items.Count > 0)
-                    cmbSerial.SelectedIndex = 0;
-                
-            }
-        }
+        
 
         private void cmdConnect1_Click(object sender, EventArgs e)
         {
@@ -615,18 +594,14 @@ namespace UV_DLP_3D_Printer
             {
                 if (!UVDLPApp.Instance().m_deviceinterface.Connected) // 
                 {
-                    String com = cmbSerial.Text;
-                    if (com.Length > 0)
+                    //maybe get the com port if it's different?
+                    //UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection.comname = com;
+                    UVDLPApp.Instance().m_deviceinterface.Configure(UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection);
+                    String com = UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection.comname;
+                    DebugLogger.Instance().LogRecord("Connecting to Printer on " + com + " using " + UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_drivertype.ToString());
+                    if (!UVDLPApp.Instance().m_deviceinterface.Connect()) 
                     {
-                        //maybe get the com port if it's different?
-                        UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection.comname = com;
-                        UVDLPApp.Instance().m_deviceinterface.Configure(UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_connection);
-                        DebugLogger.Instance().LogRecord("Connecting to Printer on " + com + " using " + UVDLPApp.Instance().m_printerinfo.m_driverconfig.m_drivertype.ToString());
-                        if (!UVDLPApp.Instance().m_deviceinterface.Connect()) 
-                        {
-                            DebugLogger.Instance().LogRecord("Cannot connect printer driver on " + com);
-                        }
-                  
+                        DebugLogger.Instance().LogRecord("Cannot connect printer driver on " + com);
                     }
                 }
             }
@@ -667,6 +642,15 @@ namespace UV_DLP_3D_Printer
                 m_frmSlice = new frmSlice();
             }
             m_frmSlice.Show();
+        }
+
+        private void sendGCodeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (m_sendgcode.IsDisposed) 
+            {
+                m_sendgcode = new frmGCodeRaw();
+            }
+            m_sendgcode.Show();
         }
     }
 }

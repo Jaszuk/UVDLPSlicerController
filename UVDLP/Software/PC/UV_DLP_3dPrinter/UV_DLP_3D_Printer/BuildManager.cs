@@ -182,7 +182,7 @@ namespace UV_DLP_3D_Printer
                             else
                             {
                                 //send to device
-                                UVDLPApp.Instance().m_deviceinterface.SendCommandToDevice(line);
+                                UVDLPApp.Instance().m_deviceinterface.SendCommandToDevice(line + "\r\n");
                             }
                         }
                         break;

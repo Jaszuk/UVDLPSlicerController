@@ -31,6 +31,8 @@
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtPlatTall = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.txtPlatHeight = new System.Windows.Forms.TextBox();
@@ -46,8 +48,8 @@
             this.lstMonitors = new System.Windows.Forms.ListBox();
             this.grpDriver = new System.Windows.Forms.GroupBox();
             this.lstDrivers = new System.Windows.Forms.ListBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtPlatTall = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtZFeed = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.Monitors.SuspendLayout();
@@ -56,7 +58,7 @@
             // 
             // cmdOK
             // 
-            this.cmdOK.Location = new System.Drawing.Point(125, 405);
+            this.cmdOK.Location = new System.Drawing.Point(125, 433);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(92, 38);
             this.cmdOK.TabIndex = 0;
@@ -66,7 +68,7 @@
             // 
             // cmdCancel
             // 
-            this.cmdCancel.Location = new System.Drawing.Point(228, 405);
+            this.cmdCancel.Location = new System.Drawing.Point(228, 433);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(92, 38);
             this.cmdCancel.TabIndex = 1;
@@ -88,6 +90,23 @@
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Build Platform Area (mm)";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(207, 36);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(17, 17);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Z";
+            // 
+            // txtPlatTall
+            // 
+            this.txtPlatTall.Location = new System.Drawing.Point(230, 33);
+            this.txtPlatTall.Name = "txtPlatTall";
+            this.txtPlatTall.Size = new System.Drawing.Size(49, 22);
+            this.txtPlatTall.TabIndex = 4;
+            this.txtPlatTall.Text = "200";
             // 
             // label6
             // 
@@ -229,28 +248,30 @@
             this.lstDrivers.Size = new System.Drawing.Size(187, 84);
             this.lstDrivers.TabIndex = 0;
             // 
-            // label3
+            // label4
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(207, 36);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(17, 17);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Z";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 356);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(178, 17);
+            this.label4.TabIndex = 37;
+            this.label4.Text = "Z Axis Feed Rate (mm/min)";
             // 
-            // txtPlatTall
+            // txtZFeed
             // 
-            this.txtPlatTall.Location = new System.Drawing.Point(230, 33);
-            this.txtPlatTall.Name = "txtPlatTall";
-            this.txtPlatTall.Size = new System.Drawing.Size(49, 22);
-            this.txtPlatTall.TabIndex = 4;
-            this.txtPlatTall.Text = "200";
+            this.txtZFeed.Location = new System.Drawing.Point(15, 376);
+            this.txtZFeed.Name = "txtZFeed";
+            this.txtZFeed.Size = new System.Drawing.Size(100, 22);
+            this.txtZFeed.TabIndex = 36;
+            this.txtZFeed.Text = "20";
             // 
             // frmMachineConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(466, 455);
+            this.ClientSize = new System.Drawing.Size(469, 488);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.txtZFeed);
             this.Controls.Add(this.grpDriver);
             this.Controls.Add(this.Monitors);
             this.Controls.Add(this.groupBox2);
@@ -274,6 +295,7 @@
             this.Monitors.PerformLayout();
             this.grpDriver.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -299,5 +321,7 @@
         private System.Windows.Forms.ListBox lstDrivers;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtPlatTall;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtZFeed;
     }
 }

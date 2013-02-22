@@ -42,21 +42,11 @@
             this.tabGCode = new System.Windows.Forms.TabPage();
             this.txtGCode = new System.Windows.Forms.TextBox();
             this.tabSliceView = new System.Windows.Forms.TabPage();
-            this.picSlice = new System.Windows.Forms.PictureBox();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.cmdLoad = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.cmdBuild = new System.Windows.Forms.ToolStripButton();
-            this.cmdStop = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.cmbSerial = new System.Windows.Forms.ToolStripComboBox();
-            this.cmdRefresh = new System.Windows.Forms.ToolStripButton();
-            this.cmdConnect = new System.Windows.Forms.ToolStripButton();
-            this.cmdDisconnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.cmdControl = new System.Windows.Forms.ToolStripButton();
-            this.cmdSlice1 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadBinarySTLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,6 +58,15 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.picSlice = new System.Windows.Forms.PictureBox();
+            this.cmdLoad = new System.Windows.Forms.ToolStripButton();
+            this.cmdBuild = new System.Windows.Forms.ToolStripButton();
+            this.cmdStop = new System.Windows.Forms.ToolStripButton();
+            this.cmdConnect = new System.Windows.Forms.ToolStripButton();
+            this.cmdDisconnect = new System.Windows.Forms.ToolStripButton();
+            this.cmdControl = new System.Windows.Forms.ToolStripButton();
+            this.cmdSlice1 = new System.Windows.Forms.ToolStripButton();
+            this.sendGCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -75,12 +74,12 @@
             this.tabModel1.SuspendLayout();
             this.tabGCode.SuspendLayout();
             this.tabSliceView.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picSlice)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picSlice)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -234,7 +233,7 @@
             this.txtGCode.Name = "txtGCode";
             this.txtGCode.ReadOnly = true;
             this.txtGCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtGCode.Size = new System.Drawing.Size(1164, 508);
+            this.txtGCode.Size = new System.Drawing.Size(1230, 570);
             this.txtGCode.TabIndex = 0;
             // 
             // tabSliceView
@@ -246,17 +245,6 @@
             this.tabSliceView.TabIndex = 2;
             this.tabSliceView.Text = "Slice Viewer";
             this.tabSliceView.UseVisualStyleBackColor = true;
-            // 
-            // picSlice
-            // 
-            this.picSlice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picSlice.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picSlice.Location = new System.Drawing.Point(0, 0);
-            this.picSlice.Name = "picSlice";
-            this.picSlice.Size = new System.Drawing.Size(1200, 514);
-            this.picSlice.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picSlice.TabIndex = 17;
-            this.picSlice.TabStop = false;
             // 
             // vScrollBar1
             // 
@@ -277,8 +265,6 @@
             this.cmdBuild,
             this.cmdStop,
             this.toolStripSeparator1,
-            this.cmbSerial,
-            this.cmdRefresh,
             this.cmdConnect,
             this.cmdDisconnect,
             this.toolStripSeparator2,
@@ -291,105 +277,20 @@
             this.toolStrip1.TabIndex = 17;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // cmdLoad
-            // 
-            this.cmdLoad.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdLoad.Image = global::UV_DLP_3D_Printer.Properties.Resources.Load;
-            this.cmdLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdLoad.Name = "cmdLoad";
-            this.cmdLoad.Size = new System.Drawing.Size(52, 52);
-            this.cmdLoad.Text = "Load Binary STL Model";
-            this.cmdLoad.Click += new System.EventHandler(this.LoadSTLModel_Click);
-            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 55);
-            // 
-            // cmdBuild
-            // 
-            this.cmdBuild.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdBuild.Image = global::UV_DLP_3D_Printer.Properties.Resources.bfzn_004;
-            this.cmdBuild.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdBuild.Name = "cmdBuild";
-            this.cmdBuild.Size = new System.Drawing.Size(52, 52);
-            this.cmdBuild.Text = "Start Build";
-            this.cmdBuild.Click += new System.EventHandler(this.cmdStartPrint_Click);
-            // 
-            // cmdStop
-            // 
-            this.cmdStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdStop.Image = global::UV_DLP_3D_Printer.Properties.Resources.bfzn_006;
-            this.cmdStop.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdStop.Name = "cmdStop";
-            this.cmdStop.Size = new System.Drawing.Size(52, 52);
-            this.cmdStop.Text = "Stop Build";
-            this.cmdStop.Click += new System.EventHandler(this.cmdStop_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 55);
             // 
-            // cmbSerial
-            // 
-            this.cmbSerial.Name = "cmbSerial";
-            this.cmbSerial.Size = new System.Drawing.Size(121, 55);
-            // 
-            // cmdRefresh
-            // 
-            this.cmdRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdRefresh.Image = global::UV_DLP_3D_Printer.Properties.Resources.Refresh_icon;
-            this.cmdRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdRefresh.Name = "cmdRefresh";
-            this.cmdRefresh.Size = new System.Drawing.Size(52, 52);
-            this.cmdRefresh.Text = "Refresh Port List";
-            this.cmdRefresh.Click += new System.EventHandler(this.cmdRefresh_Click);
-            // 
-            // cmdConnect
-            // 
-            this.cmdConnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdConnect.Image = global::UV_DLP_3D_Printer.Properties.Resources.Connect;
-            this.cmdConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdConnect.Name = "cmdConnect";
-            this.cmdConnect.Size = new System.Drawing.Size(52, 52);
-            this.cmdConnect.Text = "Connect";
-            this.cmdConnect.Click += new System.EventHandler(this.cmdConnect1_Click);
-            // 
-            // cmdDisconnect
-            // 
-            this.cmdDisconnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdDisconnect.Image = global::UV_DLP_3D_Printer.Properties.Resources.Disconnect;
-            this.cmdDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdDisconnect.Name = "cmdDisconnect";
-            this.cmdDisconnect.Size = new System.Drawing.Size(52, 52);
-            this.cmdDisconnect.Text = "Disconnect";
-            this.cmdDisconnect.Click += new System.EventHandler(this.cmdDisconnect_Click);
-            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 55);
-            // 
-            // cmdControl
-            // 
-            this.cmdControl.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdControl.Image = global::UV_DLP_3D_Printer.Properties.Resources.move;
-            this.cmdControl.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdControl.Name = "cmdControl";
-            this.cmdControl.Size = new System.Drawing.Size(52, 52);
-            this.cmdControl.Text = "View Printer Controls";
-            this.cmdControl.Click += new System.EventHandler(this.cmdControl_Click);
-            // 
-            // cmdSlice1
-            // 
-            this.cmdSlice1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cmdSlice1.Image = global::UV_DLP_3D_Printer.Properties.Resources.slice;
-            this.cmdSlice1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cmdSlice1.Name = "cmdSlice1";
-            this.cmdSlice1.Size = new System.Drawing.Size(52, 52);
-            this.cmdSlice1.Text = "Slice!";
-            this.cmdSlice1.Click += new System.EventHandler(this.cmdSlice1_Click);
             // 
             // menuStrip1
             // 
@@ -430,7 +331,8 @@
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.slicingOptionsToolStripMenuItem,
             this.machinePropertiesToolStripMenuItem,
-            this.connectionToolStripMenuItem});
+            this.connectionToolStripMenuItem,
+            this.sendGCodeToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
             this.viewToolStripMenuItem.Text = "View";
@@ -488,6 +390,94 @@
             this.txtLog.Size = new System.Drawing.Size(1457, 96);
             this.txtLog.TabIndex = 0;
             // 
+            // picSlice
+            // 
+            this.picSlice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picSlice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.picSlice.Location = new System.Drawing.Point(0, 0);
+            this.picSlice.Name = "picSlice";
+            this.picSlice.Size = new System.Drawing.Size(1236, 576);
+            this.picSlice.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picSlice.TabIndex = 17;
+            this.picSlice.TabStop = false;
+            // 
+            // cmdLoad
+            // 
+            this.cmdLoad.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdLoad.Image = global::UV_DLP_3D_Printer.Properties.Resources.Load;
+            this.cmdLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdLoad.Name = "cmdLoad";
+            this.cmdLoad.Size = new System.Drawing.Size(52, 52);
+            this.cmdLoad.Text = "Load Binary STL Model";
+            this.cmdLoad.Click += new System.EventHandler(this.LoadSTLModel_Click);
+            // 
+            // cmdBuild
+            // 
+            this.cmdBuild.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdBuild.Image = global::UV_DLP_3D_Printer.Properties.Resources.bfzn_004;
+            this.cmdBuild.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdBuild.Name = "cmdBuild";
+            this.cmdBuild.Size = new System.Drawing.Size(52, 52);
+            this.cmdBuild.Text = "Start Build";
+            this.cmdBuild.Click += new System.EventHandler(this.cmdStartPrint_Click);
+            // 
+            // cmdStop
+            // 
+            this.cmdStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdStop.Image = global::UV_DLP_3D_Printer.Properties.Resources.bfzn_006;
+            this.cmdStop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdStop.Name = "cmdStop";
+            this.cmdStop.Size = new System.Drawing.Size(52, 52);
+            this.cmdStop.Text = "Stop Build";
+            this.cmdStop.Click += new System.EventHandler(this.cmdStop_Click);
+            // 
+            // cmdConnect
+            // 
+            this.cmdConnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdConnect.Image = global::UV_DLP_3D_Printer.Properties.Resources.Connect;
+            this.cmdConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdConnect.Name = "cmdConnect";
+            this.cmdConnect.Size = new System.Drawing.Size(52, 52);
+            this.cmdConnect.Text = "Connect";
+            this.cmdConnect.Click += new System.EventHandler(this.cmdConnect1_Click);
+            // 
+            // cmdDisconnect
+            // 
+            this.cmdDisconnect.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdDisconnect.Image = global::UV_DLP_3D_Printer.Properties.Resources.Disconnect;
+            this.cmdDisconnect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdDisconnect.Name = "cmdDisconnect";
+            this.cmdDisconnect.Size = new System.Drawing.Size(52, 52);
+            this.cmdDisconnect.Text = "Disconnect";
+            this.cmdDisconnect.Click += new System.EventHandler(this.cmdDisconnect_Click);
+            // 
+            // cmdControl
+            // 
+            this.cmdControl.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdControl.Image = global::UV_DLP_3D_Printer.Properties.Resources.move;
+            this.cmdControl.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdControl.Name = "cmdControl";
+            this.cmdControl.Size = new System.Drawing.Size(52, 52);
+            this.cmdControl.Text = "View Printer Controls";
+            this.cmdControl.Click += new System.EventHandler(this.cmdControl_Click);
+            // 
+            // cmdSlice1
+            // 
+            this.cmdSlice1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdSlice1.Image = global::UV_DLP_3D_Printer.Properties.Resources.slice;
+            this.cmdSlice1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdSlice1.Name = "cmdSlice1";
+            this.cmdSlice1.Size = new System.Drawing.Size(52, 52);
+            this.cmdSlice1.Text = "Slice!";
+            this.cmdSlice1.Click += new System.EventHandler(this.cmdSlice1_Click);
+            // 
+            // sendGCodeToolStripMenuItem
+            // 
+            this.sendGCodeToolStripMenuItem.Name = "sendGCodeToolStripMenuItem";
+            this.sendGCodeToolStripMenuItem.Size = new System.Drawing.Size(205, 24);
+            this.sendGCodeToolStripMenuItem.Text = "Send GCode";
+            this.sendGCodeToolStripMenuItem.Click += new System.EventHandler(this.sendGCodeToolStripMenuItem_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -497,6 +487,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmMain";
             this.Text = "Creation Workshop - UV DLP 3D Printer Control and Slicing";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
@@ -508,7 +499,6 @@
             this.tabGCode.ResumeLayout(false);
             this.tabGCode.PerformLayout();
             this.tabSliceView.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picSlice)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -518,6 +508,7 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
             this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picSlice)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -550,8 +541,6 @@
         private System.Windows.Forms.ToolStripButton cmdBuild;
         private System.Windows.Forms.ToolStripButton cmdStop;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripComboBox cmbSerial;
-        private System.Windows.Forms.ToolStripButton cmdRefresh;
         private System.Windows.Forms.ToolStripButton cmdConnect;
         private System.Windows.Forms.ToolStripButton cmdDisconnect;
         private System.Windows.Forms.ToolStripButton cmdControl;
@@ -564,6 +553,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.VScrollBar vScrollBar1;
+        private System.Windows.Forms.ToolStripMenuItem sendGCodeToolStripMenuItem;
     }
 }
 

@@ -72,5 +72,10 @@ namespace UV_DLP_3D_Printer.GUI
             Close();
         }
 
+        private void cmdrefresh_Click(object sender, EventArgs e)
+        {
+            SetData();
+        }
+
     }
 }

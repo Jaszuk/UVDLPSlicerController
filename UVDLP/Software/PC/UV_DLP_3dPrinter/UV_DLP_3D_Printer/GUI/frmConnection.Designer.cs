@@ -36,6 +36,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtDataBits = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.cmdrefresh = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmbPorts
@@ -114,11 +115,22 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "# Data Bits";
             // 
+            // cmdrefresh
+            // 
+            this.cmdrefresh.Location = new System.Drawing.Point(231, 36);
+            this.cmdrefresh.Name = "cmdrefresh";
+            this.cmdrefresh.Size = new System.Drawing.Size(75, 23);
+            this.cmdrefresh.TabIndex = 8;
+            this.cmdrefresh.Text = "Refresh";
+            this.cmdrefresh.UseVisualStyleBackColor = true;
+            this.cmdrefresh.Click += new System.EventHandler(this.cmdrefresh_Click);
+            // 
             // frmConnection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(422, 280);
+            this.Controls.Add(this.cmdrefresh);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtDataBits);
             this.Controls.Add(this.label2);
@@ -147,5 +159,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtDataBits;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button cmdrefresh;
     }
 }

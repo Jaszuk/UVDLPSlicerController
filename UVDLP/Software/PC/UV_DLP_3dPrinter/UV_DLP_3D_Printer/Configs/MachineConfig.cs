@@ -99,7 +99,7 @@ namespace UV_DLP_3D_Printer
             m_PlatXSize = 102.0;
             m_PlatYSize = 77.0;
             m_PlatZSize = 100; // 100 mm default, we have to load this
-            m_ZMaxFeedrate = 100;
+            m_ZMaxFeedrate = 10;
             m_monitorid = "";
             CalcPixPerMM();
             m_driverconfig = new DeviceDriverConfig();

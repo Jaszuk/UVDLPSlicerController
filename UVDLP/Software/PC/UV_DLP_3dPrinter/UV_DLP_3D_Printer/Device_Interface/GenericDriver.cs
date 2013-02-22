@@ -13,21 +13,36 @@ namespace UV_DLP_3D_Printer.Drivers
         }
         public override bool Connect() 
         {
-            m_serialport.Open();
-            if (m_serialport.IsOpen) 
+            try
             {
-                m_connected = true;
-                RaiseDeviceStatus(this, eDeviceStatus.eConnect);
-                return true;
+                m_serialport.Open();
+                if (m_serialport.IsOpen)
+                {
+                    m_connected = true;
+                    RaiseDeviceStatus(this, eDeviceStatus.eConnect);
+                    return true;
+                }
+            }catch(Exception ex)
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
             }
             return false;
         }
         public override bool Disconnect() 
         {
-            m_serialport.Close();
-            m_connected = false;
-            RaiseDeviceStatus(this, eDeviceStatus.eDisconnect);
-            return true;
+            try
+            {
+                m_serialport.Close();
+                m_connected = false;
+                RaiseDeviceStatus(this, eDeviceStatus.eDisconnect);
+                return true;
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+                return false;
+            }
+            
         }
         public override int Write(byte[] data, int len) 
         {

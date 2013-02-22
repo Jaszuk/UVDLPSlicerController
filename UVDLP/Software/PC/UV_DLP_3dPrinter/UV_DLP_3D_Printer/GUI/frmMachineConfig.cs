@@ -45,6 +45,7 @@ namespace UV_DLP_3D_Printer
                 txtPlatTall.Text = UVDLPApp.Instance().m_printerinfo.m_PlatZSize.ToString();
                 projwidth.Text = "" + UVDLPApp.Instance().m_printerinfo.XRes;
                 projheight.Text = "" + UVDLPApp.Instance().m_printerinfo.YRes;
+                txtZFeed.Text = UVDLPApp.Instance().m_printerinfo.m_ZMaxFeedrate.ToString();
                 //select the current monitor
                 int idx = 0;
                 foreach (String s in lstMonitors.Items) 
@@ -79,6 +80,7 @@ namespace UV_DLP_3D_Printer
                 UVDLPApp.Instance().m_printerinfo.m_PlatZSize = double.Parse(txtPlatTall.Text);
                 UVDLPApp.Instance().m_printerinfo.m_XDLPRes = double.Parse(projwidth.Text);
                 UVDLPApp.Instance().m_printerinfo.m_YDLPRes = double.Parse(projheight.Text);
+                UVDLPApp.Instance().m_printerinfo.m_ZMaxFeedrate = double.Parse(txtZFeed.Text);
                 if (lstMonitors.SelectedIndex != -1)
                 {
                     UVDLPApp.Instance().m_printerinfo.m_monitorid = Screen.AllScreens[lstMonitors.SelectedIndex].DeviceName;// lstMonitors.Items[lstMonitors.SelectedIndex].ToString();

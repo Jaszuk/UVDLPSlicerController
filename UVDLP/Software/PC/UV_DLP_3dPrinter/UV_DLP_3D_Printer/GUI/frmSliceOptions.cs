@@ -34,7 +34,7 @@ namespace UV_DLP_3D_Printer
             chkExportSlices.Checked = UVDLPApp.Instance().m_buildparms.exportimages;
             chkexportsvg.Checked = UVDLPApp.Instance().m_buildparms.exportsvg;
             txtLayerTime.Text = "" + UVDLPApp.Instance().m_buildparms.layertime_ms;
-        
+            txtFirstLayerTime.Text = UVDLPApp.Instance().m_buildparms.firstlayertime_ms.ToString();
         }
         private bool GetValues() 
         {
@@ -45,6 +45,7 @@ namespace UV_DLP_3D_Printer
                 UVDLPApp.Instance().m_buildparms.exportimages = chkExportSlices.Checked;
                 UVDLPApp.Instance().m_buildparms.exportsvg = chkexportsvg.Checked;
                 UVDLPApp.Instance().m_buildparms.layertime_ms = int.Parse(txtLayerTime.Text);
+                UVDLPApp.Instance().m_buildparms.firstlayertime_ms = int.Parse(txtFirstLayerTime.Text);
                 return true;
             }
             catch (Exception ex) 

@@ -35,14 +35,25 @@ namespace UV_DLP_3D_Printer
             sb.Append("G1 Z" + sf.m_config.ZThick + " (move to the first layer position)\r\n");
             sb.Append("M109 S" + sf.m_config.plat_temp + "(Set Platform Temp for UV Resin)\r\n");
             */
+            
             for (int c = 0; c < sf.m_slices.Count; c++ )
             {
                 
                 String layermark = "";
-                String timedelay = "(<Delay> " + sf.m_config.layertime_ms + ")\r\n";
+                String timedelay = "";
+                if (c == 0)
+                {
+                    timedelay = "(<Delay> " + sf.m_config.firstlayertime_ms + ")\r\n";
+                }
+                else 
+                {
+                    timedelay = "(<Delay> " + sf.m_config.layertime_ms + ")\r\n";
+                }
+                
                 sb.Append(sf.m_config.PreSliceCode);
                 //move the z axis to the right layer position
-                sb.Append("G1 Z" + String.Format("{0:0.00000}",zpos) + " F" + feedrate + " (Move Z axis to position)\r\n");
+                //sb.Append("G1 Z" + String.Format("{0:0.00000}",zpos) + " F" + feedrate + " (Move Z axis to position)\r\n");
+                sb.Append("G1 Z" + String.Format("{0:0.00000}", sf.m_config.ZThick) + " F" + feedrate + "\r\n");
                 sb.Append(sf.m_config.PostSliceCode);
                 //increment the z layer absoulte position to the next layer position
                 zpos += sf.m_config.ZThick;

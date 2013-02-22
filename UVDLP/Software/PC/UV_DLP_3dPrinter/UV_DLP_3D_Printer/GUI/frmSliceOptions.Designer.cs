@@ -38,12 +38,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.chkexportsvg = new System.Windows.Forms.CheckBox();
             this.cmdCancel = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtFirstLayerTime = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // chkExportSlices
             // 
             this.chkExportSlices.AutoSize = true;
-            this.chkExportSlices.Location = new System.Drawing.Point(21, 139);
+            this.chkExportSlices.Location = new System.Drawing.Point(21, 245);
             this.chkExportSlices.Name = "chkExportSlices";
             this.chkExportSlices.Size = new System.Drawing.Size(153, 21);
             this.chkExportSlices.TabIndex = 21;
@@ -52,7 +54,7 @@
             // 
             // cmdOK
             // 
-            this.cmdOK.Location = new System.Drawing.Point(36, 239);
+            this.cmdOK.Location = new System.Drawing.Point(36, 306);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(129, 41);
             this.cmdOK.TabIndex = 24;
@@ -63,7 +65,7 @@
             // chkgengcode
             // 
             this.chkgengcode.AutoSize = true;
-            this.chkgengcode.Location = new System.Drawing.Point(21, 112);
+            this.chkgengcode.Location = new System.Drawing.Point(21, 218);
             this.chkgengcode.Name = "chkgengcode";
             this.chkgengcode.Size = new System.Drawing.Size(138, 21);
             this.chkgengcode.TabIndex = 25;
@@ -108,7 +110,7 @@
             // 
             this.chkexportsvg.AutoSize = true;
             this.chkexportsvg.Enabled = false;
-            this.chkexportsvg.Location = new System.Drawing.Point(21, 166);
+            this.chkexportsvg.Location = new System.Drawing.Point(21, 272);
             this.chkexportsvg.Name = "chkexportsvg";
             this.chkexportsvg.Size = new System.Drawing.Size(144, 21);
             this.chkexportsvg.TabIndex = 30;
@@ -117,7 +119,7 @@
             // 
             // cmdCancel
             // 
-            this.cmdCancel.Location = new System.Drawing.Point(171, 239);
+            this.cmdCancel.Location = new System.Drawing.Point(171, 306);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(129, 41);
             this.cmdCancel.TabIndex = 31;
@@ -125,11 +127,30 @@
             this.cmdCancel.UseVisualStyleBackColor = true;
             this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(20, 101);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(205, 17);
+            this.label2.TabIndex = 33;
+            this.label2.Text = "First Layer Exposure Time (ms)";
+            // 
+            // txtFirstLayerTime
+            // 
+            this.txtFirstLayerTime.Location = new System.Drawing.Point(23, 121);
+            this.txtFirstLayerTime.Name = "txtFirstLayerTime";
+            this.txtFirstLayerTime.Size = new System.Drawing.Size(100, 22);
+            this.txtFirstLayerTime.TabIndex = 32;
+            this.txtFirstLayerTime.Text = "5000";
+            // 
             // frmSliceOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(342, 292);
+            this.ClientSize = new System.Drawing.Size(351, 365);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.txtFirstLayerTime);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.chkexportsvg);
             this.Controls.Add(this.txtZThick);
@@ -163,5 +184,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkexportsvg;
         private System.Windows.Forms.Button cmdCancel;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtFirstLayerTime;
     }
 }
