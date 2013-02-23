@@ -28,8 +28,10 @@ namespace UV_DLP_3D_Printer
         ePrintCompleted
     }
 
+    
+
     public delegate void delPrintStatus(ePrintStat printstat);
-    public delegate void delPrinterLayer(Bitmap bmplayer, int layernum); // this is raised to display the next layer
+    public delegate void delPrinterLayer(Bitmap bmplayer, int layernum, int layertype); // this is raised to display the next layer
 
     public class BuildManager
     {
@@ -39,6 +41,10 @@ namespace UV_DLP_3D_Printer
         private  const int STATE_CANCELLED            = 3;
         private  const int STATE_IDLE                 = 4;
         private  const int STATE_DONE                 = 5;
+
+        public const int SLICE_NORMAL                  =  0;
+        public const int SLICE_BLANK                   = -1;
+        public const int SLICE_CALIBRATION             = -2;
 
         
 
@@ -52,6 +58,9 @@ namespace UV_DLP_3D_Printer
         int m_state = STATE_IDLE; // the state machine variable
         private Thread m_runthread; // a thread to run all this..
         private bool m_running; // a var to control thread life
+
+        Bitmap m_blankimage = null; // a blank image to display
+        Bitmap m_calibimage = null; // a calibration image to display
 
         public BuildManager() 
         {
@@ -100,7 +109,16 @@ namespace UV_DLP_3D_Printer
                 int val = 0;
                 line = line.Replace(')', ' ');
                 String[] lines = line.Split('>');
-                val = int.Parse(lines[1].Trim());
+                if (lines[1].Contains("Blank"))
+                {
+                    val = -1; // blank screen
+                }
+                else 
+                {
+                    String []lns2 = lines[1].Trim().Split(' ');
+                    val = int.Parse(lns2[0].Trim()); // first should be variable
+                }
+                
                 return val;
             }
             catch (Exception ex) 
@@ -166,14 +184,36 @@ namespace UV_DLP_3D_Printer
                                 continue;
                             }
                             else if (line.Contains("(<Slice> "))//get the slice number
-                            { 
-                                m_curlayer = getvarfromline(line);
-                                Bitmap bmp = m_sf.RenderSlice(m_curlayer);
-                                // need to send a command and wait for the z axis to raise here...
+                            {
+                                int layer = getvarfromline(line);
+                                int curtype = BuildManager.SLICE_NORMAL; // assume it's a normal image to begin with
+                                Bitmap bmp = null;
+
+                                if (layer == SLICE_BLANK)
+                                {
+                                    if (m_blankimage == null)  // blank image is null, create it
+                                    {
+                                        m_blankimage = new Bitmap(m_sf.m_config.xres, m_sf.m_config.yres);
+                                        // fill it with black
+                                        using (Graphics gfx = Graphics.FromImage(m_blankimage))
+                                        using (SolidBrush brush = new SolidBrush(Color.Black))
+                                        {
+                                            gfx.FillRectangle(brush, 0, 0, m_sf.m_config.xres, m_sf.m_config.yres);
+                                        }
+                                    }
+                                    bmp = m_blankimage;
+                                    curtype = BuildManager.SLICE_BLANK;
+                                }
+                                else 
+                                {
+                                    m_curlayer = layer;
+                                    bmp = m_sf.RenderSlice(m_curlayer); // get the rendered image slice
+                                }
+                                
                                 //raise a delegate so the main form can catch it and display layer information.
                                 if (PrintLayer != null)
                                 {
-                                    PrintLayer(bmp, m_curlayer);
+                                    PrintLayer(bmp, m_curlayer, curtype);
                                 }
                             }
                             else if (line.Trim().StartsWith("("))// ignore line comment

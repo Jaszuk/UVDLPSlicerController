@@ -13,11 +13,19 @@ using UV_DLP_3D_Printer;
 using System.Drawing;
 namespace UV_DLP_3D_Printer
 {
+    public enum eAppEvent 
+    {
+        eModelLoaded,
+        eGCodeLoaded,
+        eGCodeSaved
+    }
+    public delegate void AppEventDelegate(eAppEvent ev, String Message);
     /*
      This represents the main application object
      */
     public class UVDLPApp
     {
+        public AppEventDelegate AppEvent;
         private static UVDLPApp m_instance = null;
         public String m_PathMachines;
         public String m_PathProfiles;
@@ -72,10 +80,19 @@ namespace UV_DLP_3D_Printer
             Linux,
             Mac
         }
+
+        public void RaiseAppEvent(eAppEvent ev, String message) 
+        {
+            if (AppEvent != null) 
+            {
+                AppEvent(ev, message);
+            }
+        }
         public bool LoadModel(String filename) 
         {
             try
             {
+                RaiseAppEvent(eAppEvent.eModelLoaded, "Model Loaded");
                 return true;
             }
             catch (Exception ex) 
@@ -125,6 +142,7 @@ namespace UV_DLP_3D_Printer
                     break;
                 case Slicer.eSliceEvent.eSliceCompleted:
                     m_gcode = GCodeGenerator.Generate(m_slicefile, m_printerinfo);
+                    /*
                     //get the path of the current object file
                     path = Path.GetDirectoryName(m_obj.m_fullname);
                     string fn = Path.GetFileNameWithoutExtension(m_obj.m_fullname);
@@ -132,6 +150,8 @@ namespace UV_DLP_3D_Printer
                     {
                         DebugLogger.Instance().LogRecord("Cannot save GCode File " + path + m_pathsep + fn + ".gcode");
                     }
+                     * */
+                    SaveGCode();
                     break;
                 case Slicer.eSliceEvent.eSliceCancelled:
                     DebugLogger.Instance().LogRecord("Slicing Cancelled");
@@ -140,6 +160,45 @@ namespace UV_DLP_3D_Printer
 
             }
         }
+
+        public void LoadGCode() 
+        {
+            try
+            {
+                //get the path of the current object file
+                String path = Path.GetDirectoryName(m_obj.m_fullname);
+                string fn = Path.GetFileNameWithoutExtension(m_obj.m_fullname);
+                if (!UVDLPApp.Instance().m_gcode.Load(path + UVDLPApp.m_pathsep + fn + ".gcode"))
+                {
+                    DebugLogger.Instance().LogRecord("Cannot load GCode File " + path + m_pathsep + fn + ".gcode");
+                }
+                RaiseAppEvent(eAppEvent.eGCodeLoaded, "");
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+            }
+        }
+
+        public void SaveGCode() 
+        {
+            try
+            {
+                //get the path of the current object file
+                String path = Path.GetDirectoryName(m_obj.m_fullname);
+                string fn = Path.GetFileNameWithoutExtension(m_obj.m_fullname);
+                if (!UVDLPApp.Instance().m_gcode.Save(path + UVDLPApp.m_pathsep + fn + ".gcode"))
+                {
+                    DebugLogger.Instance().LogRecord("Cannot save GCode File " + path + m_pathsep + fn + ".gcode");
+                }
+                RaiseAppEvent(eAppEvent.eGCodeSaved, "");
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+            }
+        }
+
         // a public property to get the 3d engine
         public Engine3d Engine3D { get { return m_engine3d; } }
 

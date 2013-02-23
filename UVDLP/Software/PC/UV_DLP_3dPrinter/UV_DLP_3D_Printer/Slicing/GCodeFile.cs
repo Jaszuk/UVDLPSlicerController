@@ -44,6 +44,7 @@ namespace UV_DLP_3D_Printer
             {
                 TextWriter tw = File.CreateText(filename);
                 tw.Write(m_gcode);
+                tw.Close();
                 return true;
             }
             catch (Exception ex) 
@@ -67,6 +68,11 @@ namespace UV_DLP_3D_Printer
             get 
             {
                 return m_gcode; 
+            }
+            set 
+            {
+                m_gcode = value;
+                m_lines = null; // clear it so it will be re-generated when needed
             }
         }
     }

@@ -26,6 +26,7 @@ namespace UV_DLP_3D_Printer
         frmControl m_frmcontrol = new frmControl();
         frmSlice m_frmSlice = new frmSlice();
         frmGCodeRaw m_sendgcode = new frmGCodeRaw();
+
         private bool lmdown, rmdown;
         private int mdx, mdy;
         float orbitypos = 0;
@@ -35,6 +36,7 @@ namespace UV_DLP_3D_Printer
         public frmMain()
         {
             InitializeComponent();
+            UVDLPApp.Instance().AppEvent += new AppEventDelegate(AppEventDel);
             UVDLPApp.Instance().Engine3D.AddGrid();
             UVDLPApp.Instance().Engine3D.AddPlatCube();
             UVDLPApp.Instance().Engine3D.CameraReset();
@@ -45,7 +47,28 @@ namespace UV_DLP_3D_Printer
             UVDLPApp.Instance().m_deviceinterface.StatusEvent += new DeviceInterface.DeviceInterfaceStatus(DeviceStatusEvent);
             SetConnectionStatus();
         }
-
+        /*
+         This handles specific events triggered by the app
+         */
+        private void AppEventDel(eAppEvent ev, String Message) 
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(delegate() { AppEventDel(ev, Message); }));
+            }
+            else
+            {
+                switch (ev) 
+                {
+                    case eAppEvent.eGCodeLoaded:
+                        break;
+                    case eAppEvent.eGCodeSaved:
+                        break;
+                    case eAppEvent.eModelLoaded:
+                        break;
+                }
+            }
+        }
         
         private void SetConnectionStatus() 
         {
@@ -150,17 +173,21 @@ namespace UV_DLP_3D_Printer
         }
 
         //This delegate is called when the print manager is printing a new layer
-        void PrintLayer(Bitmap bmp, int layer) 
+        void PrintLayer(Bitmap bmp, int layer,int layertype) 
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new MethodInvoker(delegate() { PrintLayer(bmp, layer); }));
+                BeginInvoke(new MethodInvoker(delegate() { PrintLayer(bmp, layer,layertype); }));
             }
             else
             {
-                ViewLayer(layer,bmp);
-                String txt = "Printing layer " + (layer + 1) + " of " + UVDLPApp.Instance().m_slicefile.m_slices.Count;
-                DebugLogger.Instance().LogRecord(txt);
+                ViewLayer(layer,bmp,layertype);
+                // display info only if it's a normal layer
+                if (layertype == BuildManager.SLICE_NORMAL)
+                {
+                    String txt = "Printing layer " + (layer + 1) + " of " + UVDLPApp.Instance().m_slicefile.m_slices.Count;
+                    DebugLogger.Instance().LogRecord(txt);
+                }
 
             }
         }
@@ -235,31 +262,37 @@ namespace UV_DLP_3D_Printer
         }
 
         
-        private void ViewLayer(int layer, Bitmap image) 
+        private void ViewLayer(int layer, Bitmap image, int layertype) 
         {
             try
             {
-                Slice sl = (Slice)UVDLPApp.Instance().m_slicefile.m_slices[layer];
-                UVDLPApp.Instance().Engine3D.RemoveAllLines();
-                UVDLPApp.Instance().Engine3D.AddGrid();
-                UVDLPApp.Instance().Engine3D.AddPlatCube();
-                
-                foreach (PolyLine3d ln in sl.m_segments)
+                // if this is a normal slice that is specified, move to the correct 3d view of the layer, 
+                // otherwise, keep showing the current 3d layer
+                if (layertype == BuildManager.SLICE_NORMAL)
                 {
-                    ln.m_color = Color.Red;
-                    UVDLPApp.Instance().Engine3D.AddLine(ln);
+                    Slice sl = (Slice)UVDLPApp.Instance().m_slicefile.m_slices[layer];
+                    UVDLPApp.Instance().Engine3D.RemoveAllLines();
+                    UVDLPApp.Instance().Engine3D.AddGrid();
+                    UVDLPApp.Instance().Engine3D.AddPlatCube();
+
+                    foreach (PolyLine3d ln in sl.m_segments)
+                    {
+                        ln.m_color = Color.Red;
+                        UVDLPApp.Instance().Engine3D.AddLine(ln);
+                    }
+                    glControl1.Invalidate();
                 }
-                glControl1.Invalidate();
                 //render the 2d slice
                 Bitmap bmp = null;
-                if (image == null)
+                if (image == null) // we're here because of the scroll bar in the gui
                 {
                     bmp = UVDLPApp.Instance().m_slicefile.RenderSlice(layer);
                 }
-                else 
+                else // the image was specified from the build manager
                 {
                     bmp = image;
                 }
+                //this bmp could be a normal, blank, or calibration image
                 picSlice.Image = bmp;//now show the 2d slice
                 m_frmdlp.ShowImage(bmp);
                 //lblCurSlice.Text = "Layer = " +layer;
@@ -270,7 +303,7 @@ namespace UV_DLP_3D_Printer
         private void vScrollBar1_ValueChanged(object sender, EventArgs e)
         {
             int vscrollval = vScrollBar1.Value;
-            ViewLayer(vscrollval,null);
+            ViewLayer(vscrollval,null,BuildManager.SLICE_NORMAL);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -651,6 +684,33 @@ namespace UV_DLP_3D_Printer
                 m_sendgcode = new frmGCodeRaw();
             }
             m_sendgcode.Show();
+        }
+
+        private void cmdSaveGCode_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // get the gcode from the textbox, save it...
+                UVDLPApp.Instance().m_gcode.RawGCode = txtGCode.Text;
+                UVDLPApp.Instance().SaveGCode();
+            }
+            catch (Exception ex) 
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+            }
+        }
+
+        private void cmdReloadGCode_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                UVDLPApp.Instance().LoadGCode();
+                txtGCode.Text = UVDLPApp.Instance().m_gcode.RawGCode;                
+            }
+            catch (Exception ex)
+            {
+                DebugLogger.Instance().LogRecord(ex.Message);
+            }
         }
     }
 }

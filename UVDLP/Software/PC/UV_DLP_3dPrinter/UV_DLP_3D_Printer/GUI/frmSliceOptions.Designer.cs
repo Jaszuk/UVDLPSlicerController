@@ -40,6 +40,18 @@
             this.cmdCancel = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.txtFirstLayerTime = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtXOffset = new System.Windows.Forms.TextBox();
+            this.txtYOffset = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtBlankTime = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtLiftDistance = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.cmbBuildDirection = new System.Windows.Forms.ComboBox();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // chkExportSlices
@@ -138,17 +150,122 @@
             // 
             // txtFirstLayerTime
             // 
-            this.txtFirstLayerTime.Location = new System.Drawing.Point(23, 121);
+            this.txtFirstLayerTime.Location = new System.Drawing.Point(21, 121);
             this.txtFirstLayerTime.Name = "txtFirstLayerTime";
             this.txtFirstLayerTime.Size = new System.Drawing.Size(100, 22);
             this.txtFirstLayerTime.TabIndex = 32;
             this.txtFirstLayerTime.Text = "5000";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.txtYOffset);
+            this.groupBox1.Controls.Add(this.txtXOffset);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Location = new System.Drawing.Point(299, 9);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(229, 109);
+            this.groupBox1.TabIndex = 34;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Generated Image Pixel Offsets";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 24);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(59, 17);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "X Offset";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(7, 65);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 17);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Y Offset";
+            // 
+            // txtXOffset
+            // 
+            this.txtXOffset.Location = new System.Drawing.Point(72, 24);
+            this.txtXOffset.Name = "txtXOffset";
+            this.txtXOffset.Size = new System.Drawing.Size(68, 22);
+            this.txtXOffset.TabIndex = 2;
+            this.txtXOffset.Text = "0";
+            // 
+            // txtYOffset
+            // 
+            this.txtYOffset.Location = new System.Drawing.Point(72, 65);
+            this.txtYOffset.Name = "txtYOffset";
+            this.txtYOffset.Size = new System.Drawing.Size(68, 22);
+            this.txtYOffset.TabIndex = 3;
+            this.txtYOffset.Text = "0";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(20, 146);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(234, 17);
+            this.label5.TabIndex = 36;
+            this.label5.Text = "Blanking Time Between Layers (ms)";
+            // 
+            // txtBlankTime
+            // 
+            this.txtBlankTime.Location = new System.Drawing.Point(21, 166);
+            this.txtBlankTime.Name = "txtBlankTime";
+            this.txtBlankTime.Size = new System.Drawing.Size(100, 22);
+            this.txtBlankTime.TabIndex = 35;
+            this.txtBlankTime.Text = "5000";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(296, 146);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(122, 17);
+            this.label6.TabIndex = 38;
+            this.label6.Text = "Lift Distance (mm)";
+            // 
+            // txtLiftDistance
+            // 
+            this.txtLiftDistance.Location = new System.Drawing.Point(297, 166);
+            this.txtLiftDistance.Name = "txtLiftDistance";
+            this.txtLiftDistance.Size = new System.Drawing.Size(100, 22);
+            this.txtLiftDistance.TabIndex = 37;
+            this.txtLiftDistance.Text = "5";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(429, 146);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(99, 17);
+            this.label7.TabIndex = 39;
+            this.label7.Text = "Build Direction";
+            // 
+            // cmbBuildDirection
+            // 
+            this.cmbBuildDirection.FormattingEnabled = true;
+            this.cmbBuildDirection.Location = new System.Drawing.Point(432, 166);
+            this.cmbBuildDirection.Name = "cmbBuildDirection";
+            this.cmbBuildDirection.Size = new System.Drawing.Size(121, 24);
+            this.cmbBuildDirection.TabIndex = 40;
+            // 
             // frmSliceOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(351, 365);
+            this.ClientSize = new System.Drawing.Size(614, 361);
+            this.Controls.Add(this.cmbBuildDirection);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.txtLiftDistance);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.txtBlankTime);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtFirstLayerTime);
             this.Controls.Add(this.cmdCancel);
@@ -165,8 +282,10 @@
             this.MinimizeBox = false;
             this.Name = "frmSliceOptions";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Slicing Options";
+            this.Text = "Slicing and Building Options";
             this.Load += new System.EventHandler(this.frmSliceOptions_Load);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -186,5 +305,16 @@
         private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtFirstLayerTime;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox txtYOffset;
+        private System.Windows.Forms.TextBox txtXOffset;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtBlankTime;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtLiftDistance;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox cmbBuildDirection;
     }
 }

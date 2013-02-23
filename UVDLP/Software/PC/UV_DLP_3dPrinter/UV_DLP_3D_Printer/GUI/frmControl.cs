@@ -22,7 +22,7 @@ namespace UV_DLP_3D_Printer.GUI
             {
                 double dist = double.Parse(txtdist.Text);
                 //String movecommand = "G1 Z" + dist.ToString() + "\r\n";
-                UVDLPApp.Instance().m_deviceinterface.Move(dist, 10); // (movecommand);
+                UVDLPApp.Instance().m_deviceinterface.Move(dist, UVDLPApp.Instance().m_printerinfo.m_ZMaxFeedrate); // (movecommand);
             }
             catch (Exception ex) 
             {
@@ -39,7 +39,7 @@ namespace UV_DLP_3D_Printer.GUI
                 dist = dist * -1.0;
                 String movecommand = "G1 Z" + dist.ToString() + "\r\n";
                 //UVDLPApp.Instance().m_deviceinterface.SendCommandToDevice(movecommand);
-                UVDLPApp.Instance().m_deviceinterface.Move(dist, 10); //
+                UVDLPApp.Instance().m_deviceinterface.Move(dist, UVDLPApp.Instance().m_printerinfo.m_ZMaxFeedrate); //
             }
             catch (Exception ex)
             {

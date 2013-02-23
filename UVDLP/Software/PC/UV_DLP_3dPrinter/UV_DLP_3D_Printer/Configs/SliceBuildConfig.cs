@@ -12,26 +12,30 @@ namespace UV_DLP_3D_Printer
      */
     public class SliceBuildConfig
     {
+        public enum eBuildDirection 
+        {
+            Top_Down,
+            Bottom_Up
+        }
         public double dpmmX; // dots per mm x
         public double dpmmY; // dots per mm y
         public int xres, yres; // the resolution of the output image in pixels
         public double ZThick; // thickness of the z layer - slicing height
         public int layertime_ms; // time to project image per layer in milliseconds
         public int firstlayertime_ms; // first layer exposure time 
+        public int blanktime_ms; // blanking time between layers
         public int plat_temp; // desired platform temperature in celsius 
         public bool exportgcode; // export the gcode file when slicing
         public bool exportsvg; // export the svg slices when building
         public bool exportimages; // export image slices when building
-        /*
-        private String m_startgcodefilename;
-        private String m_endgcodefilename;
-        private String m_prelayergcodefilename;
-        private String m_postlayergcodefilename;
-        */
+        public eBuildDirection direction;
+        public double liftdistance; // distance to lift and retract
+
         private String m_headercode; // inserted at beginning of file
         private String m_footercode; // inserted at end of file
-        private String m_preslicecode; // inserted before each slice
-        private String m_postslicecode; // inserted after each slice
+        private String m_preliftcode; // inserted before each slice
+        private String m_postliftcode; // inserted after each slice
+        public int XOffset, YOffset; // the X/Y pixel offset used 
 
         private String[] m_defheader = 
         {
@@ -75,12 +79,12 @@ namespace UV_DLP_3D_Printer
             sb = new StringBuilder();
             foreach (String s in m_defpreslice)
                 sb.Append(s);
-            PreSliceCode = sb.ToString();
+            PreLiftCode = sb.ToString();
 
             sb = new StringBuilder();
             foreach (String s in m_defpreslice)
                 sb.Append(s);
-            PostSliceCode = sb.ToString();
+            PostLiftCode = sb.ToString();
             
         }
         public String HeaderCode
@@ -93,16 +97,16 @@ namespace UV_DLP_3D_Printer
             get { return m_footercode; }
             set { m_footercode = value; }
         }
-        public String PreSliceCode
+        public String PreLiftCode
         {
-            get { return m_preslicecode; }
-            set { m_preslicecode = value; }
+            get { return m_preliftcode; }
+            set { m_preliftcode = value; }
         }
 
-        public String PostSliceCode
+        public String PostLiftCode
         {
-            get { return m_postslicecode; }
-            set { m_postslicecode = value; }
+            get { return m_postliftcode; }
+            set { m_postliftcode = value; }
         }
 
         /*
@@ -117,14 +121,19 @@ namespace UV_DLP_3D_Printer
             ZThick = source.ZThick; // thickness of the z layer - slicing height
             layertime_ms = source.layertime_ms; // time to project image per layer in milliseconds
             firstlayertime_ms = source.firstlayertime_ms;
+            blanktime_ms = source.blanktime_ms;
             plat_temp = source.plat_temp; // desired platform temperature in celsius 
             exportgcode = source.exportgcode; // export the gcode file when slicing
             exportsvg = source.exportsvg; // export the svg slices when building
             exportimages = source.exportimages; // export image slices when building
             m_headercode = source.m_headercode; // inserted at beginning of file
             m_footercode = source.m_footercode; // inserted at end of file
-            m_preslicecode = source.m_preslicecode; // inserted between each slice            
-            m_postslicecode = source.m_postslicecode; // inserted between each slice            
+            m_preliftcode = source.m_preliftcode; // inserted between each slice            
+            m_postliftcode = source.m_postliftcode; // inserted between each slice    
+            liftdistance = source.liftdistance;
+            direction = source.direction;
+            XOffset = source.XOffset;
+            YOffset = source.YOffset;
         }
 
         public SliceBuildConfig() 
@@ -143,15 +152,20 @@ namespace UV_DLP_3D_Printer
         {
             layertime_ms = 1000;// 1 second default
             firstlayertime_ms = 5000;
+            blanktime_ms = 2000; // 2 seconds blank
             xres = 1024;
             yres = 768;
             ZThick = .025;
             plat_temp = 75;
             dpmmX = 102.4;
             dpmmY = 76.8;
+            XOffset = 0;
+            YOffset = 0;
             exportgcode = true;
             exportsvg = false;
             exportimages = false;
+            direction = eBuildDirection.Bottom_Up;
+            liftdistance = 5.0;
             SetDefaultCodes(); // set up default gcodes
         }
 
@@ -169,14 +183,16 @@ namespace UV_DLP_3D_Printer
                 yres = int.Parse(xr.ReadElementString("YResolution"));
                 ZThick = double.Parse(xr.ReadElementString("SliceHeight"));
                 layertime_ms = int.Parse(xr.ReadElementString("LayerTime"));
-                firstlayertime_ms = int.Parse(xr.ReadElementString("FirstLayerTime"));                
+                firstlayertime_ms = int.Parse(xr.ReadElementString("FirstLayerTime"));
+                blanktime_ms = int.Parse(xr.ReadElementString("BlankTime"));
                 plat_temp = int.Parse(xr.ReadElementString("PlatformTemp"));
-               // m_headercode = xr.ReadElementString("HeaderGCode");
-               // m_perslicecode = xr.ReadElementString("PerSliceGCode");
-               // m_footercode = xr.ReadElementString("FooterGCode");
                 exportgcode = bool.Parse(xr.ReadElementString("ExportGCode"));
                 exportsvg = bool.Parse(xr.ReadElementString("ExportSVG"));
                 exportimages = bool.Parse(xr.ReadElementString("ExportImages")); ;
+                XOffset = int.Parse(xr.ReadElementString("XOffset"));
+                YOffset = int.Parse(xr.ReadElementString("YOffset"));
+                direction = (eBuildDirection)Enum.Parse(typeof(eBuildDirection), xr.ReadElementString("Direction"));
+                liftdistance = double.Parse(xr.ReadElementString("LiftDistance"));
                 xr.ReadEndElement();
                 xr.Close();
                 
@@ -201,13 +217,15 @@ namespace UV_DLP_3D_Printer
                 xw.WriteElementString("SliceHeight", ZThick.ToString());
                 xw.WriteElementString("LayerTime", layertime_ms.ToString());
                 xw.WriteElementString("FirstLayerTime", firstlayertime_ms.ToString());
+                xw.WriteElementString("BlankTime", blanktime_ms.ToString());                
                 xw.WriteElementString("PlatformTemp", plat_temp.ToString());
-               // xw.WriteElementString("HeaderGCode", m_headercode);
-               // xw.WriteElementString("PerSliceGCode", m_perslicecode);
-               // xw.WriteElementString("FooterGCode", m_footercode);
                 xw.WriteElementString("ExportGCode", exportgcode.ToString());
                 xw.WriteElementString("ExportSVG", exportsvg.ToString());
                 xw.WriteElementString("ExportImages", exportimages.ToString());
+                xw.WriteElementString("XOffset", XOffset.ToString());
+                xw.WriteElementString("YOffset", YOffset.ToString());
+                xw.WriteElementString("Direction", direction.ToString());
+                xw.WriteElementString("LiftDistance", liftdistance.ToString());
 
                 xw.WriteEndElement();
                 xw.Close();
@@ -225,15 +243,19 @@ namespace UV_DLP_3D_Printer
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("(****Build and Slicing Parameters****)\r\n");
-            sb.Append("(dots per mm X   = " + dpmmX + " )\r\n");
-            sb.Append("(dots per mm Y   = " + dpmmY + " )\r\n");
-            sb.Append("(X resolution    = " + xres + " )\r\n");
-            sb.Append("(Y resolution    = " + yres + " )\r\n");
-            sb.Append("(Layer thickness = " + ZThick + " )\r\n");
-            sb.Append("(Layer Time      = " + layertime_ms + ")\r\n");
-            sb.Append("(First Layer Time      = " + firstlayertime_ms + ")\r\n");            
-            sb.Append("(Platform Temp   = " + plat_temp + ")\r\n");
-
+            sb.Append("(dots per mm X           = " + dpmmX + " )\r\n");
+            sb.Append("(dots per mm Y           = " + dpmmY + " )\r\n");
+            sb.Append("(X resolution            = " + xres + " )\r\n");
+            sb.Append("(Y resolution            = " + yres + " )\r\n");
+            sb.Append("(X Pixel Offset          = " + XOffset + " )\r\n");
+            sb.Append("(Y Pixel Offset          = " + YOffset + " )\r\n");
+            sb.Append("(Layer thickness         = " + ZThick + " )\r\n");
+            sb.Append("(Layer Time              = " + layertime_ms + ")\r\n");
+            sb.Append("(First Layer Time        = " + firstlayertime_ms + ")\r\n");
+            sb.Append("(Blanking Layer Time     = " + blanktime_ms + ")\r\n");
+            sb.Append("(Platform Temp           = " + plat_temp + ")\r\n");
+            sb.Append("(Build Direction         = " + direction.ToString() + ")\r\n");
+            sb.Append("(Lift Distance           = " + liftdistance.ToString() + ")\r\n");            
             return sb.ToString();
         }
 
@@ -241,22 +263,23 @@ namespace UV_DLP_3D_Printer
         {
             try
             {
-                String machinepath = Path.GetDirectoryName(UVDLPApp.Instance().m_appconfig.m_curmachineeprofilename);
-                machinepath += UVDLPApp.m_pathsep;
-                machinepath += Path.GetFileNameWithoutExtension(UVDLPApp.Instance().m_appconfig.m_curmachineeprofilename);
-                if (!Directory.Exists(machinepath))
+
+                String profilepath = Path.GetDirectoryName(UVDLPApp.Instance().m_appconfig.m_cursliceprofilename);
+                profilepath += UVDLPApp.m_pathsep;
+                profilepath += Path.GetFileNameWithoutExtension(UVDLPApp.Instance().m_appconfig.m_cursliceprofilename);
+                if (!Directory.Exists(profilepath))
                 {
-                    Directory.CreateDirectory(machinepath);
+                    Directory.CreateDirectory(profilepath);
                     SetDefaultCodes();
                     SaveDefaultGCodes();// save the default gcode files for this machine
                 }
                 else
                 {
                     //load the files
-                    m_headercode = LoadFile(machinepath + UVDLPApp.m_pathsep + "start.gcode");
-                    m_footercode = LoadFile(machinepath + UVDLPApp.m_pathsep + "end.gcode");
-                    m_preslicecode = LoadFile(machinepath + UVDLPApp.m_pathsep + "preslice.gcode");
-                    m_postslicecode = LoadFile(machinepath + UVDLPApp.m_pathsep + "postslice.gcode");
+                    m_headercode = LoadFile(profilepath + UVDLPApp.m_pathsep + "start.gcode");
+                    m_footercode = LoadFile(profilepath + UVDLPApp.m_pathsep + "end.gcode");
+                    m_preliftcode = LoadFile(profilepath + UVDLPApp.m_pathsep + "prelift.gcode");
+                    m_postliftcode = LoadFile(profilepath + UVDLPApp.m_pathsep + "postlift.gcode");
                 }
             }
             catch (Exception ex) 
@@ -293,14 +316,14 @@ namespace UV_DLP_3D_Printer
         }
         public void SaveDefaultGCodes() 
         {
-            String machinepath = Path.GetDirectoryName(UVDLPApp.Instance().m_appconfig.m_curmachineeprofilename);
-            machinepath += UVDLPApp.m_pathsep;
-            machinepath += Path.GetFileNameWithoutExtension(UVDLPApp.Instance().m_appconfig.m_curmachineeprofilename);
+            String profilepath = Path.GetDirectoryName(UVDLPApp.Instance().m_appconfig.m_cursliceprofilename);
+            profilepath += UVDLPApp.m_pathsep;
+            profilepath += Path.GetFileNameWithoutExtension(UVDLPApp.Instance().m_appconfig.m_cursliceprofilename);
 
-            SaveFile(machinepath + UVDLPApp.m_pathsep + "start.gcode",m_headercode);
-            SaveFile(machinepath + UVDLPApp.m_pathsep + "end.gcode", m_footercode);
-            SaveFile(machinepath + UVDLPApp.m_pathsep + "preslice.gcode", m_preslicecode);
-            SaveFile(machinepath + UVDLPApp.m_pathsep + "postslice.gcode", m_postslicecode);
+            SaveFile(profilepath + UVDLPApp.m_pathsep + "start.gcode",m_headercode);
+            SaveFile(profilepath + UVDLPApp.m_pathsep + "end.gcode", m_footercode);
+            SaveFile(profilepath + UVDLPApp.m_pathsep + "prelift.gcode", m_preliftcode);
+            SaveFile(profilepath + UVDLPApp.m_pathsep + "postlift.gcode", m_postliftcode);
         }
     }
 }

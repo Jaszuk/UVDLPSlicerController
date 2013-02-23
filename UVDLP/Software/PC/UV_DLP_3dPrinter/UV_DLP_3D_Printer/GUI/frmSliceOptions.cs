@@ -35,6 +35,17 @@ namespace UV_DLP_3D_Printer
             chkexportsvg.Checked = UVDLPApp.Instance().m_buildparms.exportsvg;
             txtLayerTime.Text = "" + UVDLPApp.Instance().m_buildparms.layertime_ms;
             txtFirstLayerTime.Text = UVDLPApp.Instance().m_buildparms.firstlayertime_ms.ToString();
+            txtBlankTime.Text = UVDLPApp.Instance().m_buildparms.blanktime_ms.ToString();
+            txtXOffset.Text = UVDLPApp.Instance().m_buildparms.XOffset.ToString();
+            txtYOffset.Text = UVDLPApp.Instance().m_buildparms.YOffset.ToString();
+            txtLiftDistance.Text = UVDLPApp.Instance().m_buildparms.liftdistance.ToString();
+
+            foreach(String name in Enum.GetNames(typeof(SliceBuildConfig.eBuildDirection)))
+            {
+                cmbBuildDirection.Items.Add(name);
+            }
+            cmbBuildDirection.SelectedItem = UVDLPApp.Instance().m_buildparms.direction.ToString();
+            //cmbBuildDirection.
         }
         private bool GetValues() 
         {
@@ -46,6 +57,11 @@ namespace UV_DLP_3D_Printer
                 UVDLPApp.Instance().m_buildparms.exportsvg = chkexportsvg.Checked;
                 UVDLPApp.Instance().m_buildparms.layertime_ms = int.Parse(txtLayerTime.Text);
                 UVDLPApp.Instance().m_buildparms.firstlayertime_ms = int.Parse(txtFirstLayerTime.Text);
+                UVDLPApp.Instance().m_buildparms.blanktime_ms = int.Parse(txtBlankTime.Text);
+                UVDLPApp.Instance().m_buildparms.XOffset = int.Parse(txtXOffset.Text);
+                UVDLPApp.Instance().m_buildparms.YOffset = int.Parse(txtYOffset.Text);
+                UVDLPApp.Instance().m_buildparms.liftdistance = double.Parse(txtLiftDistance.Text);
+                UVDLPApp.Instance().m_buildparms.direction = (SliceBuildConfig.eBuildDirection)Enum.Parse(typeof(SliceBuildConfig.eBuildDirection), cmbBuildDirection.SelectedItem.ToString());
                 return true;
             }
             catch (Exception ex) 

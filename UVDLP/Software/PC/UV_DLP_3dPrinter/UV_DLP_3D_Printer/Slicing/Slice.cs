@@ -148,7 +148,7 @@ namespace UV_DLP_3D_Printer
             return mm;
         }
 
-        private void Render2dlines(Graphics g, ArrayList lines) 
+        private void Render2dlines(Graphics g, ArrayList lines, SliceBuildConfig sp) 
         {
             Point pnt1 = new Point(); // create some points for drawing
             Point pnt2 = new Point();
@@ -157,10 +157,10 @@ namespace UV_DLP_3D_Printer
             {
                 Point2d p1 = (Point2d)ln.p1;
                 Point2d p2 = (Point2d)ln.p2;
-                pnt1.X = p1.x;
-                pnt1.Y = p1.y;
-                pnt2.X = p2.x;
-                pnt2.Y = p2.y;
+                pnt1.X = p1.x + sp.XOffset;
+                pnt1.Y = p1.y + sp.YOffset;
+                pnt2.X = p2.x + sp.XOffset;
+                pnt2.Y = p2.y + sp.YOffset;
                 g.DrawLine(pen, pnt1, pnt2);            
             }
         }
@@ -176,7 +176,7 @@ namespace UV_DLP_3D_Printer
             graph.Clear(Color.Black);
             //convert all to 2d lines
             ArrayList lines2d = Get2dLines(sp);
-            Render2dlines(graph, lines2d);
+            Render2dlines(graph, lines2d,sp);
             
             // find the x/y min/max
             MinMax_XY mm = CalcMinMax_XY(lines2d);
@@ -200,10 +200,10 @@ namespace UV_DLP_3D_Printer
                     {
                         Point2d p1 = (Point2d)points[cnt];
                         Point2d p2 = (Point2d)points[cnt+1];
-                        pnt1.X = p1.x ;
-                        pnt1.Y = p1.y ;
-                        pnt2.X = p2.x ;
-                        pnt2.Y = p2.y ;
+                        pnt1.X = p1.x + sp.XOffset;
+                        pnt1.Y = p1.y + sp.YOffset;
+                        pnt2.X = p2.x + sp.XOffset;
+                        pnt2.Y = p2.y + sp.YOffset;
                         graph.DrawLine(pen, pnt1, pnt2);
                     }
                 }

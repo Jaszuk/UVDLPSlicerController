@@ -1,3 +1,10 @@
+02/22/2013 Alpha 03 release
+	Added GCode Load/Save functionality
+	Added Pixel offset to generated slices
+	Added Lift control with pre and post-lift gcode
+	Added blank screen with additional blank delay
+	Added a durection flag to control top-down or bottom-up machines
+
 02/22/2013 Initial Alpha 02 release
 	Added in Raw GCode display to send GCodes
 	Fixed Build Issue
